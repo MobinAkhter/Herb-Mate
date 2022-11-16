@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import FlatButton from "../ui/FlatButton";
@@ -14,7 +14,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
     lastName: false,
     email: false,
     password: false,
-    confirmEmail: false,
+    // confirmEmail: false,
     confirmPassword: false,
   });
 
@@ -27,25 +27,21 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   function submitHandler(credentials) {
-    let { email, confirmEmail, password, confirmPassword } = credentials;
+    let { email, password, confirmPassword } = credentials;
 
     email = email.trim();
     password = password.trim();
 
     const emailIsValid = email.includes("@");
     const passwordIsValid = password.length > 6;
-    const emailsAreEqual = email === confirmEmail;
+    // const emailsAreEqual = email === confirmEmail;
     const passwordsAreEqual = password === confirmPassword;
 
-    if (
-      !emailIsValid ||
-      !passwordIsValid ||
-      (!isLogin && (!emailsAreEqual || !passwordsAreEqual))
-    ) {
+    if (!emailIsValid || !passwordIsValid || (!isLogin && !passwordsAreEqual)) {
       Alert.alert("Invalid input", "Please check your entered credentials.");
       setCredentialsInvalid({
         email: !emailIsValid,
-        confirmEmail: !emailIsValid || !emailsAreEqual,
+        // confirmEmail: !emailIsValid || !emailsAreEqual,
         password: !passwordIsValid,
         confirmPassword: !passwordIsValid || !passwordsAreEqual,
       });
@@ -55,7 +51,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   return (
-    <View style={styles.authContent}>
+    <KeyboardAvoidingView style={styles.authContent}>
       <AuthForm
         isLogin={isLogin}
         onSubmit={submitHandler}
@@ -66,7 +62,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
           {isLogin ? "Don't have an account? Sign up now!" : "Log in instead"}
         </FlatButton>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
