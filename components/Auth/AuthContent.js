@@ -10,6 +10,8 @@ function AuthContent({ isLogin, onAuthenticate }) {
   const navigation = useNavigation();
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
+    firstName: false,
+    lastName: false,
     email: false,
     password: false,
     confirmEmail: false,

@@ -4,7 +4,13 @@ import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 import Input from "./Input";
 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+const auth = getAuth();
+
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
+  const [enteredFirstName, setFirstName] = useState("");
+  const [enteredLastName, setLastName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredConfirmEmail, setEnteredConfirmEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
@@ -19,6 +25,12 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
+      case "firstName":
+        setFirstName(enteredValue);
+        break;
+      case "LastName":
+        setLastName(enteredValue);
+        break;
       case "email":
         setEnteredEmail(enteredValue);
         break;
@@ -36,11 +48,24 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 
   function submitHandler() {
     onSubmit({
+      firstName: enteredFirstName,
+      lastName: enteredLastName,
       email: enteredEmail,
-      confirmEmail: enteredConfirmEmail,
+      // confirmEmail: enteredConfirmEmail,
       password: enteredPassword,
       confirmPassword: enteredConfirmPassword,
     });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
   }
 
   return (
@@ -49,17 +74,17 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         {/* Will distinguish each field later, for now want it to appear nicel */}
         <Input
           label="First Name"
-          onUpdateValue={updateInputValueHandler.bind(this, "email")}
-          value={enteredEmail}
-          keyboardType="email-address"
-          isInvalid={emailIsInvalid}
+          onUpdateValue={updateInputValueHandler.bind(this, "firstName")}
+          value={enteredFirstName}
+          // keyboardType="email-address"
+          // isInvalid={emailIsInvalid}
         />
         <Input
           label="Last Name"
-          onUpdateValue={updateInputValueHandler.bind(this, "email")}
-          value={enteredEmail}
-          keyboardType="email-address"
-          isInvalid={emailIsInvalid}
+          onUpdateValue={updateInputValueHandler.bind(this, "lastName")}
+          value={enteredLastName}
+          // keyboardType="email-address"
+          // isInvalid={emailIsInvalid}
         />
         <Input
           label="Email Address"
