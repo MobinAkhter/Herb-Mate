@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import FlatButton from "../ui/FlatButton";
 import AuthForm from "./AuthForm";
 import { Colors } from "../../constants/styles";
-
+import { auth } from "../../firebase";
 function AuthContent({ isLogin, onAuthenticate }) {
   const navigation = useNavigation();
 
@@ -27,7 +27,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   function submitHandler(credentials) {
-    let { email, password, confirmPassword } = credentials;
+    let { email, password } = credentials;
 
     email = email.trim();
     password = password.trim();
@@ -35,7 +35,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
     const emailIsValid = email.includes("@");
     const passwordIsValid = password.length > 6;
     // const emailsAreEqual = email === confirmEmail;
-    const passwordsAreEqual = password === confirmPassword;
+    // const passwordsAreEqual = password === confirmPassword;
 
     if (!emailIsValid || !passwordIsValid || (!isLogin && !passwordsAreEqual)) {
       Alert.alert("Invalid input", "Please check your entered credentials.");

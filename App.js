@@ -17,11 +17,18 @@ function AuthStack() {
       screenOptions={{
         headerStyle: { backgroundColor: Colors.darkGreen },
         headerTintColor: "white",
+        headerTitleAlign: "center",
         contentStyle: { backgroundColor: Colors.darkGreen },
       }}
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen
+        name="AuthenticatedStack"
+        component={AuthenticatedStack}
+        options={{ title: "", headerTransparent: true }}
+        // https://stackoverflow.com/questions/61185135/react-native-navigation-error-the-action-navigate-with-payload-name-192-168 ^ Tried to make navigation work. Tired atm, will think about this later
+      />
     </Stack.Navigator>
   );
 }

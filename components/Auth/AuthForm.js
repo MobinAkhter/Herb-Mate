@@ -1,22 +1,22 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, KeyboardAvoidingView } from "react-native";
-
 import Button from "../ui/Button";
 import Input from "./Input";
 import { auth } from "../../firebase";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
+// Do i prolly need to import the screen i want to display?
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredFirstName, setFirstName] = useState("");
   const [enteredLastName, setLastName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
-  // const [enteredConfirmEmail, setEnteredConfirmEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
+  const navigation = useNavigation();
 
   const {
     email: emailIsInvalid,
-    // confirmEmail: emailsDontMatch,
     password: passwordIsInvalid,
     confirmPassword: passwordsDontMatch,
   } = credentialsInvalid;
@@ -32,9 +32,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       case "email":
         setEnteredEmail(enteredValue);
         break;
-      // case "confirmEmail":
-      //   setEnteredConfirmEmail(enteredValue);
-      //   break;
       case "password":
         setEnteredPassword(enteredValue);
         break;
@@ -45,33 +42,29 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   }
 
   function submitHandler() {
-    // onSubmit({
-    //   // firstName: enteredFirstName,
-    //   // lastName: enteredLastName,
-    //   email: enteredEmail,
-    //   // confirmEmail: enteredConfirmEmail,
-    //   password: enteredPassword,
-    //   // confirmPassword: enteredConfirmPassword,
-    // });
-    auth
-      .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
-      .then((authUser) => {
-        // authUser.user.updateProfile(email, password);
-      })
-      .catch((error) => alert(error.message));
+    if (isLogin) {
+      auth
+        .signInWithEmailAndPassword(enteredEmail, enteredPassword)
+        .catch((error) => alert(error));
+    } else {
+      auth
+        .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
+        .then((authUser) => {
+          // navigation.navigate("Welcome"); Doesn't work, will need to read docs
+        })
+        .catch((error) => alert(error.message));
+    }
   }
 
   return (
     <KeyboardAvoidingView style={styles.form}>
       <View>
-        {/* Will distinguish each field later, for now want it to appear nicel */}
+        {/* Shows on signup screen and not on login screen */}
         {!isLogin && (
           <Input
             label="First Name"
             onUpdateValue={updateInputValueHandler.bind(this, "firstName")}
             value={enteredFirstName}
-            // keyboardType="email-address"
-            // isInvalid={emailIsInvalid}
           />
         )}
         {!isLogin && (
@@ -79,8 +72,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
             label="Last Name"
             onUpdateValue={updateInputValueHandler.bind(this, "lastName")}
             value={enteredLastName}
-            // keyboardType="email-address"
-            // isInvalid={emailIsInvalid}
           />
         )}
         <Input
@@ -90,15 +81,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           keyboardType="email-address"
           isInvalid={emailIsInvalid}
         />
-        {/* {!isLogin && (
-          <Input
-            label="Confirm Email Address"
-            onUpdateValue={updateInputValueHandler.bind(this, "confirmEmail")}
-            value={enteredConfirmEmail}
-            keyboardType="email-address"
-            isInvalid={emailsDontMatch}
-          />
-        )} */}
+
         <Input
           label="Password"
           onUpdateValue={updateInputValueHandler.bind(this, "password")}
