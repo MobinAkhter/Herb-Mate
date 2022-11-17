@@ -7,6 +7,8 @@ import { auth } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 // Do i prolly need to import the screen i want to display?
 
+// Trying to implement google sign in
+
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredFirstName, setFirstName] = useState("");
   const [enteredLastName, setLastName] = useState("");
@@ -45,12 +47,16 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
     if (isLogin) {
       auth
         .signInWithEmailAndPassword(enteredEmail, enteredPassword)
+        .then((authUser) => {
+          navigation.navigate("Welcome");
+        })
+
         .catch((error) => alert(error));
     } else {
       auth
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
-          // navigation.navigate("Welcome"); Doesn't work, will need to read docs
+          navigation.navigate("Welcome");
         })
         .catch((error) => alert(error.message));
     }
