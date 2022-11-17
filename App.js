@@ -5,6 +5,9 @@ import { StatusBar } from "expo-status-bar";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
+import ConditionScreen from "./screens/ConditionScreen";
+import RemedyListScreen from "./screens/RemedyListScreen";
+import AboutRemedyScreen from "./screens/AboutRemedyScreen";
 import { Colors } from "./constants/styles";
 
 // Add references here
@@ -24,6 +27,9 @@ function AuthStack() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen name="Condition" component={ConditionScreen} />
+      <Stack.Screen name="RemedyList" component={RemedyListScreen} />
+      <Stack.Screen name="AboutRemedy" component={AboutRemedyScreen} />
 
       {/* <Stack.Screen
         name="AuthenticatedStack"

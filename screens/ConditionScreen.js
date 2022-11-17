@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
-import WelcomePage from "../components/Home/WelcomePage.js";
+import ConditionList from "../components/Home/ConditionList";
 
-const WelcomeScreen = ({ navigation }) => {
+function ConditionScreen({ route }) {
+  const { bp } = route.params;
   return (
     <View style={styles.rootContainer}>
-      <WelcomePage />
-      <Text style={styles.title}>Welcome!</Text>
-      <Text>You authenticated successfully!</Text>
+      <Text></Text>
+      <ConditionList bodyPart={bp} />
     </View>
   );
-};
+}
 
-export default WelcomeScreen;
+export default ConditionScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {

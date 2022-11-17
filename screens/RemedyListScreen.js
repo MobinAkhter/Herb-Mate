@@ -1,17 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
-import WelcomePage from "../components/Home/WelcomePage.js";
+import RemedyList from "../components/Home/RemedyList";
 
-const WelcomeScreen = ({ navigation }) => {
+function RemedyListScreen({ route }) {
+  const { bp, con, rem } = route.params;
   return (
     <View style={styles.rootContainer}>
-      <WelcomePage />
-      <Text style={styles.title}>Welcome!</Text>
-      <Text>You authenticated successfully!</Text>
+      <RemedyList condition={con} bodyPart={bp} rem={rem} />
     </View>
   );
-};
+}
 
-export default WelcomeScreen;
+export default RemedyListScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
