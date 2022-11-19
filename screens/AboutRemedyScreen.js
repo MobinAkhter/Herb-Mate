@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from "react-native";
 import AboutRemedy from "../components/Home/AboutRemedy";
 
 function AboutRemedyScreen({ route }) {
-  const { bp, con, rm } = route.params;
+  const { bp, con, rem } = route.params;
   return (
     <View style={styles.rootContainer}>
-      <AboutRemedy condition={con} bodyPart={bp} rem={rm} />
+      <AboutRemedy condition={con} bodyPart={bp} rem={rem} />
     </View>
   );
 }

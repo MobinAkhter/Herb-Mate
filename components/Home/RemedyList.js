@@ -52,7 +52,7 @@ function RemedyList({ bodyPart, condition }) {
                 navigation.navigate("AboutRemedy", {
                   bp: bodyPart,
                   con: condition,
-                  rem: item.id,
+                  rem: item.name,
                 });
               }}
             >

@@ -56,7 +56,7 @@ function ConditionList({ bodyPart }) {
             color="black"
           />
         )}
-        {bodyPart === "Head/Neck" && (
+        {bodyPart === "Head and Neck" && (
           <FontAwesome5
             styles={styles.icon}
             name="head-side-virus"

@@ -63,7 +63,7 @@ function WelcomePage({}) {
                   color="black"
                 />
               )}
-              {item.name === "Head/Neck" && (
+              {item.name === "Head and Neck" && (
                 <FontAwesome5
                   styles={styles.icon}
                   name="head-side-virus"

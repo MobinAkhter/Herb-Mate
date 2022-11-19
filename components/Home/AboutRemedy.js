@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { db } from "../../firebase";
 import BigButton from "../ui/BigButton";
 
 function AboutRemedy({ bodyPart, condition, rem }) {
   const [remedy, setRemedy] = useState({});
   const col = db.collection("BodyParts");
+  console.log("rem: ", rem);
 
   //Gets specific herbal remedy to show information about
   //currently has an issue getting the document id.  rem parameter should give
@@ -16,7 +17,7 @@ function AboutRemedy({ bodyPart, condition, rem }) {
       .collection("Conditions")
       .doc(condition)
       .collection("Remedies")
-      .doc("Valerian")
+      .doc(rem)
       .get()
       .then((doc) => {
         console.log(doc.data());
@@ -28,23 +29,26 @@ function AboutRemedy({ bodyPart, condition, rem }) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{remedy.name}</Text>
-      <View
-        style={{
-          width: 150,
-          height: 150,
-          backgroundColor: "green",
-        }}
-      />
-      <View style={styles.info}>
-        <Text style={styles.head}>Description</Text>
-        <Text style={styles.desc}>{remedy.description}</Text>
-        <Text style={styles.head}>Precautions</Text>
-        <Text style={styles.desc}>{remedy.precautions}</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>{remedy.name}</Text>
+
+        <View
+          style={{
+            width: 150,
+            height: 150,
+            backgroundColor: "green",
+          }}
+        />
+        <View style={styles.info}>
+          <Text style={styles.head}>Description</Text>
+          <Text style={styles.desc}>{remedy.description}</Text>
+          <Text style={styles.head}>Precautions</Text>
+          <Text style={styles.desc}>{remedy.precautions}</Text>
+        </View>
+        <BigButton>Bookmark</BigButton>
       </View>
-      <BigButton>Bookmark</BigButton>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -54,6 +58,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
+    alignItems: "center",
+  },
+  titleCon: {
     alignItems: "center",
   },
   info: {
