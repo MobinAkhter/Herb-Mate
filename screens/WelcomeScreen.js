@@ -5,8 +5,8 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.rootContainer}>
       <WelcomePage />
-      <Text style={styles.title}>Welcome!</Text>
-      <Text>You authenticated successfully!</Text>
+      {/* <Text style={styles.title}>Welcome!</Text>
+      <Text>You authenticated successfully!</Text> */}
     </View>
   );
 };
