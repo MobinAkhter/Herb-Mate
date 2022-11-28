@@ -59,8 +59,7 @@ const ComplianceScreen = () => {
                     ]}
                     disabled={!toggleCheckbox}
                     onPress={() =>
-                      setComplianceModal(false) ||
-                      navigation.navigate("Register")
+                      setComplianceModal(false) || navigation.navigate("Signup")
                     }
                   >
                     <Text>Continue to register</Text>
