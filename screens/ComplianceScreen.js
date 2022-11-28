@@ -33,13 +33,24 @@ const ComplianceScreen = () => {
                   <Text style={styles.modalComplianceTitle}>
                     Medical Disclosure
                   </Text>
-                  <Text>
-                    Hello, Mobin. Hopefully, this works and the user is able to
-                    see the terms of conditions modal.\n I hope you are having a
-                    great all nighter working on this for the domain expert
-                    meeting tomrrow!\n Make sure to update this text before then
-                    so that you can show it and ask for feedback.\n That being
-                    said, LFG!!!
+                  <Text style={styles.complianceText}>
+                    The herbal content in this app is provided as general health
+                    information only. It provides information on herbal remedies
+                    as an alternative treatment, but it is not a substitute for
+                    medical advice or treatment of any health condition. {"\n"}
+                    {"\n"}
+                    The team at HerbalLife makes no warranties about the
+                    effectiveness of the remedies in curing your health
+                    problems, so we do not assume any risk whatsoever for your
+                    use of the information contained within the app. {"\n"}
+                    {"\n"}You are hereby advised to consult with a herbalist or
+                    other professionals in the healthcare industry before using
+                    any of the information provided in this app. {"\n"}
+                    {"\n"}By agreeing to the terms and conditions, and
+                    registering to the app, you agree that neither the team at
+                    HerbalLife nor any other party is or will be liable for any
+                    decision you make based on the information provided in this
+                    app.
                   </Text>
                   <View style={styles.checkboxContainer}>
                     <Checkbox
@@ -48,13 +59,13 @@ const ComplianceScreen = () => {
                       value={toggleCheckbox}
                       onValueChange={(newValue) => setToggleCheckbox(newValue)}
                     />
-                    <Text>I agreee to the terms and conditions</Text>
+                    <Text>I agree to the terms and conditions</Text>
                   </View>
                   <TouchableOpacity
                     style={[
                       styles.registerButton,
                       {
-                        backgroundColor: toggleCheckbox ? "dodgerblue" : "grey",
+                        backgroundColor: toggleCheckbox ? "lightblue" : "grey",
                       },
                     ]}
                     disabled={!toggleCheckbox}
@@ -82,10 +93,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  googleText: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -102,10 +109,13 @@ const styles = StyleSheet.create({
   },
   modalComplianceTitle: {
     marginBottom: 20,
-    color: "dodgerblue",
+    color: "lightblue",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 18,
+  },
+  complianceText: {
+    fontSize: 15,
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -113,8 +123,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   checkbox: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     marginRight: 20,
   },
   registerButton: {
