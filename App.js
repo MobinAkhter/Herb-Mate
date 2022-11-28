@@ -9,6 +9,7 @@ import ConditionScreen from "./screens/ConditionScreen";
 import RemedyListScreen from "./screens/RemedyListScreen";
 import AboutRemedyScreen from "./screens/AboutRemedyScreen";
 import { Colors } from "./constants/styles";
+import ComplianceScreen from "./screens/ComplianceScreen";
 
 // Add references here
 
@@ -24,8 +25,9 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.darkGreen },
       }}
     >
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Compliance" component={ComplianceScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Condition" component={ConditionScreen} />
       <Stack.Screen name="RemedyList" component={RemedyListScreen} />
