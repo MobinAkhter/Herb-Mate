@@ -19,18 +19,20 @@ export default BigButton;
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 6,
+    borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    backgroundColor: "#FEFEFE",
+    backgroundColor: "white",
     elevation: 2,
     width: 300,
-    height: 60,
+    height: 65,
     shadowColor: "black",
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     marginTop: 30,
+    borderColor: '#35D96F',
+    borderWidth: 3,
   },
   pressed: {
     opacity: 0.7,
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
     color: "black",
-    fontSize: 30,
+    fontSize: 27,
     fontWeight: "bold",
   },
 });

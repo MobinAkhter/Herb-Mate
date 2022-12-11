@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   button: {
-    backgroundColor: "rgba(123,104,238,0.8)",
+    backgroundColor: "rgba(127,104,238,0.8)",
     height: 55,
     alignItems: "center",
     justifyContent: "center",

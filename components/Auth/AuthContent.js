@@ -59,7 +59,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
       />
       <View style={styles.buttons}>
         <FlatButton onPress={switchAuthModeHandler}>
-          {isLogin ? "Don't have an account? Sign up now!" : "Log in instead"}
+          {isLogin ? "Don't have an account? Sign up now!" : "Log In Instead!"}
         </FlatButton>
       </View>
     </KeyboardAvoidingView>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 32,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: Colors.redColor,
+    backgroundColor: "#35D96F",
     elevation: 2,
     shadowColor: "black",
     shadowOffset: { width: 1, height: 1 },
