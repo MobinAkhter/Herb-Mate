@@ -46,6 +46,9 @@ const ComplianceScreen = () => {
                     {"\n"}You are hereby advised to consult with a herbalist or
                     other professionals in the healthcare industry before using
                     any of the information provided in this app. {"\n"}
+                    {"\n"}If you're on any medication, please consult with
+                    health care professionals before taking any remedies listed
+                    in the app.{"\n"}
                     {"\n"}By agreeing to the terms and conditions, and
                     registering to the app, you agree that neither the team at
                     HerbalLife nor any other party is or will be liable for any
