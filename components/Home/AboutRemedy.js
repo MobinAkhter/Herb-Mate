@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { db } from "../../firebase";
 import BigButton from "../ui/BigButton";
+import BookMarkButton from "../ui/BookmarkButton";
 
 function AboutRemedy({ bodyPart, condition, rem }) {
   const [remedy, setRemedy] = useState({});
@@ -46,7 +47,7 @@ function AboutRemedy({ bodyPart, condition, rem }) {
           <Text style={styles.head}>Precautions</Text>
           <Text style={styles.desc}>{remedy.precautions}</Text>
         </View>
-        <BigButton>Bookmark</BigButton>
+        <BookMarkButton>BOOKMARK</BookMarkButton>
       </View>
     </ScrollView>
   );
@@ -77,5 +78,6 @@ const styles = StyleSheet.create({
   },
   head: {
     fontSize: 30,
+    fontWidth: 'bold'
   },
 });

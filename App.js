@@ -19,10 +19,10 @@ function AuthStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: Colors.darkGreen },
+        headerStyle: { backgroundColor: '#35D96F' },
         headerTintColor: "white",
         headerTitleAlign: "center",
-        contentStyle: { backgroundColor: Colors.darkGreen },
+        contentStyle: { backgroundColor: Colors.white },
       }}
     >
       <Stack.Screen name="Compliance" component={ComplianceScreen} />
@@ -48,9 +48,9 @@ function AuthenticatedStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: Colors.greenColor },
+        headerStyle: { backgroundColor: Colors.white },
         headerTintColor: "white",
-        contentStyle: { backgroundColor: Colors.greenColor },
+        contentStyle: { backgroundColor: Colors.blue },
       }}
     >
       {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
