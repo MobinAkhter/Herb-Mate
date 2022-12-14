@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     marginTop: 30,
-    borderColor: '#35D96F',
+    borderColor: "#35D96F",
     borderWidth: 3,
   },
   pressed: {

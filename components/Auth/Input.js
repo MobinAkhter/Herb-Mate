@@ -37,15 +37,15 @@ const styles = StyleSheet.create({
   label: {
     color: "white",
     marginBottom: 4,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   labelInvalid: {
-    color: 'red',
+    color: "red",
   },
   input: {
     paddingVertical: 8,
     paddingHorizontal: 6,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 4,
     fontSize: 16,
   },

@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Alert, StyleSheet, View, KeyboardAvoidingView } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import FlatButton from "../ui/FlatButton";
@@ -61,6 +67,11 @@ function AuthContent({ isLogin, onAuthenticate }) {
         <FlatButton onPress={switchAuthModeHandler}>
           {isLogin ? "Don't have an account? Sign up now!" : "Log In Instead!"}
         </FlatButton>
+        {isLogin && (
+          <FlatButton onPress={navigation.navigate("ForgotPassword")}>
+            Forgot password?
+          </FlatButton>
+        )}
       </View>
     </KeyboardAvoidingView>
   );

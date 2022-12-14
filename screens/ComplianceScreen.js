@@ -33,6 +33,7 @@ const ComplianceScreen = () => {
                   <Text style={styles.modalComplianceTitle}>
                     Medical Disclosure
                   </Text>
+                  {/* Create a separate file for this text and import it */}
                   <Text style={styles.complianceText}>
                     The herbal content in this app is provided as general health
                     information only. It provides information on herbal remedies
