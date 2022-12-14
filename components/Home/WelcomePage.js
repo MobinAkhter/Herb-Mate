@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import BigButton from "../ui/BigButton";
 import { db } from "../../firebase";
+import Button from "../ui/Button";
 
 function WelcomePage({}) {
   const navigation = useNavigation();
@@ -107,9 +108,13 @@ function WelcomePage({}) {
 
             {item.name}
           </BigButton>
+          
         </View>
+        
       )}
+      ListFooterComponent={() => <Button> User Profile</Button>}
     />
+    
   );
 }
 
