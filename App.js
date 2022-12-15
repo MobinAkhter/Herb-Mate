@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
+import UserProfileScreen from "./screens/UserProfileScreen";
 
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
@@ -30,7 +31,6 @@ function AuthStack() {
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-
       <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
@@ -38,10 +38,10 @@ function AuthStack() {
           headerLeft: null,
         }}
       />
+      <Stack.Screen name="UserProfile" component={UserProfileScreen} />
       <Stack.Screen name="Condition" component={ConditionScreen} />
       <Stack.Screen name="RemedyList" component={RemedyListScreen} />
       <Stack.Screen name="AboutRemedy" component={AboutRemedyScreen} />
-
       {/* <Stack.Screen
         name="AuthenticatedStack"
         component={AuthenticatedStack}

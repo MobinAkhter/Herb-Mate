@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import BigButton from "../ui/BigButton";
 import { db } from "../../firebase";
+import Button from "../ui/Button";
 
 function WelcomePage({}) {
   const navigation = useNavigation();
@@ -117,6 +118,16 @@ function WelcomePage({}) {
               {item.name}
             </BigButton>
           </View>
+        )}
+        ListFooterComponent={() => (
+          <Button
+            onPress={() => {
+              navigation.navigate("UserProfile");
+            }}
+          >
+            {" "}
+            User Profile
+          </Button>
         )}
       />
     </View>
