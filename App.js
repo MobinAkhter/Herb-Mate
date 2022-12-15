@@ -26,11 +26,18 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      {/* <Stack.Screen name="Compliance" component={ComplianceScreen} />*/}
+      <Stack.Screen name="Compliance" component={ComplianceScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        screenOptions={{
+          headerLeft: null,
+        }}
+      />
       <Stack.Screen name="Condition" component={ConditionScreen} />
       <Stack.Screen name="RemedyList" component={RemedyListScreen} />
       <Stack.Screen name="AboutRemedy" component={AboutRemedyScreen} />

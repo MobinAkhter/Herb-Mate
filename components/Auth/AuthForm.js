@@ -5,6 +5,8 @@ import Input from "./Input";
 import { auth } from "../../firebase";
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import FlatButton from "../ui/FlatButton";
+
 // Do i prolly need to import the screen i want to display?
 
 // Trying to implement google sign in
@@ -95,6 +97,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           value={enteredPassword}
           isInvalid={passwordIsInvalid}
         />
+
         {!isLogin && (
           <Input
             label="Confirm Password"

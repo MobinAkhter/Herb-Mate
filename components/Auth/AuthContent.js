@@ -31,6 +31,11 @@ function AuthContent({ isLogin, onAuthenticate }) {
       navigation.replace("Login");
     }
   }
+  function switchToForgot() {
+    if (isLogin) {
+      navigation.replace("ForgotPassword");
+    }
+  }
 
   function submitHandler(credentials) {
     let { email, password } = credentials;
@@ -67,10 +72,10 @@ function AuthContent({ isLogin, onAuthenticate }) {
         <FlatButton onPress={switchAuthModeHandler}>
           {isLogin ? "Don't have an account? Sign up now!" : "Log In Instead!"}
         </FlatButton>
+      </View>
+      <View>
         {isLogin && (
-          <FlatButton onPress={navigation.navigate("ForgotPassword")}>
-            Forgot password?
-          </FlatButton>
+          <FlatButton onPress={switchToForgot}>Forgot password?</FlatButton>
         )}
       </View>
     </KeyboardAvoidingView>

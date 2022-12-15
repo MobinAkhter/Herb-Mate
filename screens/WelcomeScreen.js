@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import WelcomePage from "../components/Home/WelcomePage.js";
 
-const WelcomeScreen = ({ navigation }) => {
+const WelcomeScreen = ({}) => {
   return (
     <View style={styles.rootContainer}>
       <WelcomePage />
