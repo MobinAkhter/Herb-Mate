@@ -119,16 +119,6 @@ function WelcomePage({}) {
             </BigButton>
           </View>
         )}
-        ListFooterComponent={() => (
-          <Button
-            onPress={() => {
-              navigation.navigate("UserProfile");
-            }}
-          >
-            {" "}
-            User Profile
-          </Button>
-        )}
       />
     </View>
   );

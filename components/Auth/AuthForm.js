@@ -11,7 +11,7 @@ import FlatButton from "../ui/FlatButton";
 
 // Trying to implement google sign in
 
-function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
+function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [enteredFirstName, setFirstName] = useState("");
   const [enteredLastName, setLastName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
@@ -50,7 +50,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       auth
         .signInWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
-          navigation.navigate("Welcome");
+          setUser(authUser.user);
+          // navigation.navigate("Welcome");
         })
 
         .catch((error) => alert(error));
@@ -58,7 +59,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       auth
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
-          navigation.navigate("Welcome");
+          setUser(authUser.user);
+          //   navigation.navigate("Welcome");
         })
         .catch((error) => alert(error.message));
     }

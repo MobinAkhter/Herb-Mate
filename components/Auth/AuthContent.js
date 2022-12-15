@@ -10,9 +10,12 @@ import { useNavigation } from "@react-navigation/native";
 
 import FlatButton from "../ui/FlatButton";
 import AuthForm from "./AuthForm";
+import React from "react";
+import { UserContext } from "../../contexts/userContext";
 import { Colors } from "../../constants/styles";
 import { auth } from "../../firebase";
 function AuthContent({ isLogin, onAuthenticate }) {
+  const { user, setUser } = React.useContext(UserContext);
   const navigation = useNavigation();
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
@@ -65,6 +68,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
     <KeyboardAvoidingView style={styles.authContent}>
       <AuthForm
         isLogin={isLogin}
+        setUser={setUser}
         onSubmit={submitHandler}
         credentialsInvalid={credentialsInvalid}
       />
