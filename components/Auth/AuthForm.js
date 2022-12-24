@@ -6,6 +6,8 @@ import { auth } from "../../firebase";
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import FlatButton from "../ui/FlatButton";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
 // Do i prolly need to import the screen i want to display?
 
@@ -45,6 +47,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
     }
   }
 
+  const firestore = firebase.firestore();
+  const usersCollection = firestore.collection('users');
+
   function submitHandler() {
     if (isLogin) {
       auth
@@ -60,7 +65,21 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
           setUser(authUser.user);
-          //   navigation.navigate("Welcome");
+          //console.log(authUser.user.uid)
+          const userId = firebase.auth().currentUser.uid;
+          const newUser = {
+            firstName: enteredFirstName,
+            lastName: enteredLastName ,
+            email: enteredEmail
+          };
+
+          usersCollection.add(newUser)
+            .then(function(docRef) {
+            console.log("User written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+            console.error("Error adding user: ", error);
+            });
         })
         .catch((error) => alert(error.message));
     }
