@@ -48,7 +48,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   }
 
   const firestore = firebase.firestore();
-  const usersCollection = firestore.collection('users');
+  
 
   function submitHandler() {
     if (isLogin) {
@@ -65,21 +65,17 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
           setUser(authUser.user);
-          //console.log(authUser.user.uid)
-          const userId = firebase.auth().currentUser.uid;
+          console.log(authUser.user.uid)
+          const authId = authUser.user.uid;
+          const usersCollection = firestore.collection('users').doc(authId);
           const newUser = {
+            id: authId,
             firstName: enteredFirstName,
             lastName: enteredLastName ,
             email: enteredEmail
           };
 
-          usersCollection.add(newUser)
-            .then(function(docRef) {
-            console.log("User written with ID: ", docRef.id);
-            })
-            .catch(function(error) {
-            console.error("Error adding user: ", error);
-            });
+          usersCollection.set(newUser)
         })
         .catch((error) => alert(error.message));
     }
