@@ -1,9 +1,10 @@
-import { Text, TextInput, StyleSheet, View, Modal} from 'react-native';
+import { Text, TextInput, StyleSheet, View, Modal, Alert} from 'react-native';
 import firebase from 'firebase/app';
 import { useState, useEffect } from 'react'
 import 'firebase/firestore';
 import 'firebase/auth'
 import Button from "../ui/Button";
+import Toast from 'react-native-easy-toast';
 
 function UserProfile() {
     //var user = auth.currentUser;
@@ -12,6 +13,8 @@ function UserProfile() {
     const [newFirstName, setFirstName] = useState("");
     const [newLastName, setLastName] = useState("");
     const [newEmail, setEmail] = useState("");
+    const [currentPass, setCurrentPass] = useState("");
+    const [newPass, setNewPass] = useState("");
 
     useEffect(() => {
       const firestore = firebase.firestore();
@@ -35,16 +38,6 @@ function UserProfile() {
       const authId = auth.currentUser.uid;
       const userRef = firestore.collection('users').doc(authId);
 
-      
-    
-   /*   await userRef.set({
-        firstName: newFirstName,
-        lastName: newLastName,
-        email: newEmail
-      }, {merge: true}).catch((error) => {
-        console.error('Error updating document: ', error);
-      }); */
-
       if(newFirstName != "")
       {
         updateFirst(newFirstName)
@@ -67,6 +60,8 @@ function UserProfile() {
         }, {merge: true}).catch((error) => {
           console.error('Error updating document: ', error);
         });
+
+         
       }
 
       function updateLast(last){
@@ -75,29 +70,98 @@ function UserProfile() {
         }, {merge: true}).catch((error) => {
           console.error('Error updating document: ', error);
         });
+
+
       }
 
       function updateEmail(email){
         userRef.set({
-          email: email
+          email: email,
         }, {merge: true}).catch((error) => {
           console.error('Error updating document: ', error);
         });
+        
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            user.updateEmail(email).then(() => {
+              console.log('Email updated successfully.');
+              user.sendEmailVerification().then(() => {
+                console.log('Verification email sent.');
+            }).catch((error) => {
+                console.log(error);
+            });
+            }).catch((error) => {
+              console.log(error);
+            });
+          }
+        });
+       
+  
       }
 
+      showAlert();
+
     }//end function
+
+    
+  
 
     const toggleModal = () => {
       setIsVisible(!isVisible);
     };
 
-    const checkPassword = (pass) =>{
+    
+    function changePassword(newPassword) {
+      if(newPassword == "")
+      {
+          passEmptyAlert();
+      }
+      var user = firebase.auth().currentUser;
+      user.updatePassword(newPassword).then(() => {
+          console.log("Password Updated!");
+          passAlert()
+      }).catch((error) => {
+          console.log(error);
+      });
+  }
 
+
+  const passAlert = () => {
+    Alert.alert(
+      'Password Update',
+      'Your Password Has Been Changed',
+      [
+        
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      
+    );
+  }
+
+  const passEmptyAlert = () => {
+    Alert.alert(
+      'Password Empty',
+      'Please Enter Your New Password',
+      [
+        
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      
+    );
+  }
+
+    const showAlert = () => {
+      Alert.alert(
+        'Update',
+        'Your Changes Have Been Updated',
+        [
+          
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        
+      );
     }
 
-    
-   
-  
     return (
       <>
         {userData && (
@@ -125,8 +189,9 @@ function UserProfile() {
             </View>
 
             <View>
-            <Text> <Text>Email: {userData.email}</Text></Text>
+            <Text> Email: {userData.email}</Text>
             <TextInput 
+             autoCapitalize="none"
             style={styles.input}
             secureTextEntry={false}
             value={newEmail}
@@ -137,39 +202,27 @@ function UserProfile() {
           <Button onPress={updateUser}>
             Change NOW
           </Button>
+
+          <Text>Enter New Password</Text>
+                <TextInput 
+                  autoCapitalize="none"
+                  style={styles.input}
+                  secureTextEntry={true}
+                  value={newPass}
+                  onChangeText={setNewPass}
+                  placeholder="Enter new password">
+            </TextInput>
             
-          <Button onPress={toggleModal}>
-           Confirm Changes
+          <Button onPress={() => changePassword(newPass)} >
+           Change Password
           </Button>
-
-          <View>
-          <Modal visible={isVisible} animationType="slide">
-        <View style={{ marginTop: 22 }}>
-          <View>
-            <Text>Enter Current Password</Text>
-            <TextInput 
-            style={styles.input}
-            secureTextEntry={true}
-            placeholder="Current Password"></TextInput>
-            <Button title="Close" onPress={toggleModal}> Close</Button>
-          </View>
-        </View>
-      </Modal>
-
-    
-          </View>
-
-          <Button>
-            Create New Password
-          </Button>
-    
           </>
         )}
       </>
     );
         
 
-  
+        
 }
 
 export default UserProfile;

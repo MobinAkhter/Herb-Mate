@@ -72,7 +72,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
             id: authId,
             firstName: enteredFirstName,
             lastName: enteredLastName ,
-            email: enteredEmail
+            email: enteredEmail,
           };
 
           usersCollection.set(newUser)
