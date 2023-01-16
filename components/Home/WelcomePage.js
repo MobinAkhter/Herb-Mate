@@ -35,7 +35,7 @@ function WelcomePage({}) {
   }, []);
 
   return (
-    <View>
+    <>
       <View style={styles.search}>
         <MagnifyingGlassIcon color="gray" size={20} />
         <TextInput
@@ -120,7 +120,11 @@ function WelcomePage({}) {
           </View>
         )}
       />
-    </View>
+      <View>
+        
+      
+      </View>
+    </>
   );
 }
 

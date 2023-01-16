@@ -7,6 +7,8 @@ import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
 import { auth } from "./firebase";
 import { log } from "react-native-reanimated";
+import AppSettings from "./components/Home/AppSettings";
+import StackRouter from "@react-navigation/native";
 
 function Navigation() {
   const { user, setUser } = React.useContext(UserContext);
@@ -21,6 +23,8 @@ function Navigation() {
       setUser(user);
     }
   }
+
+  
 
   return (
     <NavigationContainer>

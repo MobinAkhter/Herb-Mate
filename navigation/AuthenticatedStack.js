@@ -6,6 +6,7 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import ConditionScreen from "../screens/ConditionScreen";
 import RemedyListScreen from "../screens/RemedyListScreen";
 import AboutRemedyScreen from "../screens/AboutRemedyScreen";
+import AppSettingsScreen from "../screens/AppSettingsScreen";
 import { Colors } from "../constants/styles";
 
 // Add references here
@@ -61,6 +62,13 @@ function AuthenticatedStack({ navigation }) {
       <Tab.Screen
         name="Profile"
         component={UserProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Tab.Screen
+        name="App Settings"
+        component={AppSettingsScreen}
         options={{
           headerShown: false,
         }}
