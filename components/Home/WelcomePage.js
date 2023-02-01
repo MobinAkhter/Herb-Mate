@@ -8,13 +8,16 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import BigButton from "../ui/BigButton";
+import SearchField from "../ui/SearchField";
 import { db } from "../../firebase";
 import Button from "../ui/Button";
+import Icon from "@expo/vector-icons/FontAwesome";
 
 function WelcomePage({}) {
   const navigation = useNavigation();
   //Bodyparts array used to display flatlist based on DB collection
   const [bodyParts, setBodyParts] = useState([]);
+  const [searchInput, setSearchInput] = useState();
   const bp = db.collection("BodyParts");
   useEffect(() => {
     const parts = [];
@@ -37,11 +40,20 @@ function WelcomePage({}) {
   return (
     <>
       <View style={styles.search}>
-        <MagnifyingGlassIcon color="gray" size={20} />
-        <TextInput
+        <MagnifyingGlassIcon color="gray" size={20} style={styles.searchIcon} />
+        {/* <TextInput
           style={styles.searchInput}
           placeholder="Search by herbs or symptoms"
           keyboardType="default"
+        /> */}
+        <SearchField value={searchInput}>
+          Search by remedy or condition
+        </SearchField>
+        <Icon
+          name="arrow-right"
+          size={24}
+          color="black"
+          onPress={() => navigation.navigate("Welcome")}
         />
       </View>
       <FlatList
@@ -113,6 +125,23 @@ function WelcomePage({}) {
                     color="black"
                   />
                 )}
+                {item.name === "Male Reproductive" ||
+                  (item.name === "Female Reproductive" && (
+                    <MaterialCommunityIcons
+                      styles={styles.icon}
+                      name="reproduction"
+                      size={40}
+                      color="black"
+                    />
+                  ))}
+                {item.name === "Male Reproductive" && (
+                  <MaterialCommunityIcons
+                    styles={styles.icon}
+                    name="reproduction"
+                    size={40}
+                    color="black"
+                  />
+                )}
               </View>
 
               {item.name}
@@ -120,10 +149,7 @@ function WelcomePage({}) {
           </View>
         )}
       />
-      <View>
-        
-      
-      </View>
+      <View></View>
     </>
   );
 }
@@ -133,11 +159,16 @@ export default WelcomePage;
 const styles = StyleSheet.create({
   search: {
     flexDirection: "row",
+    width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "left",
+    borderRadius: 50,
     backgroundColor: "lightgray",
   },
-  searchInput: {
-    backgroundColor: "lightgray",
+  searchIcon: {
+    //paddingRight: 30,
+  },
+  arrowIcon: {
+    //paddingRight: -30,
   },
 });
