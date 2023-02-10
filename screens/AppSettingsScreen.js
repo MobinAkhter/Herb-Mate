@@ -1,5 +1,5 @@
 import AppSettings from "../components/Home/AppSettings";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const AppSettingsScreen = ({ navigation }) => {
     return (
@@ -31,3 +31,4 @@ const AppSettingsScreen = ({ navigation }) => {
       color: "white",
     },
   });
+  

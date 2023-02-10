@@ -6,6 +6,22 @@ import 'firebase/auth'
 import Button from "../ui/Button";
 import Toast from 'react-native-easy-toast';
 
+const Col = (props) => {
+  return(
+    <View>
+      <Text> {props.colorName}</Text>
+    </View>
+  )
+}
+
+const Themes = props => {
+  return(
+    <View>
+      <Text> {props.colTheme} </Text>
+    </View>
+  )
+}
+
 function UserProfile() {
     //var user = auth.currentUser;
     const [userData, setUserData] = useState(null);
@@ -216,6 +232,22 @@ function UserProfile() {
           <Button onPress={() => changePassword(newPass)} >
            Change Password
           </Button>
+
+          <View>
+            <Col colorName="Green" ></Col>
+            <Col colorName="Blue" ></Col>
+            <Col colorName="Red" ></Col>
+            <Col colorName="Orange" ></Col>
+            <Col colorName="Magenta" ></Col>
+            <Col colorName="Purple" ></Col>
+          </View>
+
+          <View>
+            <Text> Color Themes</Text>
+            <Themes colTheme="Light"></Themes>
+            <Themes colTheme="Dim"></Themes>
+            <Themes colTheme="Dark"></Themes>
+          </View>
           </>
         )}
       </>
