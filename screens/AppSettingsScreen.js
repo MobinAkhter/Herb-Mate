@@ -1,15 +1,17 @@
 import AppSettings from "../components/Home/AppSettings";
+
 import { StyleSheet, View } from "react-native";
 
+
 const AppSettingsScreen = ({ navigation }) => {
-    return (
-      <View>
-        <AppSettings/>
-      </View>
-    );
-  };
-  
-  export default AppSettingsScreen;
+  return (
+    <View style={styles.rootContainer}>
+      <View style={styles.header}></View>
+      <AppSettings />
+    </View>
+  );
+};
+
 
   const styles = StyleSheet.create({
     header: {
@@ -32,3 +34,4 @@ const AppSettingsScreen = ({ navigation }) => {
     },
   });
   
+
