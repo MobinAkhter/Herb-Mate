@@ -1,6 +1,6 @@
 import AppSettings from "../components/Home/AppSettings";
 import { View, StyleSheet } from "react-native";
-
+//random comment
 const AppSettingsScreen = ({ navigation }) => {
   return (
     <View style={styles.rootContainer}>
