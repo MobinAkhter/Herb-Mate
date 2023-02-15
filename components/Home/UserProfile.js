@@ -32,6 +32,11 @@ function UserProfile() {
     const [currentPass, setCurrentPass] = useState("");
     const [newPass, setNewPass] = useState("");
 
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+
     useEffect(() => {
       const firestore = firebase.firestore();
       const auth = firebase.auth();
@@ -127,49 +132,37 @@ function UserProfile() {
     
   
 
-    const toggleModal = () => {
-      setIsVisible(!isVisible);
-    };
-
     
-    function changePassword(newPassword) {
-      if(newPassword == "")
-      {
-          passEmptyAlert();
-      }
-      var user = firebase.auth().currentUser;
-      user.updatePassword(newPassword).then(() => {
-          console.log("Password Updated!");
-          passAlert()
-      }).catch((error) => {
-          console.log(error);
+
+  const handleChangePassword = () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      alert('Please fill all fields');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+    const user = firebase.auth().currentUser;
+    const credentials = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      oldPassword
+    );
+    user.reauthenticateWithCredential(credentials)
+      .then(() => {
+        user.updatePassword(newPassword)
+          .then(() => {
+            alert('Password updated successfully');
+            setModalVisible(false);
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      })
+      .catch((error) => {
+        alert(error.message);
       });
-  }
-
-
-  const passAlert = () => {
-    Alert.alert(
-      'Password Update',
-      'Your Password Has Been Changed',
-      [
-        
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ],
-      
-    );
-  }
-
-  const passEmptyAlert = () => {
-    Alert.alert(
-      'Password Empty',
-      'Please Enter Your New Password',
-      [
-        
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ],
-      
-    );
-  }
+  };
 
 
     const showAlert = (text) => {
@@ -222,38 +215,44 @@ function UserProfile() {
             </View>
 
           <Button onPress={updateUser}>
-            Change NOW
+            Update
           </Button>
 
-          <Text>Enter New Password</Text>
-                <TextInput 
-                  autoCapitalize="none"
-                  style={styles.input}
-                  secureTextEntry={true}
-                  value={newPass}
-                  onChangeText={setNewPass}
-                  placeholder="Enter new password">
-            </TextInput>
-            
-          <Button onPress={() => changePassword(newPass)} >
-           Change Password
-          </Button>
 
+          
           <View>
-            <Col colorName="Green" ></Col>
-            <Col colorName="Blue" ></Col>
-            <Col colorName="Red" ></Col>
-            <Col colorName="Orange" ></Col>
-            <Col colorName="Magenta" ></Col>
-            <Col colorName="Purple" ></Col>
-          </View>
+      <Button  onPress={() => setModalVisible(true)}> 
+          Change New Password
+      </Button>
+      
+      <Modal visible={modalVisible} animationType="slide">
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      
+          <TextInput
+            placeholder="Enter Old Password"
+            secureTextEntry
+            value={oldPassword}
+            onChangeText={setOldPassword}
+          />
+          <TextInput
+            placeholder="Enter New Password"
+            secureTextEntry
+            value={newPassword}
+            onChangeText={setNewPassword}
+          />
+          <TextInput
+            placeholder="Enter Confirm Password"
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+          <Button title="Submit" onPress={handleChangePassword}> Submit</Button> 
+          <Button title="Cancel" onPress={() => setModalVisible(false)}> Cancel </Button>
+        </View>
+      </Modal>
+    </View>
 
-          <View>
-            <Text> Color Themes</Text>
-            <Themes colTheme="Light"></Themes>
-            <Themes colTheme="Dim"></Themes>
-            <Themes colTheme="Dark"></Themes>
-          </View>
+
           </>
         )}
       </>
