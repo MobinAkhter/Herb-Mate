@@ -93,14 +93,17 @@ function UserProfile() {
       function updateEmail(email) {
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
+
             user.sendEmailVerification().then(() => {
               console.log('Verification email sent.');
+              alert("Email Verification Sent, Please Click on Link to Verify");
               user.updateEmail(email).then(() => {
                 console.log('Email updated successfully.');
                 userRef.set({
                   email: email,
                 }, {merge: true}).then(() => {
                   console.log('Firestore document updated successfully.');
+                  alert("Email has been updated");
                 }).catch((error) => {
                   console.error('Error updating Firestore document: ', error);
                 });
@@ -113,7 +116,6 @@ function UserProfile() {
           }
         });
 
-        alert("Email has been updated");
       }
 
       
