@@ -89,35 +89,38 @@ function UserProfile() {
 
 
       }
-
-      function updateEmail(email){
-        userRef.set({
-          email: email,
-        }, {merge: true}).catch((error) => {
-          console.error('Error updating document: ', error);
-        });
-        
+      //updating email
+      function updateEmail(email) {
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
-            user.updateEmail(email).then(() => {
-              console.log('Email updated successfully.');
-              user.sendEmailVerification().then(() => {
-                console.log('Verification email sent.');
-            }).catch((error) => {
+            user.sendEmailVerification().then(() => {
+              console.log('Verification email sent.');
+              user.updateEmail(email).then(() => {
+                console.log('Email updated successfully.');
+                userRef.set({
+                  email: email,
+                }, {merge: true}).then(() => {
+                  console.log('Firestore document updated successfully.');
+                }).catch((error) => {
+                  console.error('Error updating Firestore document: ', error);
+                });
+              }).catch((error) => {
                 console.log(error);
-            });
+              });
             }).catch((error) => {
               console.log(error);
             });
           }
         });
-       
-  
+
+        alert("Email has been updated");
       }
 
-      showAlert();
+      
+      
 
-    }//end function
+      
+  }
 
     
   
@@ -166,9 +169,10 @@ function UserProfile() {
     );
   }
 
-    const showAlert = () => {
+
+    const showAlert = (text) => {
       Alert.alert(
-        'Update',
+        text,
         'Your Changes Have Been Updated',
         [
           
