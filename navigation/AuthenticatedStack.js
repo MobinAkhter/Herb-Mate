@@ -1,13 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Text } from "react-native";
+import { Text, Image, Settings } from "react-native";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ConditionScreen from "../screens/ConditionScreen";
 import RemedyListScreen from "../screens/RemedyListScreen";
 import AboutRemedyScreen from "../screens/AboutRemedyScreen";
 import AppSettingsScreen from "../screens/AppSettingsScreen";
 import { Colors } from "../constants/styles";
+import { HomeIcon, HomeModernIcon } from "react-native-heroicons/outline";
+import { Profiler } from "react";
+import iconSet from "@expo/vector-icons/build/Fontisto";
+import { Ionicons } from "@expo/vector-icons";
+
 
 // Add references here
 
@@ -55,15 +60,27 @@ function AuthenticatedStack({ navigation }) {
     >
       {/* These are the screens that get displayed on the bottom tab */}
       <Tab.Screen
-        name="Welcome"
+        name="Home"
         component={Home}
-        options={{ headerShown: false }}
+        options={{ 
+          headerShown: false,
+           tabBarIcon: () => { // setting the icon of the tab
+            return (
+            <Ionicons name="md-home" size={28} color = "#00ff0d" />
+            )
+          }
+          }}
       />
       <Tab.Screen
         name="Profile"
         component={UserProfileScreen}
         options={{
           headerShown: false,
+          tabBarIcon:   () => { // setting the icon of the tab
+            return (
+            <Ionicons name="md-person" size={28} color = "#008cff" />
+            )
+          }
         }}
       />
        <Tab.Screen
@@ -71,6 +88,11 @@ function AuthenticatedStack({ navigation }) {
         component={AppSettingsScreen}
         options={{
           headerShown: false,
+          tabBarIcon: () => { // setting the icon of the tab
+            return (
+            <Ionicons name="md-settings" size={28} color = "#ff001f" />
+            )
+          }
         }}
       />
     </Tab.Navigator>
