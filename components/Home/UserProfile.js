@@ -96,32 +96,33 @@ function UserProfile() {
       }
       //updating email
       function updateEmail(email) {
-        firebase.auth().onAuthStateChanged((user) => {
-          if (user) {
-
-            user.sendEmailVerification().then(() => {
-              console.log('Verification email sent.');
-              alert("Email Verification Sent, Please Click on Link to Verify");
-              user.updateEmail(email).then(() => {
-                console.log('Email updated successfully.');
+        const user = firebase.auth().currentUser;
+      
+        user.updateEmail(email)
+          .then(() => {
+            console.log('Email updated successfully.');
+            user.reload()
+              .then(() => {
                 userRef.set({
                   email: email,
-                }, {merge: true}).then(() => {
-                  console.log('Firestore document updated successfully.');
-                  alert("Email has been updated");
-                }).catch((error) => {
-                  console.error('Error updating Firestore document: ', error);
-                });
-              }).catch((error) => {
-                console.log(error);
+                }, {merge: true})
+                  .then(() => {
+                    console.log('Firestore document updated successfully.');
+                    alert("Email has been updated");
+                  })
+                  .catch((error) => {
+                    console.error('Error updating Firestore document: ', error);
+                  });
+              })
+              .catch((error) => {
+                console.error('Error reloading user data: ', error);
               });
-            }).catch((error) => {
-              console.log(error);
-            });
-          }
-        });
-
+          })
+          .catch((error) => {
+            console.error('Error updating email: ', error);
+          });
       }
+      
 
       
       
