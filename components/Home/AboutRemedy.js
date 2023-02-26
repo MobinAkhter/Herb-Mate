@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
 import { db } from "../../firebase";
 import BigButton from "../ui/BigButton";
 import BookMarkButton from "../ui/BookmarkButton";
@@ -35,13 +35,14 @@ function AboutRemedy({ bodyPart, condition, rem }) {
         <Text style={styles.title}>{remedy.name}</Text>
 
         <View
-          style={{
-            width: 150,
-            height: 150,
-            backgroundColor: "green",
-          }}
+         // style={{
+        //    width: 150,
+       ////     backgroundColor: "green",
+       //   }}
+         
         />
         <View style={styles.info}>
+          <Image source={{uri: remedy.image}} style={{ width: 100, height: 150 }}/>
           <Text style={styles.head}>Description</Text>
           <Text style={styles.desc}>{remedy.description}</Text>
           <Text style={styles.head}>Precautions</Text>
