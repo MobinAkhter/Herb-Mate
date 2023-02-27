@@ -62,6 +62,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         .catch((error) => alert(error));
     } else {
       auth
+      
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
           setUser(authUser.user);
@@ -69,13 +70,17 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           const authId = authUser.user.uid;
           const usersCollection = firestore.collection('users').doc(authId);
           const newUser = {
-            id: authId,
             firstName: enteredFirstName,
             lastName: enteredLastName ,
             email: enteredEmail,
           };
-
           usersCollection.set(newUser)
+          .then(() => {
+            console.log('User created successfully');
+            const foodsCollection = firestore.collection('users').doc(authId).collection('bookmarks');
+            // Create an empty document to create the collection
+           foodsCollection.doc('remedy').set({})
+          })
         })
         .catch((error) => alert(error.message));
     }
