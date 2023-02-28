@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View, TextInput } from "react-native";
+import { FlatList, StyleSheet, View, TextInput, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -10,11 +10,13 @@ import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import BigButton from "../ui/BigButton";
 import { db } from "../../firebase";
 import Button from "../ui/Button";
+import Icon from "@expo/vector-icons/FontAwesome";
 
 function WelcomePage({}) {
   const navigation = useNavigation();
   //Bodyparts array used to display flatlist based on DB collection
   const [bodyParts, setBodyParts] = useState([]);
+  const [searchInput, setSearchInput] = useState();
   const bp = db.collection("BodyParts");
   useEffect(() => {
     const parts = [];
@@ -37,11 +39,28 @@ function WelcomePage({}) {
   return (
     <>
       <View style={styles.search}>
-        <MagnifyingGlassIcon color="gray" size={20} />
-        <TextInput
+        <MagnifyingGlassIcon color="gray" size={20} style={styles.searchIcon} />
+        {/* <TextInput
           style={styles.searchInput}
           placeholder="Search by herbs or symptoms"
           keyboardType="default"
+        /> */}
+        <TextInput
+          keyboardType="default"
+          style={styles.searchInput}
+          placeholder={"Search..."}
+          onChangeText={(input) => setSearchInput(input)}
+          value={searchInput}
+        ></TextInput>
+        <Icon
+          name="arrow-right"
+          size={24}
+          color="black"
+          onPress={() => {
+            navigation.navigate("SearchResult", {
+              searchVal: searchInput,
+            });
+          }}
         />
       </View>
       <FlatList
@@ -66,9 +85,9 @@ function WelcomePage({}) {
                   />
                 )}
                 {item.name === "Circulatory" && (
-                  <Fontisto
+                  <MaterialCommunityIcons
                     styles={styles.icon}
-                    name="blood-drop"
+                    name="blood-bag"
                     size={40}
                     color="black"
                   />
@@ -113,17 +132,38 @@ function WelcomePage({}) {
                     color="black"
                   />
                 )}
+                {item.name === "Male Reproductive" ||
+                  (item.name === "Female Reproductive" && (
+                    <MaterialCommunityIcons
+                      styles={styles.icon}
+                      name="reproduction"
+                      size={40}
+                      color="black"
+                    />
+                  ))}
+                {item.name === "Male Reproductive" && (
+                  <MaterialCommunityIcons
+                    styles={styles.icon}
+                    name="reproduction"
+                    size={40}
+                    color="black"
+                  />
+                )}
+                {item.name === "Urinary" && (
+                  <Fontisto
+                    styles={styles.icon}
+                    name="blood-drop"
+                    size={40}
+                    color="black"
+                  />
+                )}
               </View>
-
-              {item.name}
+              <Text>{item.name}</Text>
             </BigButton>
           </View>
         )}
       />
-      <View>
-        
-      
-      </View>
+      <View></View>
     </>
   );
 }
@@ -133,11 +173,21 @@ export default WelcomePage;
 const styles = StyleSheet.create({
   search: {
     flexDirection: "row",
+    width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "left",
+    borderRadius: 50,
     backgroundColor: "lightgray",
   },
+  searchIcon: {
+    //paddingRight: 30,
+  },
+  arrowIcon: {
+    //paddingRight: -30,
+  },
   searchInput: {
-    backgroundColor: "lightgray",
+    height: 35,
+    fontSize: 22,
+    width: "80%",
   },
 });

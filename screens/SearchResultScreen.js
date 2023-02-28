@@ -1,25 +1,16 @@
-import AppSettings from "../components/Home/AppSettings";
+import SearchResults from "../components/Home/SearchResults";
 import { View, StyleSheet, Icon, Text, Button } from "react-native";
 
-const AppSettingsScreen = ({ navigation }) => {
+function SearchResultScreen({ route }) {
+  const { searchVal } = route.params;
   return (
     <View style={styles.rootContainer}>
-      <View style={styles.header}>
-        {/* <Icon
-          name="arrow-left"
-          size={24}
-          color="white"
-          onPress={() => navigation.navigate("Welcome")}
-        />
-        <Text style={styles.title}>User Profile</Text>
-        <Button title={"Logout"} /> */}
-      </View>
-      <AppSettings />
+      <SearchResults searchVal={searchVal} />
     </View>
   );
-};
+}
 
-export default AppSettingsScreen;
+export default SearchResultScreen;
 
 const styles = StyleSheet.create({
   header: {
