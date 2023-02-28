@@ -7,6 +7,7 @@ import ConditionScreen from "../screens/ConditionScreen";
 import RemedyListScreen from "../screens/RemedyListScreen";
 import AboutRemedyScreen from "../screens/AboutRemedyScreen";
 import AppSettingsScreen from "../screens/AppSettingsScreen";
+import SearchResultScreen from "../screens/SearchResultScreen";
 import { Colors } from "../constants/styles";
 
 // Add references here
@@ -32,6 +33,7 @@ function Home() {
       <Tab.Screen name="Condition" component={ConditionScreen} />
       <Tab.Screen name="RemedyList" component={RemedyListScreen} />
       <Tab.Screen name="AboutRemedy" component={AboutRemedyScreen} />
+      <Tab.Screen name="SearchResult" component={SearchResultScreen} />
       {/* <Tab.Screen
         name="AuthenticatedStack"
         component={AuthenticatedStack}
@@ -66,7 +68,7 @@ function AuthenticatedStack({ navigation }) {
           headerShown: false,
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="App Settings"
         component={AppSettingsScreen}
         options={{

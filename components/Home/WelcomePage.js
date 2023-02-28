@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View, TextInput } from "react-native";
+import { FlatList, StyleSheet, View, TextInput, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -8,7 +8,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import BigButton from "../ui/BigButton";
-import SearchField from "../ui/SearchField";
 import { db } from "../../firebase";
 import Button from "../ui/Button";
 import Icon from "@expo/vector-icons/FontAwesome";
@@ -46,14 +45,22 @@ function WelcomePage({}) {
           placeholder="Search by herbs or symptoms"
           keyboardType="default"
         /> */}
-        <SearchField value={searchInput}>
-          Search by remedy or condition
-        </SearchField>
+        <TextInput
+          keyboardType="default"
+          style={styles.searchInput}
+          placeholder={"Search..."}
+          onChangeText={(input) => setSearchInput(input)}
+          value={searchInput}
+        ></TextInput>
         <Icon
           name="arrow-right"
           size={24}
           color="black"
-          onPress={() => navigation.navigate("Welcome")}
+          onPress={() => {
+            navigation.navigate("SearchResult", {
+              searchVal: searchInput,
+            });
+          }}
         />
       </View>
       <FlatList
@@ -78,9 +85,9 @@ function WelcomePage({}) {
                   />
                 )}
                 {item.name === "Circulatory" && (
-                  <Fontisto
+                  <MaterialCommunityIcons
                     styles={styles.icon}
-                    name="blood-drop"
+                    name="blood-bag"
                     size={40}
                     color="black"
                   />
@@ -142,9 +149,16 @@ function WelcomePage({}) {
                     color="black"
                   />
                 )}
+                {item.name === "Urinary" && (
+                  <Fontisto
+                    styles={styles.icon}
+                    name="blood-drop"
+                    size={40}
+                    color="black"
+                  />
+                )}
               </View>
-
-              {item.name}
+              <Text>{item.name}</Text>
             </BigButton>
           </View>
         )}
@@ -170,5 +184,10 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     //paddingRight: -30,
+  },
+  searchInput: {
+    height: 35,
+    fontSize: 22,
+    width: "80%",
   },
 });
