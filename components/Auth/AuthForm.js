@@ -77,9 +77,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           usersCollection.set(newUser)
           .then(() => {
             console.log('User created successfully');
-            const foodsCollection = firestore.collection('users').doc(authId).collection('bookmarks');
+       //     const foodsCollection = firestore.collection('users').doc(authId).collection('bookmarks');
             // Create an empty document to create the collection
-           foodsCollection.doc('remedy').set({})
+      //     foodsCollection.doc('remedy').set({})
           })
         })
         .catch((error) => alert(error.message));
