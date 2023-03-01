@@ -19,7 +19,7 @@ export default BookMarkButton;
 
 const styles = StyleSheet.create({
     button: {
-     // borderRadius: 20,
+      borderRadius: 20,
       paddingVertical: 6,
       paddingHorizontal: 12,
       backgroundColor: "#35D96F",
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 4,
       marginTop: 30,
-      borderColor: '#35D96F',
+     borderColor: '#35D96F',
       borderWidth: 3,
     },
     pressed: {
