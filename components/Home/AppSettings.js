@@ -1,14 +1,50 @@
-import { StyleSheet, View, Text, TextInput } from "react-native";
-
-
+import { StyleSheet, View, Text, TextInput, FlatList } from "react-native";
+import { db, auth } from "../../firebase";
+import { useEffect, useState } from "react";
+import { Button } from "react-native";
+import BigButton from "../ui/BigButton";
 
 
 function AppSettings(){
 
+  //need to extract the remedies collection from the user's bookmark collection
+
+  const user = auth.currentUser.uid
+  const userRef = db.collection("users").doc(user)
+  const bookMarks =  userRef.collection("bookmarks").get()
+  const [bookmarkCollection, setBookmarkCollection] = useState([]);
+
+  useEffect( () => {
+    const con = []
+    bookMarks.then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        con.push({
+          ...doc.data(),
+          key: doc.id,
+        });
+      })
+      setBookmarkCollection(con);
+     })
+  
+  }) 
+
+  
     return(
         <>
         
-            <Text> App Settings</Text>
+            <Text> BOOKMARKS</Text>
+            
+            <FlatList
+              data={bookmarkCollection}
+              renderItem={({ item }) => (
+                <View>
+                  <BigButton>
+                  <Text>{item.name}</Text>
+                  </BigButton>
+                 
+                </View>
+              )}
+            />
        
             
             
