@@ -11,7 +11,7 @@ import BigButton from "../ui/BigButton";
 import { db } from "../../firebase";
 import Button from "../ui/Button";
 import Icon from "@expo/vector-icons/FontAwesome";
-
+//random
 function WelcomePage({}) {
   const navigation = useNavigation();
   //Bodyparts array used to display flatlist based on DB collection
