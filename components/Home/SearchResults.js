@@ -16,6 +16,7 @@ function SearchResults({ searchVal }) {
   const navigation = useNavigation();
   //gets/sets list of remedies to show in flatlist
   const [conditions, setConditions] = useState([]);
+  const [remedies, setRemedies] = useState([]);
   const col = db.collection("BodyParts");
   const bpList = [
     "Circulatory",
@@ -32,6 +33,7 @@ function SearchResults({ searchVal }) {
 
   var width = Dimensions.get("window").width; //full width
   var height = Dimensions.get("window").height; //full height
+  var rems = db.collectionGroup("Remedies");
 
   //Fills list of conditions to show in flatlist based on the bodypart selected
   useEffect(() => {
@@ -58,6 +60,22 @@ function SearchResults({ searchVal }) {
         .catch((error) => {
           console.log("Error getting documents: ", error);
         });
+    });
+
+    const remList = [];
+    //Gets a list of remedies to populate the second flat list depending on search terms entered
+    rems.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        if (doc.id.toLowerCase().includes(searchVal.toLowerCase())) {
+          console.log("rem result: " + doc.id);
+          remList.push({
+            ...doc.data(),
+            key: doc.id,
+          });
+        }
+        //console.log(doc.id, " => ", doc.data());
+      });
+      setRemedies(remList);
     });
     // col
     //   .doc(bodyPart)
@@ -108,7 +126,7 @@ function SearchResults({ searchVal }) {
         <Text style={styles.title}>Remedies</Text>
       </View>
       <FlatList
-        data={conditions}
+        data={remedies}
         renderItem={({ item }) => (
           <View style={styles.container}>
             <BigButton
