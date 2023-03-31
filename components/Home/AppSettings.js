@@ -3,10 +3,11 @@ import { db, auth } from "../../firebase";
 import { useEffect, useState } from "react";
 import { Button } from "react-native";
 import BigButton from "../ui/BigButton";
+import { useNavigation } from "@react-navigation/native";
 
 
 function AppSettings(){
-
+  const navigation = useNavigation();
   //need to extract the remedies collection from the user's bookmark collection
 
   const user = auth.currentUser.uid
@@ -38,7 +39,12 @@ function AppSettings(){
               data={bookmarkCollection}
               renderItem={({ item }) => (
                 <View>
-                  <BigButton>
+                  <BigButton
+                  onPress={() => {
+                    navigation.navigate("AboutRemedy", {
+                      rem: item.name,
+                    });
+                  }}>
                   <Text>{item.name}</Text>
                   </BigButton>
                  

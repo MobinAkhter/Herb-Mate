@@ -16,6 +16,7 @@ function RemedyList({ bodyPart, condition }) {
   //gets/sets list of remedies to show in flatlist
   const [remedies, setRemedies] = useState([]);
   const col = db.collection("BodyParts");
+//
 
   //gets remedies based on condition from db
   useEffect(() => {
@@ -50,8 +51,6 @@ function RemedyList({ bodyPart, condition }) {
             <BigButton
               onPress={() => {
                 navigation.navigate("AboutRemedy", {
-                  bp: bodyPart,
-                  con: condition,
                   rem: item.name,
                 });
               }}

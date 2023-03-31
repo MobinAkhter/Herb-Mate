@@ -8,7 +8,7 @@ import {getAuth} from 'firebase/auth'
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-function AboutRemedy({ bodyPart, condition, rem }) {
+function AboutRemedy({ rem }) {
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState("BookMark")
  const [checkBookMark, setCheckBookMark] = useState("")
@@ -19,7 +19,8 @@ function AboutRemedy({ bodyPart, condition, rem }) {
 
   //access firestore
  
- 
+ //accessing the collection
+  const remediesFirebase = db.collection("Remedies")
   //accessing current authenticated user
   
   //accessing the current user in firestore users collection in database by finding record through user id
@@ -34,8 +35,9 @@ function AboutRemedy({ bodyPart, condition, rem }) {
   //Gets specific herbal remedy to show information about
   //currently has an issue getting the document id.  rem parameter should give
   // document id from previous screen but it shows as undefined
+  
   useEffect(() => {
-    col
+   /* col
       .doc(bodyPart)
       .collection("Conditions")
       .doc(condition)
@@ -48,7 +50,17 @@ function AboutRemedy({ bodyPart, condition, rem }) {
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);
-      });
+      }); */
+      remediesFirebase
+      .doc(rem)
+      .get()
+      .then((doc) => {
+        console.log(doc.data());
+        setRemedy(doc.data());
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      })
   }, []);
 
   function bookMarkRemedy()
