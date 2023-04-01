@@ -27,12 +27,12 @@ function WelcomePage({}) {
             ...doc.data(),
             key: doc.id,
           });
-          console.log(doc.id);
+      
         });
         setBodyParts(parts);
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
+        
       });
   }, []);
 

@@ -33,12 +33,12 @@ function RemedyList({ bodyPart, condition }) {
             ...doc.data(),
             key: doc.id,
           });
-          console.log(doc.id);
+
         });
         setRemedies(con);
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
+      
       });
   }, []);
 

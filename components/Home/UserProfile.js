@@ -45,9 +45,7 @@ function UserProfile() {
       userRef.get().then((doc) => {
         if (doc.exists) {
           setUserData(doc.data());
-        } else {
-          console.log("No such user");
-        }
+        } 
       });
       
     }, []);
@@ -79,7 +77,7 @@ function UserProfile() {
          userRef.set({
           firstName: first,
         }, {merge: true}).catch((error) => {
-          console.error('Error updating document: ', error);
+
         });
 
          
@@ -89,7 +87,7 @@ function UserProfile() {
         userRef.set({
           lastName: last,
         }, {merge: true}).catch((error) => {
-          console.error('Error updating document: ', error);
+      
         });
 
 
@@ -100,26 +98,26 @@ function UserProfile() {
       
         user.updateEmail(email)
           .then(() => {
-            console.log('Email updated successfully.');
+           
             user.reload()
               .then(() => {
                 userRef.set({
                   email: email,
                 }, {merge: true})
                   .then(() => {
-                    console.log('Firestore document updated successfully.');
+
                     alert("Email has been updated");
                   })
                   .catch((error) => {
-                    console.error('Error updating Firestore document: ', error);
+      
                   });
               })
               .catch((error) => {
-                console.error('Error reloading user data: ', error);
+               
               });
           })
           .catch((error) => {
-            console.error('Error updating email: ', error);
+           
           });
       }
       

@@ -14,9 +14,6 @@ function AboutRemedy({ rem }) {
  const [checkBookMark, setCheckBookMark] = useState("")
  const [buttonColor, setButtonColor] = useState("red")
 
-  const col = db.collection("BodyParts");
-  console.log("rem: ", rem);
-
   //access firestore
  
  //accessing the collection
@@ -41,35 +38,14 @@ function AboutRemedy({ rem }) {
       .doc(rem)
       .get()
       .then((doc) => {
-        console.log(doc.data());
         setRemedy(doc.data());
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
       })
   }, []);
 
   function bookMarkRemedy()
   {
-
-   
-    userRef.get().then((doc) => {
-      if (doc.exists) {
-        const data = doc.data();
-        const email = data.email;
-        const firstName = data.firstName;
-        const lastName = data.lastName;
-        console.log('Email:', email);
-        console.log('First name:', firstName);
-        console.log('Last name:', lastName);
-      } else {
-        console.log('No such document!');
-      }
-    }).catch((error) => {
-      console.log('Error getting document:', error);
-    });
-
-
 
     if(checkBookMark == false){
         userRef.collection('bookmarks')
@@ -77,7 +53,6 @@ function AboutRemedy({ rem }) {
           .set({
             name: remedy.name,
             description: remedy.description,
-            image : remedy.image,
             precautions: remedy.precautions
           })
       
@@ -107,18 +82,18 @@ function AboutRemedy({ rem }) {
       checkRemedy.get()
           .then((docSnapshot) => {
             if (docSnapshot.exists){
-              console.log("true")
+         
               setBookMarkText("UNBOOKMARK")
               setCheckBookMark(true)
               
             }else{
-              console.log('false')
+             
               setBookMarkText("BOOKMARK")
               setCheckBookMark(false)
             }
           });
         
-  })
+  }, [])
 
   return (
     <ScrollView>
@@ -130,10 +105,10 @@ function AboutRemedy({ rem }) {
         //    width: 150,
        ////     backgroundColor: "green",
        //   }}
+       // <Image source={{uri: remedy.image}} style={{ width: 100, height: 150 }}/>
          
         />
         <View style={styles.info}>
-          <Image source={{uri: remedy.image}} style={{ width: 100, height: 150 }}/>
           <Text style={styles.head}>Description</Text>
           <Text style={styles.desc}>{remedy.description}</Text>
           <Text style={styles.head}>Precautions</Text>

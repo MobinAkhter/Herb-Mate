@@ -33,7 +33,7 @@ function ConditionList({ bodyPart }) {
         setConditions(con);
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
+   
       });
   }, []);
 
