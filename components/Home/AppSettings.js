@@ -27,7 +27,7 @@ function AppSettings(){
       setBookmarkCollection(con);
      })
   
-  }) 
+  }, []) 
 
   
     return(

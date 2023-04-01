@@ -37,20 +37,6 @@ function AboutRemedy({ rem }) {
   // document id from previous screen but it shows as undefined
   
   useEffect(() => {
-   /* col
-      .doc(bodyPart)
-      .collection("Conditions")
-      .doc(condition)
-      .collection("Remedies")
-      .doc(rem)
-      .get()
-      .then((doc) => {
-        console.log(doc.data());
-        setRemedy(doc.data());
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      }); */
       remediesFirebase
       .doc(rem)
       .get()
@@ -76,10 +62,6 @@ function AboutRemedy({ rem }) {
         console.log('Email:', email);
         console.log('First name:', firstName);
         console.log('Last name:', lastName);
-
-        //console.log(doc.data().collection("bookmarks"))
-
-        
       } else {
         console.log('No such document!');
       }
