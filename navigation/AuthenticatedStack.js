@@ -8,12 +8,12 @@ import RemedyListScreen from "../screens/RemedyListScreen";
 import AboutRemedyScreen from "../screens/AboutRemedyScreen";
 import AppSettingsScreen from "../screens/AppSettingsScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
+import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import { Colors } from "../constants/styles";
 import { HomeIcon, HomeModernIcon } from "react-native-heroicons/outline";
 import { Profiler } from "react";
 import iconSet from "@expo/vector-icons/build/Fontisto";
 import { Ionicons } from "@expo/vector-icons";
-
 
 // Add references here
 
@@ -64,25 +64,23 @@ function AuthenticatedStack({ navigation }) {
       <Tab.Screen
         name="Home"
         component={Home}
-        options={{ 
+        options={{
           headerShown: false,
-           tabBarIcon: () => { // setting the icon of the tab
-            return (
-            <Ionicons name="md-home" size={28} color = "#00ff0d" />
-            )
-          }
-          }}
+          tabBarIcon: () => {
+            // setting the icon of the tab
+            return <Ionicons name="md-home" size={28} color="#00ff0d" />;
+          },
+        }}
       />
       <Tab.Screen
         name="Profile"
         component={UserProfileScreen}
         options={{
           headerShown: false,
-          tabBarIcon:   () => { // setting the icon of the tab
-            return (
-            <Ionicons name="md-person" size={28} color = "#008cff" />
-            )
-          }
+          tabBarIcon: () => {
+            // setting the icon of the tab
+            return <Ionicons name="md-person" size={28} color="#008cff" />;
+          },
         }}
       />
       <Tab.Screen
@@ -90,11 +88,21 @@ function AuthenticatedStack({ navigation }) {
         component={AppSettingsScreen}
         options={{
           headerShown: false,
-          tabBarIcon: () => { // setting the icon of the tab
-            return (
-            <Ionicons name="md-settings" size={28} color = "#ff001f" />
-            )
-          }
+          tabBarIcon: () => {
+            // setting the icon of the tab
+            return <Ionicons name="md-settings" size={28} color="#ff001f" />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Data Analytics"
+        component={DataAnalyticsScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => {
+            // setting the icon of the tab
+            return <Ionicons name="md-settings" size={28} color="#ff001f" />;
+          },
         }}
       />
     </Tab.Navigator>
