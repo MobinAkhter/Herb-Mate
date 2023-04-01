@@ -61,22 +61,21 @@ function SearchResults({ searchVal }) {
     //       console.log("Error getting documents: ", error);
     //     });
     // });
-
-    const remList = [];
-    //Gets a list of remedies to populate the second flat list depending on search terms entered
-    rems.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        if (doc.id.toLowerCase().includes(searchVal.toLowerCase())) {
-          console.log("rem result: " + doc.id);
-          remList.push({
-            ...doc.data(),
-            key: doc.id,
-          });
-        }
-        //console.log(doc.id, " => ", doc.data());
-      });
-      setRemedies(remList);
-    });
+    // const remList = [];
+    // //Gets a list of remedies to populate the second flat list depending on search terms entered
+    // rems.get().then((querySnapshot) => {
+    //   querySnapshot.forEach((doc) => {
+    //     if (doc.id.toLowerCase().includes(searchVal.toLowerCase())) {
+    //       console.log("rem result: " + doc.id);
+    //       remList.push({
+    //         ...doc.data(),
+    //         key: doc.id,
+    //       });
+    //     }
+    //     //console.log(doc.id, " => ", doc.data());
+    //   });
+    //   setRemedies(remList);
+    // });
   }, []);
 
   return (
@@ -108,7 +107,7 @@ function SearchResults({ searchVal }) {
       <View style={styles.header}>
         <Text style={styles.title}>Remedies</Text>
       </View>
-      <FlatList
+      {/* <FlatList
         data={remedies}
         renderItem={({ item }) => (
           <View style={styles.container}>
@@ -126,7 +125,7 @@ function SearchResults({ searchVal }) {
             </BigButton>
           </View>
         )}
-      />
+      /> */}
     </View>
   );
 }
