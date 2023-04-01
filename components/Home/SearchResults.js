@@ -37,30 +37,30 @@ function SearchResults({ searchVal }) {
 
   //Fills list of conditions to show in flatlist based on the bodypart selected
   useEffect(() => {
-    const con = [];
-    bpList.forEach((element) => {
-      col
-        .doc(element)
-        .collection("Conditions")
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            if (doc.id.toLowerCase().includes(searchVal.toLowerCase())) {
-              console.log("result: " + doc.id);
-              con.push({
-                ...doc.data(),
-                key: doc.id,
-                bp: element,
-              });
-            }
-            //console.log(doc.id);
-          });
-          setConditions(con);
-        })
-        .catch((error) => {
-          console.log("Error getting documents: ", error);
-        });
-    });
+    // const con = [];
+    // bpList.forEach((element) => {
+    //   col
+    //     .doc(element)
+    //     .collection("Conditions")
+    //     .get()
+    //     .then((querySnapshot) => {
+    //       querySnapshot.forEach((doc) => {
+    //         if (doc.id.toLowerCase().includes(searchVal.toLowerCase())) {
+    //           console.log("result: " + doc.id);
+    //           con.push({
+    //             ...doc.data(),
+    //             key: doc.id,
+    //             bp: element,
+    //           });
+    //         }
+    //         //console.log(doc.id);
+    //       });
+    //       setConditions(con);
+    //     })
+    //     .catch((error) => {
+    //       console.log("Error getting documents: ", error);
+    //     });
+    // });
 
     const remList = [];
     //Gets a list of remedies to populate the second flat list depending on search terms entered
@@ -77,29 +77,12 @@ function SearchResults({ searchVal }) {
       });
       setRemedies(remList);
     });
-    // col
-    //   .doc(bodyPart)
-    //   .collection("Conditions")
-    //   .get()
-    //   .then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //       con.push({
-    //         ...doc.data(),
-    //         key: doc.id,
-    //       });
-    //       console.log(doc.id);
-    //     });
-    //     setConditions(con);
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error getting documents: ", error);
-    //   });
   }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Searching for: {searchVal}</Text>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.title}>Conditions</Text>
       </View>
       <FlatList
@@ -121,7 +104,7 @@ function SearchResults({ searchVal }) {
             </BigButton>
           </View>
         )}
-      />
+      /> */}
       <View style={styles.header}>
         <Text style={styles.title}>Remedies</Text>
       </View>
