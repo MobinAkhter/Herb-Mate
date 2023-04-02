@@ -15,11 +15,11 @@ function Navigation() {
 
   React.useEffect(() => {
     getUser();
-  });
+  },[]);
 
   async function getUser() {
     const user = await auth.currentUser;
-    if (user) {
+    if (user !== null) { // add a check here to see if user is not null
       setUser(user);
     }
   }

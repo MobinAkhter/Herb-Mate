@@ -7,27 +7,34 @@ import { useNavigation } from "@react-navigation/native";
 
 
 function AppSettings(){
-/** *  const navigation = useNavigation();
-  //need to extract the remedies collection from the user's bookmark collection
-
-  const user = auth.currentUser.uid
-  const userRef = db.collection("users").doc(user)
-  const bookMarks =  userRef.collection("bookmarks").get()
+  const navigation = useNavigation();
+  const user = auth.currentUser.uid;
+  const userRef = db.collection("users").doc(user);
   const [bookmarkCollection, setBookmarkCollection] = useState([]);
-
-  useEffect( () => {
-    const con = []
-    bookMarks.then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        con.push({
+  
+  const fetchBookmarks = async () => {
+    try {
+      const querySnapshot = await userRef.collection("bookmarks").get();
+      const bookmarks = [];
+      querySnapshot.forEach((doc) => {
+        bookmarks.push({
           ...doc.data(),
           key: doc.id,
         });
-      })
-      setBookmarkCollection(con);
-     })
+      });
+      setBookmarkCollection(bookmarks);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   
-  })  **/
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchBookmarks();
+    });
+  
+    return unsubscribe;
+  }, [navigation]);
 
   
     return(
@@ -35,7 +42,7 @@ function AppSettings(){
         
             <Text> BOOKMARKS</Text>
             
-         {/**   <FlatList
+         <FlatList
               data={bookmarkCollection}
               renderItem={({ item }) => (
                 <View>
@@ -50,7 +57,7 @@ function AppSettings(){
                  
                 </View>
               )}
-              */} 
+            ></FlatList>
         </>
     )
 }

@@ -32,7 +32,7 @@ function AboutRemedy({ rem }) {
         if (cachedData) {
           const {data, timestamp} = JSON.parse(cachedData);
           const ageInMinutes = (Date.now() - timestamp) / (1000 * 60);
-          if (ageInMinutes < 30) { // cache is still fresh
+          if (ageInMinutes < 120) { // cache is still fresh
             console.log("Remedy was cached")
             setRemedy(data);
             return;
