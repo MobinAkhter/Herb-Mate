@@ -4,96 +4,105 @@ import { db, auth } from "../../firebase";
 import BigButton from "../ui/BigButton";
 import BookMarkButton from "../ui/BookmarkButton";
 import {getAuth} from 'firebase/auth'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 function AboutRemedy({ rem }) {
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState("BookMark")
- const [checkBookMark, setCheckBookMark] = useState("")
- const [buttonColor, setButtonColor] = useState("red")
+  const [checkBookMark, setCheckBookMark] = useState("")
+  const [buttonColor, setButtonColor] = useState("red")
 
-  //access firestore
- 
- //accessing the collection
+  // access firestore
   const remediesFirebase = db.collection("Remedies")
-  //accessing current authenticated user
-  
-  //accessing the current user in firestore users collection in database by finding record through user id
   const user = auth.currentUser.uid
-
   const userRef = db.collection('users').doc(user);
 
-  //accessing the bookmarks collection from the user
-  //const bookmarks =  userRef.collection('bookmarks').doc('remedy').get();
+  // define the key for AsyncStorage
+  //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
 
-
-  //Gets specific herbal remedy to show information about
-  //currently has an issue getting the document id.  rem parameter should give
-  // document id from previous screen but it shows as undefined
-  
   useEffect(() => {
-      remediesFirebase
-      .doc(rem)
-      .get()
-      .then((doc) => {
-        setRemedy(doc.data());
-      })
-      .catch((error) => {
-      })
+    // define the key for AsyncStorage
+    const remedyKey = 'remedy-' + rem;
+    
+    // check if the remedy is in the cache and if the data is still fresh
+    AsyncStorage.getItem(remedyKey)
+      .then(cachedData => {
+        if (cachedData) {
+          const {data, timestamp} = JSON.parse(cachedData);
+          const ageInMinutes = (Date.now() - timestamp) / (1000 * 60);
+          if (ageInMinutes < 30) { // cache is still fresh
+            console.log("Remedy was cached")
+            setRemedy(data);
+            return;
+          }
+        }
+        
+        // fetch the remedy from Firestore and save it in the cache
+        remediesFirebase
+          .doc(rem)
+          .get()
+          .then(doc => {
+            const data = doc.data();
+            console.log('Fetching remedy from Firebase')
+            setRemedy(data);
+            AsyncStorage.setItem(remedyKey, JSON.stringify({data, timestamp: Date.now()}));
+          })
+          .catch(error => {
+            console.error('Error fetching remedy from Firestore:', error);
+          });
+      });
   }, []);
+  
+  
 
+  
   function bookMarkRemedy()
   {
-
     if(checkBookMark == false){
-        userRef.collection('bookmarks')
-          .doc(rem)
-          .set({
-            name: remedy.name,
-            description: remedy.description,
-            precautions: remedy.precautions
-          })
-      
-          Alert.alert(
-            `${remedy.name} has been bookmarked!`
-           )
-          setBookMarkText("UNBOOKMARK")
-         
-          setCheckBookMark(true)
-    }else{
-      userRef.collection('bookmarks').doc(rem).delete()
-      
-      Alert.alert(
-        `${remedy.name} has been removed from your bookmarks!`
-       )
-      setBookMarkText("BOOKMARK")
-      setCheckBookMark(false)
-    }
-
-   
-
+            userRef.collection('bookmarks')
+                .doc(rem)
+                .set({
+                  name: remedy.name,
+                  description: remedy.description,
+                  precautions: remedy.precautions
+                })
+           
+                Alert.alert(
+                  `${remedy.name} has been bookmarked!`
+                 )
+                setBookMarkText("UNBOOKMARK")
+               
+                setCheckBookMark(true)
+          }else{
+            userRef.collection('bookmarks').doc(rem).delete()
+            
+            Alert.alert(
+              `${remedy.name} has been removed from your bookmarks!`
+             )
+           setBookMarkText("BOOKMARK")
+            setCheckBookMark(false)
+          }
   }
 
   
-  useEffect(() => {
-   const checkRemedy = userRef.collection('bookmarks').doc(rem)
-      checkRemedy.get()
-          .then((docSnapshot) => {
-            if (docSnapshot.exists){
-         
-              setBookMarkText("UNBOOKMARK")
-              setCheckBookMark(true)
-              
-            }else{
-             
-              setBookMarkText("BOOKMARK")
-              setCheckBookMark(false)
-            }
-          });
-        
-  }, [])
+
+
+  /**useEffect(() => {
+    const checkRemedy = userRef.collection('bookmarks').doc(rem)
+    checkRemedy.get()
+      .then(docSnapshot => {
+        if (docSnapshot.exists) {
+          setBookMarkText("UNBOOKMARK")
+          setCheckBookMark(true)
+        } else {
+          setBookMarkText("BOOKMARK")
+          setCheckBookMark(false)
+        }
+      });
+
+  }, []) **/
 
   return (
     <ScrollView>
@@ -104,7 +113,7 @@ function AboutRemedy({ rem }) {
          // style={{
         //    width: 150,
        ////     backgroundColor: "green",
-       //   }}
+       //   }}   onPress={bookMarkRemedy}
        // <Image source={{uri: remedy.image}} style={{ width: 100, height: 150 }}/>
          
         />

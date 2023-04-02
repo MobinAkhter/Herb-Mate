@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 
 function AppSettings(){
-  const navigation = useNavigation();
+/** *  const navigation = useNavigation();
   //need to extract the remedies collection from the user's bookmark collection
 
   const user = auth.currentUser.uid
@@ -27,7 +27,7 @@ function AppSettings(){
       setBookmarkCollection(con);
      })
   
-  }) 
+  })  **/
 
   
     return(
@@ -35,7 +35,7 @@ function AppSettings(){
         
             <Text> BOOKMARKS</Text>
             
-            <FlatList
+         {/**   <FlatList
               data={bookmarkCollection}
               renderItem={({ item }) => (
                 <View>
@@ -50,10 +50,7 @@ function AppSettings(){
                  
                 </View>
               )}
-            />
-       
-            
-            
+              */} 
         </>
     )
 }

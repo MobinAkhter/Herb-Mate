@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -13,34 +13,53 @@ import { db } from "../../firebase";
 
 function RemedyList({ bodyPart, condition }) {
   const navigation = useNavigation();
-  //gets/sets list of remedies to show in flatlist
   const [remedies, setRemedies] = useState([]);
-  const col = db.collection("BodyParts");
-//
+  const [cached, setCached] = useState(false); // new state variable
 
-  //gets remedies based on condition from db
+  // Define the cache key for AsyncStorage
+  const cacheKey = `remedies_${bodyPart}_${condition}`;
+
+  const col = db.collection("BodyParts");
+
   useEffect(() => {
     const con = [];
-    col
-      .doc(bodyPart)
-      .collection("Conditions")
-      .doc(condition)
-      .collection("Remedies")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          con.push({
-            ...doc.data(),
-            key: doc.id,
-          });
-
-        });
-        setRemedies(con);
+  
+    // Try to retrieve the remedies from cache
+    AsyncStorage.getItem(cacheKey)
+      .then((cachedRemedies) => {
+        if (cachedRemedies) {
+          setRemedies(JSON.parse(cachedRemedies));
+          console.log("Remedies retrieved from cache");
+        } else {
+          // If remedies are not found in cache, fetch from Firestore
+          col
+            .doc(bodyPart)
+            .collection("Conditions")
+            .doc(condition)
+            .collection("Remedies")
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                con.push({
+                  ...doc.data(),
+                  key: doc.id,
+                });
+              });
+  
+              // Cache the remedies in AsyncStorage 
+              AsyncStorage.setItem(cacheKey, JSON.stringify(con))
+                .then(() => console.log("Remedies cached successfully"))
+                .catch((error) => console.error(error));
+  
+              setRemedies(con);
+              console.log("Remedies retrieved from Firestore");
+            })
+            .catch((error) => console.error(error));
+        }
       })
-      .catch((error) => {
-      
-      });
+      .catch((error) => console.error(error));
   }, []);
+  
 
   return (
     <View style={styles.container}>

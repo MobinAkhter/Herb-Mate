@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import BigButton from "../ui/BigButton";
 import { db } from "../../firebase";
 
@@ -15,26 +15,40 @@ function ConditionList({ bodyPart }) {
   const [conditions, setConditions] = useState([]);
   const col = db.collection("BodyParts");
 
-  //Fills list of conditions to show in flatlist based on the bodypart selected
-  useEffect(() => {
-    const con = [];
-    col
-      .doc(bodyPart)
-      .collection("Conditions")
-      .get()
-      .then((querySnapshot) => {
+  // Loads the conditions from cache or database
+  const loadConditions = async () => {
+    try {
+      const cacheKey = `conditions_${bodyPart}`;
+      const cachedConditions = await AsyncStorage.getItem(cacheKey);
+
+      if (cachedConditions !== null) {
+        console.log(`Fetching conditions from cache for body part: ${bodyPart}`);
+        setConditions(JSON.parse(cachedConditions));
+      } else {
+        console.log(`Fetching conditions from Firestore for body part: ${bodyPart}`);
+        const con = [];
+        const querySnapshot = await col
+          .doc(bodyPart)
+          .collection("Conditions")
+          .get();
+
         querySnapshot.forEach((doc) => {
           con.push({
             ...doc.data(),
             key: doc.id,
           });
-          console.log(doc.id);
         });
+
+        await AsyncStorage.setItem(cacheKey, JSON.stringify(con));
         setConditions(con);
-      })
-      .catch((error) => {
-   
-      });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    loadConditions();
   }, []);
 
   return (

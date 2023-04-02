@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View, TextInput, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -14,27 +14,47 @@ import Icon from "@expo/vector-icons/FontAwesome";
 //random
 function WelcomePage({}) {
   const navigation = useNavigation();
-  //Bodyparts array used to display flatlist based on DB collection
   const [bodyParts, setBodyParts] = useState([]);
   const [searchInput, setSearchInput] = useState();
-  const bp = db.collection("BodyParts");
+
   useEffect(() => {
-    const parts = [];
-    bp.get()
-      .then((querySnapshot) => {
+    const fetchBodyParts = async () => {
+      try {
+        // Try to get the cached body parts from AsyncStorage
+        const cachedBodyParts = await AsyncStorage.getItem('bodyParts');
+  
+        // If cached data exists, parse it and set it as the state
+        if (cachedBodyParts) {
+          const parsedBodyParts = JSON.parse(cachedBodyParts);
+          console.log('Fetching body parts from cache...'); 
+          await setBodyParts(parsedBodyParts); // add await here
+        }
+  
+        // Always fetch the latest data from Firestore and update the state and cache
+        const parts = [];
+        const querySnapshot = await db.collection("BodyParts").get();
+        console.log('Fetching body parts from Firestore...'); 
         querySnapshot.forEach((doc) => {
           parts.push({
             ...doc.data(),
             key: doc.id,
           });
-      
         });
-        setBodyParts(parts);
-      })
-      .catch((error) => {
         
-      });
+        // Update state with the latest body parts
+        setBodyParts(parts);
+  
+        // Cache the latest body parts
+        await AsyncStorage.setItem('bodyParts', JSON.stringify(parts));
+        console.log("Caching")
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  
+    fetchBodyParts();
   }, []);
+  
 
   return (
     <>
