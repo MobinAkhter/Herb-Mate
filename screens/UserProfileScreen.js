@@ -35,7 +35,7 @@ export default UserProfileScreen;
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
-    paddingTop: 25,
+    paddingTop: 35,
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",

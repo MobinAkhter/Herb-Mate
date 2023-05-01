@@ -60,7 +60,7 @@ function AboutRemedy({ rem }) {
   
   function bookMarkRemedy()
   {
-    if(checkBookMark == false){
+    if(!userRef.collection('bookmarks').doc(rem).exists){
             userRef.collection('bookmarks')
                 .doc(rem)
                 .set({
