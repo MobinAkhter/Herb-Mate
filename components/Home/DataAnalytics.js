@@ -5,6 +5,16 @@ import Button from "../ui/Button";
 import BigButton from "../ui/BigButton";
 import { useNavigation } from "@react-navigation/native";
 
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from 'react-native-chart-kit'
+import { color } from "react-native-reanimated";
+
 
 function DataAnalytics() {
   const navigation = useNavigation();
@@ -25,6 +35,32 @@ function DataAnalytics() {
    const [remedy4, setRemedy4] = useState("");
    const [remedy5, setRemedy5] = useState("");
 
+   const barData = {
+      datasets: [
+        
+        {
+          data: [ 10, 20, 30, 40, 20],
+          colors: [
+            (opacity = 1) => "#01FD1A",
+            (opacity = 1) => "#1F51FF",
+            (opacity = 1) => "#FD0131",
+            (opacity = 1) => "#FD6101",
+            (opacity = 1) => "#6D01FD",
+            
+          ]
+        },
+      ],
+    };
+    const chartConfig = {
+      backgroundGradientFrom: '#fff', // white background
+  backgroundGradientTo: '#fff', // white background
+  decimalPlaces: 0, // Hide decimals in the y-axis labels
+  color: (opacity = 0) => "#FFFFFF", // blue color for bars
+  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // black color for labels
+    };
+    
+
+
   ///
   // Retrieves the Remedy data in the database
   ///
@@ -39,6 +75,11 @@ function DataAnalytics() {
       });
     }); 
   }
+
+  const formatYLabel = (value) => {
+    return "f"
+  };
+
 
   function getTopFive()
   {
@@ -61,6 +102,7 @@ function DataAnalytics() {
     setRemedy4(remedyNames[3])
     setRemedy5(remedyNames[4])
 
+    
 
 
   }
@@ -76,6 +118,20 @@ function DataAnalytics() {
       <Text>{remedy3}</Text>
       <Text>{remedy4}</Text>
       <Text>{remedy5}</Text>
+
+      <BarChart
+       
+        data={barData}
+        width={390}
+        height={450}
+        fromZero={true}
+        chartConfig={chartConfig}
+        style={{ marginVertical: 8, borderRadius: 16 }}
+        withCustomBarColorFromData = {true}
+        flatColor = {true}
+        showBarTops ={false}
+        showValuesOnTopOfBars={true}
+      />
     </>
   );
   }
