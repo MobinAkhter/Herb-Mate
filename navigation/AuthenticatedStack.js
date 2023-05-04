@@ -9,11 +9,13 @@ import AboutRemedyScreen from "../screens/AboutRemedyScreen";
 import AppSettingsScreen from "../screens/AppSettingsScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
+import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
 import { Colors } from "../constants/styles";
 import { HomeIcon, HomeModernIcon } from "react-native-heroicons/outline";
 import { Profiler } from "react";
 import iconSet from "@expo/vector-icons/build/Fontisto";
 import { Ionicons } from "@expo/vector-icons";
+
 
 // Add references here
 
@@ -105,6 +107,18 @@ function AuthenticatedStack({ navigation }) {
           },
         }}
       />
+
+      <Tab.Screen
+        name="Bar Graph"
+        component={RemediesBarGraphScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => {
+            // setting the icon of the tab
+            return <Ionicons name="md-settings" size={28} color="#ff001f" />;
+          },
+        }}
+      /> 
     </Tab.Navigator>
   );
 }

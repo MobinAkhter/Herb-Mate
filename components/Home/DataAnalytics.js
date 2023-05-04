@@ -119,19 +119,7 @@ function DataAnalytics() {
       <Text>{remedy4}</Text>
       <Text>{remedy5}</Text>
 
-      <BarChart
-       
-        data={barData}
-        width={390}
-        height={450}
-        fromZero={true}
-        chartConfig={chartConfig}
-        style={{ marginVertical: 8, borderRadius: 16 }}
-        withCustomBarColorFromData = {true}
-        flatColor = {true}
-        showBarTops ={false}
-        showValuesOnTopOfBars={true}
-      />
+  
     </>
   );
   }
