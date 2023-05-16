@@ -1,22 +1,18 @@
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import UserProfileScreen from "../screens/UserProfileScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Text, Image, Settings } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ConditionScreen from "../screens/ConditionScreen";
 import RemedyListScreen from "../screens/RemedyListScreen";
 import AboutRemedyScreen from "../screens/AboutRemedyScreen";
+import UserProfileScreen from "../screens/UserProfileScreen";
 import AppSettingsScreen from "../screens/AppSettingsScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
 import { Colors } from "../constants/styles";
-// import { HomeIcon, HomeModernIcon } from "react-native-heroicons/outline";
-// import { Profiler } from "react";
-// import iconSet from "@expo/vector-icons/build/Fontisto";
-import { Ionicons } from "@expo/vector-icons";
-
-// Add references here
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -30,35 +26,21 @@ function Home() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      <Tab.Screen
+      <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
-        screenOptions={{ headerLeft: null }}
+        options={{ headerLeft: null }}
       />
-      <Tab.Screen
-        name="Profile"
-        component={UserProfileScreen}
-        screenOptions={{
-          headerLeft: null,
-          contentStyle: { backgroundColor: Colors.white },
-        }}
-      />
-      <Tab.Screen name="Condition" component={ConditionScreen} />
-      <Tab.Screen name="RemedyList" component={RemedyListScreen} />
-      <Tab.Screen name="AboutRemedy" component={AboutRemedyScreen} />
-      <Tab.Screen name="SearchResult" component={SearchResultScreen} />
-      {/* <Tab.Screen
-        name="AuthenticatedStack"
-        component={AuthenticatedStack}
-        options={{ title: "", headerTransparent: true }} */}
-      {/* //
-      https://stackoverflow.com/questions/61185135/react-native-navigation-error-the-action-navigate-with-payload-name-192-168
-      ^ Tried to make navigation work. Tired atm, will think about this later /> */}
+      <Stack.Screen name="Profile" component={UserProfileScreen} />
+      <Stack.Screen name="Condition" component={ConditionScreen} />
+      <Stack.Screen name="RemedyList" component={RemedyListScreen} />
+      <Stack.Screen name="AboutRemedy" component={AboutRemedyScreen} />
+      <Stack.Screen name="SearchResult" component={SearchResultScreen} />
     </Stack.Navigator>
   );
 }
 
-function AuthenticatedStack({ navigation }) {
+function AuthenticatedStack() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -68,16 +50,14 @@ function AuthenticatedStack({ navigation }) {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      {/* These are the screens that get displayed on the bottom tab */}
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
           headerShown: false,
-          tabBarIcon: () => {
-            // setting the icon of the tab
-            return <Ionicons name="md-home" size={28} color="#00ff0d" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="md-home" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -85,10 +65,9 @@ function AuthenticatedStack({ navigation }) {
         component={UserProfileScreen}
         options={{
           headerShown: false,
-          tabBarIcon: () => {
-            // setting the icon of the tab
-            return <Ionicons name="md-person" size={28} color="#008cff" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="md-person" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -96,37 +75,46 @@ function AuthenticatedStack({ navigation }) {
         component={AppSettingsScreen}
         options={{
           headerShown: false,
-          tabBarIcon: () => {
-            // setting the icon of the tab
-            return <Ionicons name="md-settings" size={28} color="#ff001f" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="md-settings" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
-        name="Data Analytics"
+        name="DataAnalytics"
         component={DataAnalyticsScreen}
         options={{
           headerShown: false,
-          tabBarIcon: () => {
-            // setting the icon of the tab
-            return <Ionicons name="md-settings" size={28} color="#ff001f" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="md-analytics" size={size} color={color} />
+          ),
         }}
       />
-
       <Tab.Screen
-        name="Bar Graph"
+        name="BarGraph"
         component={RemediesBarGraphScreen}
         options={{
           headerShown: false,
-          tabBarIcon: () => {
-            // setting the icon of the tab
-            return <Ionicons name="md-settings" size={28} color="#ff001f" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="md-bar-chart" size={size} color={color} />
+          ),
         }}
       />
     </Tab.Navigator>
   );
 }
+
+// function AuthenticatedStack() {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen
+//         name="MainTabs"
+//         component={MainTabs}
+//         options={{ headerShown: false }}
+//       />
+//     </Stack.Navigator>
+//   );
+// }
+// Might need to do what has been commented later, i think. The app seems to work perfectly fine so I'll keep as is.
 
 export default AuthenticatedStack;
