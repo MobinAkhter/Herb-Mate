@@ -96,6 +96,7 @@ function WelcomePage({}) {
         renderItem={({ item }) => (
           <View style={styles.container}>
             <BigButton
+              style={styles.button}
               onPress={() => {
                 navigation.navigate("Condition", {
                   bp: item.name,
@@ -103,10 +104,9 @@ function WelcomePage({}) {
               }}
             >
               {/* Determines icon to show based on bodypart */}
-              <View style={styles.icon}>
+              <View style={styles.bodyParts}>
                 {item.name === "Digestive" && (
                   <MaterialCommunityIcons
-                    styles={styles.icon}
                     name="stomach"
                     size={40}
                     color="black"
@@ -114,7 +114,6 @@ function WelcomePage({}) {
                 )}
                 {item.name === "Circulatory" && (
                   <MaterialCommunityIcons
-                    styles={styles.icon}
                     name="blood-bag"
                     size={40}
                     color="black"
@@ -122,7 +121,6 @@ function WelcomePage({}) {
                 )}
                 {item.name === "Head and Neck" && (
                   <FontAwesome5
-                    styles={styles.icon}
                     name="head-side-virus"
                     size={40}
                     color="black"
@@ -130,40 +128,23 @@ function WelcomePage({}) {
                 )}
                 {item.name === "Mental" && (
                   <MaterialCommunityIcons
-                    styles={styles.icon}
                     name="brain"
                     size={40}
                     color="black"
                   />
                 )}
                 {item.name === "Respiratory" && (
-                  <FontAwesome5
-                    styles={styles.icon}
-                    name="lungs"
-                    size={40}
-                    color="black"
-                  />
+                  <FontAwesome5 name="lungs" size={40} color="black" />
                 )}
                 {item.name === "Skeletal" && (
-                  <FontAwesome5
-                    styles={styles.icon}
-                    name="bone"
-                    size={40}
-                    color="black"
-                  />
+                  <FontAwesome5 name="bone" size={40} color="black" />
                 )}
                 {item.name === "Skin" && (
-                  <Ionicons
-                    styles={styles.icon}
-                    name="body"
-                    size={40}
-                    color="black"
-                  />
+                  <Ionicons name="body" size={40} color="black" />
                 )}
                 {item.name === "Male Reproductive" ||
                   (item.name === "Female Reproductive" && (
                     <MaterialCommunityIcons
-                      styles={styles.icon}
                       name="reproduction"
                       size={40}
                       color="black"
@@ -171,19 +152,13 @@ function WelcomePage({}) {
                   ))}
                 {item.name === "Male Reproductive" && (
                   <MaterialCommunityIcons
-                    styles={styles.icon}
                     name="reproduction"
                     size={40}
                     color="black"
                   />
                 )}
                 {item.name === "Urinary" && (
-                  <Fontisto
-                    styles={styles.icon}
-                    name="blood-drop"
-                    size={40}
-                    color="black"
-                  />
+                  <Fontisto name="blood-drop" size={40} color="black" />
                 )}
               </View>
               <Text>{item.name}</Text>
@@ -191,7 +166,6 @@ function WelcomePage({}) {
           </View>
         )}
       />
-      <View></View>
     </SafeAreaView>
   );
 }
@@ -216,6 +190,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     height: "100%",
   },
+  searchInput: {
+    width: "100%",
+    height: "100%",
+    paddingHorizontal: 16,
+  },
   searchBtn: {
     width: 45,
     height: "100%",
@@ -224,23 +203,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  search: {
-    flexDirection: "row",
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "left",
-    borderRadius: 50,
-    backgroundColor: "lightgray",
-  },
-  searchIcon: {
-    //paddingRight: 30,
-  },
-  arrowIcon: {
-    //paddingRight: -30,
-  },
-  searchInput: {
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 16,
-  },
+  // search: {
+  //   flexDirection: "row",
+  //   width: "100%",
+  //   alignItems: "center",
+  //   justifyContent: "left",
+  //   borderRadius: 50,
+  //   backgroundColor: "lightgray",
+  // },
 });

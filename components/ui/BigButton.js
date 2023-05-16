@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     marginTop: 30,
+    alignItems: "center",
     borderColor: "#35D96F",
     borderWidth: 3,
   },
@@ -38,8 +39,8 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   buttonText: {
-    textAlign: "center",
-    color: "black",
+    // textAlign: "center",
+    // color: "black",
     fontSize: 27,
     fontWeight: "bold",
   },
