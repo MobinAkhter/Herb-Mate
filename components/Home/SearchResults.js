@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+// import { MaterialCommunityIcons } from "@expo/vector-icons";
+// import { Fontisto } from "@expo/vector-icons";
+// import { FontAwesome5 } from "@expo/vector-icons";
+// import { Ionicons } from "@expo/vector-icons";
 
-import BigButton from "../ui/BigButton";
+// import BigButton from "../ui/BigButton";
 import { Colors } from "../../constants/styles";
 import { db } from "../../firebase";
 

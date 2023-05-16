@@ -11,11 +11,10 @@ import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
 import { Colors } from "../constants/styles";
-import { HomeIcon, HomeModernIcon } from "react-native-heroicons/outline";
-import { Profiler } from "react";
-import iconSet from "@expo/vector-icons/build/Fontisto";
+// import { HomeIcon, HomeModernIcon } from "react-native-heroicons/outline";
+// import { Profiler } from "react";
+// import iconSet from "@expo/vector-icons/build/Fontisto";
 import { Ionicons } from "@expo/vector-icons";
-
 
 // Add references here
 
@@ -28,7 +27,6 @@ function Home() {
       screenOptions={{
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
-        headerTitleAlign: "center",
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
@@ -36,6 +34,14 @@ function Home() {
         name="Welcome"
         component={WelcomeScreen}
         screenOptions={{ headerLeft: null }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={UserProfileScreen}
+        screenOptions={{
+          headerLeft: null,
+          contentStyle: { backgroundColor: Colors.white },
+        }}
       />
       <Tab.Screen name="Condition" component={ConditionScreen} />
       <Tab.Screen name="RemedyList" component={RemedyListScreen} />
@@ -118,7 +124,7 @@ function AuthenticatedStack({ navigation }) {
             return <Ionicons name="md-settings" size={28} color="#ff001f" />;
           },
         }}
-      /> 
+      />
     </Tab.Navigator>
   );
 }

@@ -1,5 +1,5 @@
 import SearchResults from "../components/Home/SearchResults";
-import { View, StyleSheet, Icon, Text, Button } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 function SearchResultScreen({ route }) {
   const { searchVal } = route.params;

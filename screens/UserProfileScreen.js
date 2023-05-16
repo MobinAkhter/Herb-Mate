@@ -14,19 +14,20 @@ function UserProfileScreen({ navigation }) {
     setUser(null);
   };
   return (
-    <View style={styles.container}>
+    <>
       <View style={styles.header}>
         <Icon
+          style={styles.backIcon}
           name="arrow-left"
           size={24}
           color="white"
           onPress={() => navigation.goBack()}
         />
-        {/* <Text style={styles.title}>User Profile</Text> */}
+        <Text style={styles.title}>User Profile</Text>
         <Button title={"Logout"} onPress={handleLogout} />
       </View>
       <UserProfile />
-    </View>
+    </>
   );
 }
 
@@ -34,19 +35,20 @@ export default UserProfileScreen;
 
 const styles = StyleSheet.create({
   header: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingTop: 50,
     justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    flexDirection: "row",
-    // alignItems: "center",
     backgroundColor: "#35D96F",
     padding: 16,
   },
 
   title: {
+    flex: 1, // Add flex property
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
+    marginLeft: 40,
+    textAlign: "center",
   },
 });

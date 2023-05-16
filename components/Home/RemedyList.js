@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { Ionicons } from "@expo/vector-icons";
 
 import BigButton from "../ui/BigButton";
-// import { Colors } from "../../constants/styles";
+import { Colors } from "../../constants/styles";
 import { db } from "../../firebase";
 
 function RemedyList({ bodyPart, condition }) {

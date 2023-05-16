@@ -5,8 +5,6 @@ const WelcomeScreen = ({}) => {
   return (
     <View style={styles.rootContainer}>
       <WelcomePage />
-      {/* <Text style={styles.title}>Welcome!</Text>
-      <Text>You authenticated successfully!</Text> */}
     </View>
   );
 };
@@ -19,10 +17,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 32,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
   },
 });
