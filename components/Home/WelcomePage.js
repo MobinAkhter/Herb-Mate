@@ -24,6 +24,7 @@ function WelcomePage({}) {
   const navigation = useNavigation();
   const [bodyParts, setBodyParts] = useState([]);
   const [searchInput, setSearchInput] = useState();
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const fetchBodyParts = async () => {
@@ -90,82 +91,101 @@ function WelcomePage({}) {
           />
         </TouchableOpacity>
       </View>
-
-      <FlatList
-        data={bodyParts}
-        renderItem={({ item }) => (
-          <View style={styles.container}>
-            <BigButton
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("Condition", {
-                  bp: item.name,
-                });
-              }}
-            >
-              {/* Determines icon to show based on bodypart */}
-              <View style={styles.bodyParts}>
-                {item.name === "Digestive" && (
-                  <MaterialCommunityIcons
-                    name="stomach"
-                    size={40}
-                    color="black"
-                  />
-                )}
-                {item.name === "Circulatory" && (
-                  <MaterialCommunityIcons
-                    name="blood-bag"
-                    size={40}
-                    color="black"
-                  />
-                )}
-                {item.name === "Head and Neck" && (
-                  <FontAwesome5
-                    name="head-side-virus"
-                    size={40}
-                    color="black"
-                  />
-                )}
-                {item.name === "Mental" && (
-                  <MaterialCommunityIcons
-                    name="brain"
-                    size={40}
-                    color="black"
-                  />
-                )}
-                {item.name === "Respiratory" && (
-                  <FontAwesome5 name="lungs" size={40} color="black" />
-                )}
-                {item.name === "Skeletal" && (
-                  <FontAwesome5 name="bone" size={40} color="black" />
-                )}
-                {item.name === "Skin" && (
-                  <Ionicons name="body" size={40} color="black" />
-                )}
-                {item.name === "Male Reproductive" ||
-                  (item.name === "Female Reproductive" && (
+      <View style={styles.bodyPartsContainer}>
+        <FlatList
+          data={showAll ? bodyParts : bodyParts.slice(0, 4)}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View style={styles.container}>
+              <BigButton
+                style={styles.button}
+                onPress={() => {
+                  navigation.navigate("Condition", {
+                    bp: item.name,
+                  });
+                }}
+              >
+                {/* Determines icon to show based on bodypart */}
+                <View style={styles.bodyParts}>
+                  {item.name === "Digestive" && (
+                    <MaterialCommunityIcons
+                      name="stomach"
+                      size={40}
+                      color="black"
+                    />
+                  )}
+                  {item.name === "Circulatory" && (
+                    <MaterialCommunityIcons
+                      name="blood-bag"
+                      size={40}
+                      color="black"
+                    />
+                  )}
+                  {item.name === "Head and Neck" && (
+                    <FontAwesome5
+                      name="head-side-virus"
+                      size={40}
+                      color="black"
+                    />
+                  )}
+                  {item.name === "Mental" && (
+                    <MaterialCommunityIcons
+                      name="brain"
+                      size={40}
+                      color="black"
+                    />
+                  )}
+                  {item.name === "Respiratory" && (
+                    <FontAwesome5 name="lungs" size={40} color="black" />
+                  )}
+                  {item.name === "Skeletal" && (
+                    <FontAwesome5 name="bone" size={40} color="black" />
+                  )}
+                  {item.name === "Skin" && (
+                    <Ionicons name="body" size={40} color="black" />
+                  )}
+                  {item.name === "Male Reproductive" ||
+                    (item.name === "Female Reproductive" && (
+                      <MaterialCommunityIcons
+                        name="reproduction"
+                        size={40}
+                        color="black"
+                      />
+                    ))}
+                  {item.name === "Male Reproductive" && (
                     <MaterialCommunityIcons
                       name="reproduction"
                       size={40}
                       color="black"
                     />
-                  ))}
-                {item.name === "Male Reproductive" && (
-                  <MaterialCommunityIcons
-                    name="reproduction"
-                    size={40}
-                    color="black"
-                  />
-                )}
-                {item.name === "Urinary" && (
-                  <Fontisto name="blood-drop" size={40} color="black" />
-                )}
-              </View>
-              <Text>{item.name}</Text>
-            </BigButton>
-          </View>
-        )}
-      />
+                  )}
+                  {item.name === "Urinary" && (
+                    <Fontisto name="blood-drop" size={40} color="black" />
+                  )}
+                </View>
+                <Text>{item.name}</Text>
+              </BigButton>
+            </View>
+          )}
+        />
+      </View>
+      {!showAll && bodyParts.length > 4 && (
+        <TouchableOpacity
+          onPress={() => setShowAll(true)}
+          style={styles.disclosureButton}
+        >
+          <Text style={styles.disclosureButtonText}>See More</Text>
+        </TouchableOpacity>
+      )}
+
+      {showAll && (
+        <TouchableOpacity
+          onPress={() => setShowAll(false)}
+          style={styles.disclosureButton}
+        >
+          <Text style={styles.disclosureButtonText}>See Less</Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }
@@ -180,6 +200,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 50,
     marginBottom: 10,
+  },
+  bodyPartsContainer: {
+    flex: 1,
+    marginTop: 10,
   },
   searchWrapper: {
     flex: 1,
@@ -202,6 +226,19 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
+  },
+  disclosureButton: {
+    marginLeft: 125,
+    width: "auto",
+    height: 50,
+    backgroundColor: "#35D96F",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  disclosureButtonText: {
+    color: "white",
+    fontSize: 16,
   },
   // search: {
   //   flexDirection: "row",
