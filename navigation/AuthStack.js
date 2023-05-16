@@ -21,7 +21,7 @@ function AuthStack() {
       }}
     >
       <Stack.Screen
-        options={{ headerBackVisible: false }}
+        options={{ headerBackVisible: false, presentation: "modal" }}
         name="Compliance"
         component={ComplianceScreen}
       />

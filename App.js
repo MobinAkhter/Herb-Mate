@@ -9,8 +9,11 @@ import { auth } from "./firebase";
 // import { log } from "react-native-reanimated";
 // import AppSettings from "./components/Home/AppSettings";
 // import StackRouter from "@react-navigation/native";
+import { LogBox } from "react-native";
 
 function Navigation() {
+  LogBox.ignoreAllLogs();
+
   const { user, setUser } = React.useContext(UserContext);
 
   React.useEffect(() => {

@@ -24,7 +24,7 @@ function UserProfileScreen({ navigation }) {
           onPress={() => navigation.goBack()}
         />
         <Text style={styles.title}>User Profile</Text>
-        <Button title={"Logout"} onPress={handleLogout} />
+        <Button color="white" title={"Logout"} onPress={handleLogout} />
       </View>
       <UserProfile />
     </>
