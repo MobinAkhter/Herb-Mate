@@ -14,15 +14,15 @@ function UserProfileScreen({ navigation }) {
     setUser(null);
   };
   return (
-    <View style={styles.rootContainer}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Icon
           name="arrow-left"
           size={24}
           color="white"
-          onPress={() => navigation.navigate("Welcome")}
+          onPress={() => navigation.goBack()}
         />
-        <Text style={styles.title}>User Profile</Text>
+        {/* <Text style={styles.title}>User Profile</Text> */}
         <Button title={"Logout"} onPress={handleLogout} />
       </View>
       <UserProfile />
@@ -34,18 +34,16 @@ export default UserProfileScreen;
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
-    paddingTop: 35,
+    paddingTop: 50,
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    padding: 16,
+    flexDirection: "row",
+    // alignItems: "center",
     backgroundColor: "#35D96F",
+    padding: 16,
   },
-  rootContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
+
   title: {
     fontSize: 20,
     fontWeight: "bold",
