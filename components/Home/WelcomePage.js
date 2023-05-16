@@ -6,6 +6,7 @@ import {
   TextInput,
   Text,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -64,31 +65,32 @@ function WelcomePage({}) {
 
   return (
     <SafeAreaView>
-      <View style={styles.search}>
-        <MagnifyingGlassIcon color="gray" size={20} style={styles.searchIcon} />
-        {/* <TextInput
-          style={styles.searchInput}
-          placeholder="Search by herbs or symptoms"
-          keyboardType="default"
-        /> */}
-        <TextInput
-          keyboardType="default"
-          style={styles.searchInput}
-          placeholder={"Search..."}
-          onChangeText={(input) => setSearchInput(input)}
-          value={searchInput}
-        ></TextInput>
-        <Icon
-          name="arrow-right"
-          size={24}
-          color="black"
-          onPress={() => {
-            navigation.navigate("SearchResult", {
-              searchVal: searchInput,
-            });
-          }}
-        />
+      {/* new */}
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search for remedy"
+            keyboardType="default"
+            onChangeText={(input) => setSearchInput(input)}
+            value={searchInput}
+          />
+        </View>
+
+        <TouchableOpacity style={styles.searchBtn}>
+          <MagnifyingGlassIcon
+            color="white"
+            size={20}
+            style={styles.searchIcon}
+            onPress={() => {
+              navigation.navigate("SearchResult", {
+                searchVal: searchInput,
+              });
+            }}
+          />
+        </TouchableOpacity>
       </View>
+
       <FlatList
         data={bodyParts}
         renderItem={({ item }) => (
@@ -197,6 +199,31 @@ function WelcomePage({}) {
 export default WelcomePage;
 
 const styles = StyleSheet.create({
+  searchContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 20,
+    height: 50,
+    marginBottom: 10,
+  },
+  searchWrapper: {
+    flex: 1,
+    backgroundColor: "white",
+    marginRight: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 16,
+    height: "100%",
+  },
+  searchBtn: {
+    width: 45,
+    height: "100%",
+    backgroundColor: "#35D96F",
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   search: {
     flexDirection: "row",
     width: "100%",
@@ -212,8 +239,8 @@ const styles = StyleSheet.create({
     //paddingRight: -30,
   },
   searchInput: {
-    height: 35,
-    fontSize: 22,
-    width: "80%",
+    width: "100%",
+    height: "100%",
+    paddingHorizontal: 16,
   },
 });
