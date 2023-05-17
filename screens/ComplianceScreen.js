@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Checkbox from "expo-checkbox";
 import { useNavigation } from "@react-navigation/native";
 
@@ -17,6 +17,19 @@ const ComplianceScreen = () => {
   const [toggleCheckbox, setToggleCheckbox] = useState(false);
   const [complianceModal, setComplianceModal] = useState(true);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (!complianceModal) {
+      // Navigate to the "Signup" screen when complianceModal becomes false
+      navigation.navigate("Signup");
+    }
+  }, [complianceModal, navigation]);
+
+  const handleContinueRegistration = () => {
+    if (toggleCheckbox) {
+      setComplianceModal(false);
+    }
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -73,9 +86,7 @@ const ComplianceScreen = () => {
                       },
                     ]}
                     disabled={!toggleCheckbox}
-                    onPress={() =>
-                      setComplianceModal(false) || navigation.navigate("Signup")
-                    }
+                    onPress={handleContinueRegistration}
                   >
                     <Text>Continue to register</Text>
                   </TouchableOpacity>

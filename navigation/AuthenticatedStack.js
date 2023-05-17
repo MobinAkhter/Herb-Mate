@@ -70,8 +70,9 @@ function AuthenticatedStack() {
           ),
         }}
       />
+      {/* changed App Settings to Settings, revert if something breaks */}
       <Tab.Screen
-        name="App Settings"
+        name="Settings"
         component={AppSettingsScreen}
         options={{
           headerShown: false,

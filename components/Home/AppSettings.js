@@ -2,22 +2,23 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   FlatList,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
 import { db, auth } from "../../firebase";
 import { useEffect, useState } from "react";
-import { Button } from "react-native";
 import BigButton from "../ui/BigButton";
 import { useNavigation } from "@react-navigation/native";
-import ScreenWrapper from "../screenWrapper";
 
 function AppSettings() {
   const navigation = useNavigation();
   const user = auth.currentUser.uid;
   const userRef = db.collection("users").doc(user);
   const [bookmarkCollection, setBookmarkCollection] = useState([]);
+
+  const windowHeight = Dimensions.get("window").height;
+  const topSectionHeight = windowHeight * 0.08;
 
   const fetchBookmarks = async () => {
     try {
@@ -44,14 +45,15 @@ function AppSettings() {
   }, [navigation]);
 
   return (
-    <ScreenWrapper>
-      <SafeAreaView>
-        <Text style={{ textAlign: "center" }}> BOOKMARKS</Text>
-
+    <View style={styles.container}>
+      <View style={[styles.topSection, { height: topSectionHeight }]}>
+        <Text style={styles.bookmarksText}>Bookmarks</Text>
+      </View>
+      <View style={styles.bottomSection}>
         <FlatList
           data={bookmarkCollection}
           renderItem={({ item }) => (
-            <View>
+            <View style={styles.bigButtonContainer}>
               <BigButton
                 onPress={() => {
                   navigation.navigate("AboutRemedy", {
@@ -64,26 +66,35 @@ function AppSettings() {
             </View>
           )}
         ></FlatList>
-      </SafeAreaView>
-    </ScreenWrapper>
+      </View>
+    </View>
   );
 }
 
 export default AppSettings;
 
 const styles = StyleSheet.create({
-  centered: {
+  container: {
     flex: 1,
+    width: "100%",
+  },
+  topSection: {
+    backgroundColor: "#35D96F",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ffc2c2",
+    paddingHorizontal: 20,
   },
-  title: {
+  bookmarksText: {
+    textAlign: "center",
+    color: "white",
     fontSize: 18,
-    marginVertical: 2,
+    fontWeight: "bold",
   },
-  subtitle: {
-    fontSize: 14,
-    color: "#888",
+  bottomSection: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  bigButtonContainer: {
+    alignItems: "center",
   },
 });

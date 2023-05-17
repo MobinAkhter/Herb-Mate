@@ -240,12 +240,4 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
-  // search: {
-  //   flexDirection: "row",
-  //   width: "100%",
-  //   alignItems: "center",
-  //   justifyContent: "left",
-  //   borderRadius: 50,
-  //   backgroundColor: "lightgray",
-  // },
 });
