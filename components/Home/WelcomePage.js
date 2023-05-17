@@ -19,6 +19,8 @@ import BigButton from "../ui/BigButton";
 import { db } from "../../firebase";
 // import Button from "../ui/Button";
 import Icon from "@expo/vector-icons/FontAwesome";
+import { Entypo } from "@expo/vector-icons";
+
 //random
 function WelcomePage({}) {
   const navigation = useNavigation();
@@ -63,6 +65,19 @@ function WelcomePage({}) {
 
     fetchBodyParts();
   }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Chat")}
+          style={styles.chatButton}
+        >
+          <Entypo name="chat" size={24} color="royalblue" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView>

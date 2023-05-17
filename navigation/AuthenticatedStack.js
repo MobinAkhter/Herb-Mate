@@ -13,6 +13,7 @@ import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
 import { Colors } from "../constants/styles";
+import ChatScreen from "../screens/ChatScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,7 @@ function Home() {
         component={WelcomeScreen}
         options={{ headerLeft: null }}
       />
+      <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="Profile" component={UserProfileScreen} />
       <Stack.Screen name="Condition" component={ConditionScreen} />
       <Stack.Screen name="RemedyList" component={RemedyListScreen} />
