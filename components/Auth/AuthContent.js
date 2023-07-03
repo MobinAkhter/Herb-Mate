@@ -1,19 +1,12 @@
 import { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-} from "react-native";
+import { Alert, StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import FlatButton from "../ui/FlatButton";
 import AuthForm from "./AuthForm";
 import React from "react";
 import { UserContext } from "../../contexts/userContext";
-import { Colors } from "../../constants/styles";
-import { auth } from "../../firebase";
+
 function AuthContent({ isLogin, onAuthenticate }) {
   const { user, setUser } = React.useContext(UserContext);
   const navigation = useNavigation();
@@ -48,14 +41,11 @@ function AuthContent({ isLogin, onAuthenticate }) {
 
     const emailIsValid = email.includes("@");
     const passwordIsValid = password.length > 6;
-    // const emailsAreEqual = email === confirmEmail;
-    // const passwordsAreEqual = password === confirmPassword;
 
     if (!emailIsValid || !passwordIsValid || (!isLogin && !passwordsAreEqual)) {
       Alert.alert("Invalid input", "Please check your entered credentials.");
       setCredentialsInvalid({
         email: !emailIsValid,
-        // confirmEmail: !emailIsValid || !emailsAreEqual,
         password: !passwordIsValid,
         confirmPassword: !passwordIsValid || !passwordsAreEqual,
       });

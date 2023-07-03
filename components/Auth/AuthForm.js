@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import Button from "../ui/Button";
 import Input from "./Input";
 import { auth } from "../../firebase";
-// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import FlatButton from "../ui/FlatButton";
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-
-// Do i prolly need to import the screen i want to display?
-
-// Trying to implement google sign in
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [enteredFirstName, setFirstName] = useState("");
@@ -48,7 +42,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   }
 
   const firestore = firebase.firestore();
-  
 
   function submitHandler() {
     if (isLogin) {
@@ -62,25 +55,24 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         .catch((error) => alert(error));
     } else {
       auth
-      
+
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
           setUser(authUser.user);
-          console.log(authUser.user.uid)
+          console.log(authUser.user.uid);
           const authId = authUser.user.uid;
-          const usersCollection = firestore.collection('users').doc(authId);
+          const usersCollection = firestore.collection("users").doc(authId);
           const newUser = {
             firstName: enteredFirstName,
-            lastName: enteredLastName ,
+            lastName: enteredLastName,
             email: enteredEmail,
           };
-          usersCollection.set(newUser)
-          .then(() => {
-            console.log('User created successfully');
-       //     const foodsCollection = firestore.collection('users').doc(authId).collection('bookmarks');
+          usersCollection.set(newUser).then(() => {
+            console.log("User created successfully");
+            //     const foodsCollection = firestore.collection('users').doc(authId).collection('bookmarks');
             // Create an empty document to create the collection
-      //     foodsCollection.doc('remedy').set({})
-          })
+            //     foodsCollection.doc('remedy').set({})
+          });
         })
         .catch((error) => alert(error.message));
     }

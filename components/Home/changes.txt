@@ -1,0 +1,6 @@
+So, basically I took out files from this folder, that were unnecessary. 
+The components folder should have components not entire pages.
+Instead of 1 screen file in screens folder, and 1 page file in components folder, I reduced it to 1 screen file in screens folder.
+Also, this folder should not be called Home, but i left it, because i think we do not need any of the files in this folder for the app to work as before.
+We can prob delete the entire folder.
+Having a lot of screens in the screens folder is fine.

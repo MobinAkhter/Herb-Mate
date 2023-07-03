@@ -1,7 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { Colors } from "../../constants/styles";
-
 function BigButton({ children, onPress }) {
   return (
     <Pressable
@@ -39,8 +37,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   buttonText: {
-    // textAlign: "center",
-    // color: "black",
     fontSize: 27,
     fontWeight: "bold",
   },
