@@ -13,8 +13,6 @@ import {
 } from "react-native";
 import firebase from "firebase/app";
 import { useState, useEffect } from "react";
-// import "firebase/firestore";
-// import "firebase/auth";
 import Button from "../components/ui/Button";
 
 function UserProfileScreen({ navigation }) {
