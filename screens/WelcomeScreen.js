@@ -10,15 +10,10 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import BigButton from "../components/ui/BigButton";
 import { db } from "../firebase";
 // import Button from "../ui/Button";
-import Icon from "@expo/vector-icons/FontAwesome";
 import { Entypo } from "@expo/vector-icons";
 import { removeSpace, iconMapper } from "../utils";
 import MIcon from "../components/ui/MIcon";
