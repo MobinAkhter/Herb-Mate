@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 15,
   },
   disclosureButtonText: {
     color: "white",
