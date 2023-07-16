@@ -2,7 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
 import { Colors } from "../constants/styles";
-import ComplianceScreen from "../screens/ComplianceScreen";
 import ForgotPassword from "../screens/ForgotPassword";
 
 // Add references here
@@ -20,11 +19,6 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      {/* <Stack.Screen
-        options={{ headerBackVisible: false, presentation: "modal" }}
-        name="Compliance"
-        component={ComplianceScreen}
-      /> */}
       <Stack.Screen
         options={{ headerBackVisible: false }}
         name="Signup"

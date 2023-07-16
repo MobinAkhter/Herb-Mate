@@ -63,7 +63,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const firestore = firebase.firestore();
 
   function submitHandler() {
-    if (!termsAgreed) {
+    if (!isLogin && !termsAgreed) {
       Alert.alert(
         "Terms and Conditions",
         "Please agree to the terms and conditions."
@@ -257,6 +257,7 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 20,
     alignItems: "center",
+    marginTop: 15,
   },
   modalComplianceTitle: {
     marginBottom: 20,
@@ -290,5 +291,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 20,
     borderRadius: 18,
+  },
+  closeButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "blue",
   },
 });
