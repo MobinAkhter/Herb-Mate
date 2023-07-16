@@ -20,11 +20,11 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{ headerBackVisible: false, presentation: "modal" }}
         name="Compliance"
         component={ComplianceScreen}
-      />
+      /> */}
       <Stack.Screen
         options={{ headerBackVisible: false }}
         name="Signup"
