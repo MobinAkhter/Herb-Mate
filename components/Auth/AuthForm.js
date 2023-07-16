@@ -7,6 +7,8 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  Modal,
+  Alert,
 } from "react-native";
 import Button from "../ui/Button";
 import Input from "./Input";
@@ -15,7 +17,6 @@ import { auth } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { Modal } from "react-native";
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [enteredFirstName, setFirstName] = useState("");
@@ -23,8 +24,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
-  const [termsModalVisible, setTermsModalVisible] = useState(false);
   const [termsAgreed, setTermsAgreed] = useState(false);
+  const [termsModalVisible, setTermsModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const {
@@ -33,21 +34,11 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
     confirmPassword: passwordsDontMatch,
   } = credentialsInvalid;
 
-  const [toggleCheckbox, setToggleCheckbox] = useState(false);
-  const [complianceModal, setComplianceModal] = useState(true);
-
   useEffect(() => {
-    if (!complianceModal) {
-      // Navigate to the "Signup" screen when complianceModal becomes false
-      navigation.navigate("Signup");
+    if (termsAgreed) {
+      setTermsModalVisible(false);
     }
-  }, [complianceModal, navigation]);
-
-  const handleContinueRegistration = () => {
-    if (toggleCheckbox) {
-      setComplianceModal(false);
-    }
-  };
+  }, [termsAgreed]);
 
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
@@ -68,19 +59,15 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         break;
     }
   }
-  function toggleTermsModal() {
-    setTermsModalVisible(!termsModalVisible);
-  }
-  function agreeToTerms() {
-    setTermsAgreed(true);
-    setTermsModalVisible(false);
-  }
 
   const firestore = firebase.firestore();
 
   function submitHandler() {
     if (!termsAgreed) {
-      // Show an error message or prevent submission
+      Alert.alert(
+        "Terms and Conditions",
+        "Please agree to the terms and conditions."
+      );
       return;
     }
     if (isLogin) {
@@ -90,11 +77,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           setUser(authUser.user);
           // navigation.navigate("Welcome");
         })
-
         .catch((error) => alert(error));
     } else {
       auth
-
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
           setUser(authUser.user);
@@ -108,19 +93,19 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           };
           usersCollection.set(newUser).then(() => {
             console.log("User created successfully");
-            //     const foodsCollection = firestore.collection('users').doc(authId).collection('bookmarks');
-            // Create an empty document to create the collection
-            //     foodsCollection.doc('remedy').set({})
           });
         })
         .catch((error) => alert(error.message));
     }
   }
 
+  function toggleTermsModal() {
+    setTermsModalVisible(!termsModalVisible);
+  }
+
   return (
     <KeyboardAvoidingView style={styles.form}>
       <View>
-        {/* Shows on signup screen and not on login screen */}
         {!isLogin && (
           <Input
             label="First Name"
@@ -163,6 +148,19 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
             isInvalid={passwordsDontMatch}
           />
         )}
+
+        {!isLogin && (
+          <View style={styles.checkboxContainer}>
+            <Checkbox value={termsAgreed} onValueChange={setTermsAgreed} />
+            <TouchableOpacity onPress={toggleTermsModal}>
+              <Text style={styles.checkboxLabel}>
+                I agree to the{" "}
+                <Text style={styles.linkText}>terms and conditions</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View style={styles.buttons}>
           <Button onPress={submitHandler}>
             {isLogin ? "Log In" : "Sign Up"}
@@ -170,78 +168,43 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         </View>
       </View>
 
-      {/* Terms and condition modal */}
-      {/* Make it as a separate component later */}
-      <View style={styles.mainContainer}>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={complianceModal}
-          >
-            <SafeAreaView>
-              <ScrollView>
-                <View style={styles.modalContainer}>
-                  <View style={styles.modalView}>
-                    <Text style={styles.modalComplianceTitle}>
-                      Medical Disclosure
-                    </Text>
-                    {/* Create a separate file for this text and import it */}
-                    <Text style={styles.complianceText}>
-                      The herbal content in this app is provided as general
-                      health information only. It provides information on herbal
-                      remedies as an alternative treatment, but it is not a
-                      substitute for medical advice or treatment of any health
-                      condition. {"\n"}
-                      {"\n"}
-                      The team at HerbalLife makes no warranties about the
-                      effectiveness of the remedies in curing your health
-                      problems, so we do not assume any risk whatsoever for your
-                      use of the information contained within the app. {"\n"}
-                      {"\n"}You are hereby advised to consult with a herbalist
-                      or other professionals in the healthcare industry before
-                      using any of the information provided in this app. {"\n"}
-                      {"\n"}If you're on any medication, please consult with
-                      health care professionals before taking any remedies
-                      listed in the app.{"\n"}
-                      {"\n"}By agreeing to the terms and conditions, and
-                      registering to the app, you agree that neither the team at
-                      HerbalLife nor any other party is or will be liable for
-                      any decision you make based on the information provided in
-                      this app.
-                    </Text>
-                    <View style={styles.checkboxContainer}>
-                      <Checkbox
-                        style={styles.checkbox}
-                        disabled={false}
-                        value={toggleCheckbox}
-                        onValueChange={(newValue) =>
-                          setToggleCheckbox(newValue)
-                        }
-                      />
-                      <Text>I agree to the terms and conditions</Text>
-                    </View>
-                    <TouchableOpacity
-                      style={[
-                        styles.registerButton,
-                        {
-                          backgroundColor: toggleCheckbox
-                            ? "lightblue"
-                            : "grey",
-                        },
-                      ]}
-                      disabled={!toggleCheckbox}
-                      onPress={handleContinueRegistration}
-                    >
-                      <Text>Continue to register</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </ScrollView>
-            </SafeAreaView>
-          </Modal>
-        </View>
-      </View>
+      <Modal visible={termsModalVisible} animationType="slide" transparent>
+        <SafeAreaView style={styles.modalContainer}>
+          <ScrollView>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTitle}>Medical Disclosure</Text>
+              {/* Create a separate file for this text and import it */}
+              <Text style={styles.complianceText}>
+                The herbal content in this app is provided as general health
+                information only. It provides information on herbal remedies as
+                an alternative treatment, but it is not a substitute for medical
+                advice or treatment of any health condition. {"\n"}
+                {"\n"}
+                The team at HerbalLife makes no warranties about the
+                effectiveness of the remedies in curing your health problems, so
+                we do not assume any risk whatsoever for your use of the
+                information contained within the app. {"\n"}
+                {"\n"}You are hereby advised to consult with a herbalist or
+                other professionals in the healthcare industry before using any
+                of the information provided in this app. {"\n"}
+                {"\n"}If you're on any medication, please consult with health
+                care professionals before taking any remedies listed in the app.
+                {"\n"}
+                {"\n"}By agreeing to the terms and conditions, and registering
+                to the app, you agree that neither the team at HerbalLife nor
+                any other party is or will be liable for any decision you make
+                based on the information provided in this app.
+              </Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={toggleTermsModal}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -310,6 +273,18 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     marginRight: 20,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  checkboxLabel: {
+    marginLeft: 8,
+  },
+  linkText: {
+    color: "blue",
+    textDecorationLine: "underline",
   },
   registerButton: {
     marginTop: 20,
