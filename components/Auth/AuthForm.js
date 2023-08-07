@@ -26,6 +26,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsModalVisible, setTermsModalVisible] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const navigation = useNavigation();
 
   const {
@@ -33,6 +34,14 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
     password: passwordIsInvalid,
     confirmPassword: passwordsDontMatch,
   } = credentialsInvalid;
+
+  useEffect(() => {
+    // Check if user's email is verified
+    const user = auth.currentUser;
+    if (user) {
+      setEmailVerified(user.emailVerified);
+    }
+  }, []);
 
   useEffect(() => {
     if (termsAgreed) {
@@ -70,15 +79,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
       );
       return;
     }
-    if (isLogin) {
-      auth
-        .signInWithEmailAndPassword(enteredEmail, enteredPassword)
-        .then((authUser) => {
-          setUser(authUser.user);
-          // navigation.navigate("Welcome");
-        })
-        .catch((error) => alert(error));
-    } else {
+    if (!isLogin) {
       auth
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
@@ -93,9 +94,44 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           };
           usersCollection.set(newUser).then(() => {
             console.log("User created successfully");
+
+            // Send verification email
+            authUser.user
+              .sendEmailVerification()
+              .then(() => {
+                // Verification link sent
+                Alert.alert(
+                  "Verification Email Sent",
+                  "Please verify your email before signing in."
+                );
+
+                // Navigate to sign-in screen
+                navigation.replace("Login");
+              })
+              .catch((error) => {
+                console.log("Error sending verification email:", error);
+              });
           });
         })
         .catch((error) => alert(error.message));
+    } else {
+      auth
+        .signInWithEmailAndPassword(enteredEmail, enteredPassword)
+        .then((authUser) => {
+          setUser(authUser.user);
+          if (authUser.user.emailVerified) {
+            navigation.navigate("Welcome"); // Navigate to welcome screen if email is verified
+          } else {
+            Alert.alert(
+              "Email Verification Required",
+              "Please verify your email before signing in."
+            );
+
+            // Redirect to sign-in screen
+            navigation.replace("Login");
+          }
+        })
+        .catch((error) => alert(error));
     }
   }
 

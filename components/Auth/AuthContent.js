@@ -16,7 +16,6 @@ function AuthContent({ isLogin, onAuthenticate }) {
     lastName: false,
     email: false,
     password: false,
-    // confirmEmail: false,
     confirmPassword: false,
   });
 
