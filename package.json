@@ -29,7 +29,8 @@
     "react-native-heroicons": "^3.2.0",
     "react-native-reanimated": "~2.9.1",
     "react-native-svg": "^12.3.0",
-    "react-query": "^3.39.3"
+    "react-query": "^3.39.3",
+    "expo-notifications": "~0.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
