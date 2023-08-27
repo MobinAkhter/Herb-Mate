@@ -1,5 +1,14 @@
+// FROM MY UNDERSTANDING IF YOU INCLUDE THE IMAGE URL IN ROOT COLLECTION "Remedies" AS A IMAGE FILED, THE IMAGES WILL SHOW UP.
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, ScrollView, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +19,7 @@ function AboutRemedyScreen({ route }) {
   const { rem } = route.params;
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState("BookMark");
+  const [isLoading, setIsLoading] = useState(true);
   //const [checkBookMark, setCheckBookMark] = useState("");
 
   // access firestore
@@ -21,6 +31,8 @@ function AboutRemedyScreen({ route }) {
   //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
 
   useEffect(() => {
+    AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
+    setIsLoading(true);
     // define the key for AsyncStorage
     const remedyKey = "remedy-" + rem;
 
@@ -28,11 +40,12 @@ function AboutRemedyScreen({ route }) {
     AsyncStorage.getItem(remedyKey).then((cachedData) => {
       if (cachedData) {
         const { data, timestamp } = JSON.parse(cachedData);
+        console.log("Retrieved from cache: ", data);
         const ageInMinutes = (Date.now() - timestamp) / (1000 * 60);
         if (ageInMinutes < 120) {
-          // cache is still fresh
           console.log("Remedy was cached");
           setRemedy(data);
+          setIsLoading(false);
           return;
         }
       }
@@ -43,15 +56,21 @@ function AboutRemedyScreen({ route }) {
         .get()
         .then((doc) => {
           const data = doc.data();
-          console.log("Fetching remedy from Firebase");
+          console.log("Fetching remedy from Firebase", data);
           setRemedy(data);
+          setIsLoading(false);
           AsyncStorage.setItem(
             remedyKey,
-            JSON.stringify({ data, timestamp: Date.now() })
+            JSON.stringify({
+              data,
+              timestamp: Date.now(),
+            })
           );
+          console.log("Storing in cache: ", data);
         })
         .catch((error) => {
           console.error("Error fetching remedy from Firestore:", error);
+          setIsLoading(false);
         });
     });
   }, []);
@@ -66,30 +85,32 @@ function AboutRemedyScreen({ route }) {
 
       Alert.alert(`${remedy.name} has been bookmarked!`);
       setBookMarkText("UNBOOKMARK");
-
-      //setCheckBookMark(true);
     } else {
       userRef.collection("bookmarks").doc(rem).delete();
 
       Alert.alert(`${remedy.name} has been removed from your bookmarks!`);
       setBookMarkText("BOOKMARK");
-      // setCheckBookMark(false);
     }
   }
 
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  console.log(remedy.image);
   return (
     <View style={styles.rootContainer}>
       <ScrollView>
         <View style={styles.container}>
           <Text style={styles.title}>{remedy.name}</Text>
 
-          <View
-          // style={{
-          //    width: 150,
-          ////     backgroundColor: "green",
-          //   }}   onPress={bookMarkRemedy}
-          // <Image source={{uri: remedy.image}} style={{ width: 100, height: 150 }}/>
+          <Image
+            source={{ uri: remedy.image }}
+            style={styles.image}
+            resizeMode="contain"
+            // PlaceholderContent={<ActivityIndicator />}
           />
+
           <View style={styles.info}>
             <Text style={styles.head}>Description</Text>
             <Text style={styles.desc}>{remedy.description}</Text>
@@ -121,6 +142,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 8,
+  },
+  image: {
+    width: "100%",
+    height: undefined,
+    aspectRatio: 1.5, // or whatever is appropriate for your images
   },
   container: {
     flex: 1,

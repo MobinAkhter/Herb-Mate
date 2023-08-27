@@ -7,25 +7,39 @@ import { db } from "../firebase";
 
 function RemedyListScreen({ route }) {
   const { bp, con } = route.params;
-  console.log("Received bp " + bp);
-  console.log(con);
   const navigation = useNavigation();
   const [remedies, setRemedies] = useState([]);
-  
+  const cacheKey = `remedies_${bp}_${con}`;
+
   useEffect(() => {
     const fetchRemedies = async () => {
       try {
-        const querySnapshot = await db
-          .collection("BodyParts")
-          .doc(bp)
-          .collection("Conditions")
-          .doc(con)
-          .get();
+        const cachedRemedies = await AsyncStorage.getItem(cacheKey);
+        if (cachedRemedies) {
+          setRemedies(JSON.parse(cachedRemedies));
+          console.log("Remedies retrieved from cache");
+        } else {
+          const querySnapshot = await db
+            .collection("BodyParts")
+            .doc(bp)
+            .collection("Conditions")
+            .doc(con)
+            .get();
 
-        if (querySnapshot.exists) {
-          const conditionData = querySnapshot.data();
-          if (conditionData && conditionData.remedies) {
-            setRemedies(conditionData.remedies);
+          if (querySnapshot.exists) {
+            const conditionData = querySnapshot.data();
+            if (conditionData && conditionData.remedies) {
+              setRemedies(conditionData.remedies);
+
+              await AsyncStorage.setItem(
+                cacheKey,
+                JSON.stringify(conditionData.remedies)
+              )
+                .then(() => console.log("Remedies cached successfully"))
+                .catch((error) => console.error(error));
+
+              console.log("Remedies retrieved from Firestore");
+            }
           }
         }
       } catch (error) {
