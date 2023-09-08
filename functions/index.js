@@ -8,6 +8,7 @@ const expo = new Expo();
 
 exports.sendPushNotifications = functions.pubsub
     .schedule("every 1 month")
+    .timeZone("America/Toronto")
     .onRun(async (context) => {
       const messages = [];
       const usersSnapshot = await db.collection("users").get();
