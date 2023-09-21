@@ -10,14 +10,17 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@google-cloud/dialogflow": "^6.1.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/checkbox": "^0.5.14",
     "@react-navigation/bottom-tabs": "^6.5.1",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
     "@react-navigation/stack": "^6.3.17",
+    "axios": "^1.5.0",
     "expo": "~46.0.16",
     "expo-checkbox": "~2.2.0",
+    "expo-notifications": "~0.16.1",
     "expo-status-bar": "~1.4.0",
     "firebase": "^8.10.1",
     "react": "18.0.0",
@@ -29,8 +32,7 @@
     "react-native-heroicons": "^3.2.0",
     "react-native-reanimated": "~2.9.1",
     "react-native-svg": "^12.3.0",
-    "react-query": "^3.39.3",
-    "expo-notifications": "~0.16.1"
+    "react-query": "^3.39.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

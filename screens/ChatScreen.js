@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -7,13 +7,26 @@ import {
   FlatList,
   Text,
 } from "react-native";
+import axios from "axios";
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
+  const [isBotTyping, setIsBotTyping] = useState(false);
   const flatListRef = useRef(null);
 
-  const sendMessage = () => {
+  useEffect(() => {
+    const welcomeMessage = {
+      id: 1,
+      text: "Hello! I'm HerbalLifeBot. How can I assist you today?",
+      isUser: false,
+    };
+
+    setMessages([welcomeMessage]);
+  }, []);
+
+  const sendMessage = async () => {
+    console.log("sendMessage function triggered");
     if (inputText.trim() === "") return;
 
     const newMessage = {
@@ -25,7 +38,31 @@ const ChatScreen = () => {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setInputText("");
     scrollToBottom();
-    // You can handle chatbot response here
+
+    setIsBotTyping(true);
+
+    try {
+      const response = await axios.post(
+        "https://us-central1-fir-auth-b5f8a.cloudfunctions.net/dialogflowGateway",
+        {
+          text: inputText,
+        }
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second
+
+      const botResponse = {
+        id: messages.length + 2,
+        text: response.data.message,
+        isUser: false,
+      };
+
+      setMessages((prevMessages) => [...prevMessages, botResponse]);
+      setIsBotTyping(false);
+    } catch (error) {
+      setIsBotTyping(false);
+      console.error("Error getting response from Dialogflow:", error);
+    }
   };
 
   const scrollToBottom = () => {
@@ -52,6 +89,17 @@ const ChatScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.messagesContainer}
         onContentSizeChange={scrollToBottom}
+        ListFooterComponent={() => {
+          if (isBotTyping) {
+            return (
+              <View style={[styles.messageContainer, styles.botMessage]}>
+                <Text style={styles.messageText}>...</Text>
+              </View>
+            );
+          } else {
+            return null;
+          }
+        }}
       />
       <View style={styles.inputContainer}>
         <TextInput
