@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fir-auth-b5f8a",
+  "private_key_id": "17bbebc0fc1606627748e219b53c2479e7dc763c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCJaV8+gAvV+vRU\n6JeqlTsGM87yGXHcQSKzQv6VYMq3NOSfQViXWcZ0OPbOFA+SGyNZAdTqQnLOukKO\n+jyBtFo+iZBGeYAbIus+KaBqEzwQpxka3ZaE4wsXxJQRWUBCR153iqnPdKljfI0K\neskjPjwEDFeTZnWSwix0FG+J9OJYcu4yMaHaOPiWJVVQP52XtN1UsgLynR7g4xCz\nsa5GlmLUj6bfe8SLdGsACq+Gw+eFPDKbBZe7n9lNU1T5pOIOwaoIHXmqcONaPSvY\nzuG4+2fhe5Vs4eT55sTiXP4eR8HsqP1b9oxr/+6ziY1MQ3ixLNKJxTRbebdICxay\nEMt9y1CzAgMBAAECggEAAjc9kJ0PU8y9jEwjwBJ2fwxQSvMtUvA7eikuMXjd1G9Z\nHm1cpsr2iy/huzCRzMRPrHXnbKYX84ytLJz+GAU40RSURETHANn1rgdvC5EyXWAk\n5JRzvv6Hyw5aO9PalI9+8LzzlwsDovH3PkP9BJ9hfk/OZwJ2kgJLB76hNEjpiKQ3\nSJbtS1CplKW1vv3StF1GI7MCdYD2RwgNnGJXODlgwekY99rwlguaYlf/eDdyGUkV\nMiBAzi4rZYqVsKkITeOZ9o8qqwIaRZUuR0DAxLVmhsfpUj4iXsNEq7PxohyIhCdQ\nxGhn71RU4twdkjyseULqbm7g9jCwg+obRt5dvZVqaQKBgQC9CQouy9506Gu9jAt1\nCiC+Kdyn8yxEZ4Sys8xbr9w/G7Mj+IVthVzw9lTJ0jsIoGQTVjwPUY2K5i6BWwtI\n7X68vakStvCrNcnrbm0NigMyghObMhklcbL32NyJ86eyCY/6DrEy8UpTETN801My\n2k99Kip9tE2fqTSFuQivN5e7WQKBgQC6FsHAC2+Ql4+IXR7AOPEKwudp/gGq3GE5\nsVXpWsF0OelqSIedKA88dt6A+SGMnjyOsTXGUsPt7q7MdsLqiP/gPCcAKZyt1ZGz\nbraqV4aMEM54kkergDI6bGw7CnzieKipBt1fhzopcR4uHI52fRrlB/dBCsLfscDe\nJ35G2YhG6wKBgEM/+wpo5swqf2Hgd5b8smdUlzZ8sUvok/HLOzGHH9CntxRd7oHn\nBwiGaeWez/eir9edPyKn/bXja7oDPMGGFCdrRcHtqTMPoLUMBOnjJn4KfpUgvodu\nqp+328WMFCWndzwbi/i2lJ12qh2HRLr7pXm+zX0I7vCVDqVgDXHgUi+JAoGBAIQc\nadrsg3z0jJrz+UPgaQgJzP7LrOVfZcruoh50Jwlbn+GrslOZQA/eGCMaO344TKfF\nGXc+BQljPUe9PK4DKx1Htyx/XlNvXuwzOo1+a+/+cobY2vbfoUkm9kOIM5cYsCyn\nyfvq5hjLzPBRp7ZpJPHakOflOupSqKlPAnBMOVqXAoGAelDb1VVUnU8jYTr4wVPs\nwlsJYnXEUD8RJlalt5NIc6SgdHAFbNh8GT9F3ooFOUQuSoyB82pIv6ljmz3W1o0H\n52uHBDtmyuwMM54IoHCoygjvY7MA9l3KoEGLme0ZFogxImXMLeMQUZXBAdvPIc8+\nNpLSdi7LcnlsYqrR/LohEMA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "herballifebot@fir-auth-b5f8a.iam.gserviceaccount.com",
+  "client_id": "101119804713766199465",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/herballifebot%40fir-auth-b5f8a.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
