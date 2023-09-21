@@ -74,7 +74,7 @@ function AuthenticatedStack() {
       />
       {/* changed App Settings to Settings, revert if something breaks */}
       <Tab.Screen
-        name="Settings"
+        name="Bookmarks"
         component={AppSettingsScreen}
         options={{
           headerShown: false,
