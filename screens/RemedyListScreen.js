@@ -6,54 +6,49 @@ import BigButton from "../components/ui/BigButton";
 import { db } from "../firebase";
 
 function RemedyListScreen({ route }) {
-  const { bp, con, rem } = route.params;
+  const { bp, con } = route.params;
   const navigation = useNavigation();
   const [remedies, setRemedies] = useState([]);
-  const [cached, setCached] = useState(false); // new state variable
-
-  // Define the cache key for AsyncStorage
   const cacheKey = `remedies_${bp}_${con}`;
 
-  const col = db.collection("BodyParts");
-
   useEffect(() => {
-    const con = [];
-
-    // Try to retrieve the remedies from cache
-    AsyncStorage.getItem(cacheKey)
-      .then((cachedRemedies) => {
+    const fetchRemedies = async () => {
+      try {
+        const cachedRemedies = await AsyncStorage.getItem(cacheKey);
         if (cachedRemedies) {
           setRemedies(JSON.parse(cachedRemedies));
           console.log("Remedies retrieved from cache");
         } else {
-          // If remedies are not found in cache, fetch from Firestore
-          col
+          const querySnapshot = await db
+            .collection("BodyParts")
             .doc(bp)
             .collection("Conditions")
             .doc(con)
-            .collection("Remedies")
-            .get()
-            .then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                con.push({
-                  ...doc.data(),
-                  key: doc.id,
-                });
-              });
+            .get();
 
-              // Cache the remedies in AsyncStorage
-              AsyncStorage.setItem(cacheKey, JSON.stringify(con))
+          if (querySnapshot.exists) {
+            const conditionData = querySnapshot.data();
+            if (conditionData && conditionData.remedies) {
+              setRemedies(conditionData.remedies);
+
+              await AsyncStorage.setItem(
+                cacheKey,
+                JSON.stringify(conditionData.remedies)
+              )
                 .then(() => console.log("Remedies cached successfully"))
                 .catch((error) => console.error(error));
 
-              setRemedies(con);
               console.log("Remedies retrieved from Firestore");
-            })
-            .catch((error) => console.error(error));
+            }
+          }
         }
-      })
-      .catch((error) => console.error(error));
-  }, []);
+      } catch (error) {
+        console.error("Error fetching remedies:", error);
+      }
+    };
+
+    fetchRemedies();
+  }, [bp, con]);
 
   return (
     <View style={styles.rootContainer}>
@@ -64,11 +59,11 @@ function RemedyListScreen({ route }) {
             <BigButton
               onPress={() => {
                 navigation.navigate("AboutRemedy", {
-                  rem: item.name,
+                  rem: item,
                 });
               }}
             >
-              <Text style={styles.itemText}>{item.name}</Text>
+              <Text style={styles.itemText}>{item}</Text>
             </BigButton>
           </View>
         )}
