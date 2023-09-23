@@ -35,8 +35,8 @@ function Home() {
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="Profile" component={UserProfileScreen} />
       <Stack.Screen name="Condition" component={ConditionScreen} />
-      <Stack.Screen name="RemedyList" component={RemedyListScreen} />
-      <Stack.Screen name="AboutRemedy" component={AboutRemedyScreen} />
+      <Stack.Screen name="Remedies" component={RemedyListScreen} />
+      <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
     </Stack.Navigator>
   );

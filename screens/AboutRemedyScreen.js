@@ -100,7 +100,7 @@ function AboutRemedyScreen({ route }) {
   console.log(remedy.image);
   return (
     <View style={styles.rootContainer}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <Text style={styles.title}>{remedy.name}</Text>
 
