@@ -58,7 +58,7 @@ function RemedyListScreen({ route }) {
           <View style={styles.container}>
             <BigButton
               onPress={() => {
-                navigation.navigate("AboutRemedy", {
+                navigation.navigate("Remedy Details", {
                   rem: item,
                 });
               }}

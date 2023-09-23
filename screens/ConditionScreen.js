@@ -126,7 +126,7 @@ function ConditionScreen({ route }) {
           <View style={styles.container}>
             <BigButton
               onPress={() => {
-                navigation.navigate("RemedyList", {
+                navigation.navigate("Remedies", {
                   bp: bp,
                   con: item.name,
                 });

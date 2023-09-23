@@ -65,7 +65,7 @@ const AppSettingsScreen = () => {
               <View style={styles.bigButtonContainer}>
                 <BigButton
                   onPress={() => {
-                    navigation.navigate("AboutRemedy", {
+                    navigation.navigate("Remedy Details", {
                       rem: item.name,
                     });
                   }}
