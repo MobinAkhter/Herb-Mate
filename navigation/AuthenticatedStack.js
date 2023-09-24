@@ -14,6 +14,7 @@ import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
 import { Colors } from "../constants/styles";
 import ChatScreen from "../screens/ChatScreen";
+import SortedRemedies from "../screens/SortedRemedies";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -77,7 +78,6 @@ function AuthenticatedStack() {
         name="Bookmarks"
         component={AppSettingsScreen}
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="md-settings" size={size} color={color} />
           ),
@@ -94,10 +94,9 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="BarGraph"
-        component={RemediesBarGraphScreen}
+        name="A-Z Herbs"
+        component={SortedRemedies}
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="md-bar-chart" size={size} color={color} />
           ),
