@@ -17,6 +17,19 @@ function UserProvider({ children }) {
     }
   }, [user]);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+      } else {
+        setUser(null);
+      }
+    });
+
+    // Cleanup the listener
+    return () => unsubscribe();
+  }, []);
+
   async function registerForPushNotificationsAsync() {
     let token;
     const { status: existingStatus } =
