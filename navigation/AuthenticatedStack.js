@@ -84,10 +84,9 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="DataAnalytics"
+        name="Data Analytics"
         component={DataAnalyticsScreen}
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="md-analytics" size={size} color={color} />
           ),
@@ -98,7 +97,7 @@ function AuthenticatedStack() {
         component={SortedRemedies}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="md-bar-chart" size={size} color={color} />
+            <Ionicons name="md-book-outline" size={size} color={color} />
           ),
         }}
       />
