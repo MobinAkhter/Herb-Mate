@@ -13,17 +13,17 @@ function Navigation() {
 
   const { user, setUser } = React.useContext(UserContext);
 
-  React.useEffect(() => {
-    getUser();
-  }, []);
+  // React.useEffect(() => {
+  //   getUser();
+  // }, []);
 
-  async function getUser() {
-    const user = await auth.currentUser;
-    if (user !== null) {
-      // add a check here to see if user is not null
-      setUser(user);
-    }
-  }
+  // async function getUser() {
+  //   const user = await auth.currentUser;
+  //   if (user !== null) {
+  //     // add a check here to see if user is not null
+  //     setUser(user);
+  //   }
+  // }
 
   return (
     <NavigationContainer>
