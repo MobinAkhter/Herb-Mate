@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     borderColor: "#35D96F",
     borderWidth: 3,
+    alignItems: "center",
   },
   pressed: {
     opacity: 0.7,

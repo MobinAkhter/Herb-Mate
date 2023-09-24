@@ -99,5 +99,6 @@ const styles = StyleSheet.create({
   },
   herbName: {
     fontSize: 18,
+    marginRight: 70,
   },
 });
