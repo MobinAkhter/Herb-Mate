@@ -45,23 +45,23 @@ function ConditionScreen({ route }) {
     }
   };
 
-  // useEffect(() => {
-  //   loadConditions();
-  // }, []);
+  useEffect(() => {
+    loadConditions();
+  }, []);
 
   // TODO: Uncomment the lines of code below, if there is some caching problem, herbs from db are not showing up etc.
-  useEffect(() => {
-    // Clear the AsyncStorage cache
-    AsyncStorage.clear()
-      .then(() => {
-        console.log("Cache cleared for testing!");
-        loadConditions();
-      })
-      .catch((error) => {
-        console.log("Error clearing cache:", error);
-        loadConditions(); // You might still want to load conditions even if clearing cache fails.
-      });
-  }, []);
+  // useEffect(() => {
+  //   // Clear the AsyncStorage cache
+  //   AsyncStorage.clear()
+  //     .then(() => {
+  //       console.log("Cache cleared for testing!");
+  //       loadConditions();
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error clearing cache:", error);
+  //       loadConditions(); // You might still want to load conditions even if clearing cache fails.
+  //     });
+  // }, []);
 
   return (
     <View style={styles.rootContainer}>

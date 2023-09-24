@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "../constants/styles";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ConditionScreen from "../screens/ConditionScreen";
@@ -11,13 +12,13 @@ import UserProfileScreen from "../screens/UserProfileScreen";
 import AppSettingsScreen from "../screens/AppSettingsScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
-import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
-import { Colors } from "../constants/styles";
 import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 function Home() {
   return (
@@ -40,6 +41,16 @@ function Home() {
       <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
     </Stack.Navigator>
+  );
+}
+
+function DrawerContent() {
+  return (
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Profile" component={UserProfileScreen} />
+      {/* For now, I think Home and Profile should be inside of drawer navigation, other screens can be added later */}
+    </Drawer.Navigator>
   );
 }
 

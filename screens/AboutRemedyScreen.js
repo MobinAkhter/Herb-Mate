@@ -119,7 +119,7 @@ function AboutRemedyScreen({ route }) {
           </View>
           <BookMarkButton
             onPress={bookMarkRemedy}
-            style={{ backgroundColor: "red" }}
+            style={{ backgroundColor: "red", alignItems: "center" }}
           >
             {bookMarkText}
           </BookMarkButton>
@@ -133,43 +133,30 @@ export default AboutRemedyScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     padding: 32,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
+    fontSize: 28,
+    fontWeight: "600",
+    marginBottom: 24,
   },
   image: {
     width: "100%",
     height: undefined,
-    aspectRatio: 1.5, // or whatever is appropriate for your images
+    aspectRatio: 1.5,
   },
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-  },
+  container: {},
   titleCon: {
     alignItems: "center",
   },
-  info: {
-    flex: 1,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 36,
-    fontWeight: "bold",
-    padding: 15,
-  },
   desc: {
-    fontSize: 20,
+    fontSize: 16,
+    lineHeight: "24px",
   },
   head: {
-    fontSize: 30,
-    fontWidth: "bold",
+    fontSize: 28,
+    fontWeight: "600",
+    marginTop: 16,
+    marginBottom: 16,
   },
 });
