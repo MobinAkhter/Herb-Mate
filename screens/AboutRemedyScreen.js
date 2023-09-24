@@ -9,6 +9,8 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
+import Collapsible from "react-native-collapsible";
+import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +23,10 @@ function AboutRemedyScreen({ route }) {
   const [bookMarkText, setBookMarkText] = useState("BookMark");
   const [isLoading, setIsLoading] = useState(true);
   //const [checkBookMark, setCheckBookMark] = useState("");
+
+  // Creating the collapsable state for description and precautions
+  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
+  const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
 
   // access firestore
   const remediesFirebase = db.collection("Remedies");
@@ -112,17 +118,36 @@ function AboutRemedyScreen({ route }) {
           />
 
           <View style={styles.info}>
-            <Text style={styles.head}>Description</Text>
-            <Text style={styles.desc}>{remedy.description}</Text>
-            <Text style={styles.head}>Precautions</Text>
-            <Text style={styles.desc}>{remedy.precautions}</Text>
+            <View style={styles.titleRow}>
+              <Text style={styles.head}>Description</Text>
+              <AntDesign
+                name={isDescriptionCollapsed ? "down" : "up"}
+                size={24}
+                onPress={() => setDescriptionCollapsed(!isDescriptionCollapsed)}
+              />
+            </View>
+
+            <Collapsible collapsed={isDescriptionCollapsed}>
+              <Text style={styles.desc}>{remedy.description}</Text>
+            </Collapsible>
+            <View style={styles.titleRow}>
+              <Text style={styles.head}>Precautions</Text>
+              <AntDesign
+                name={isPrecautionsCollapsed ? "down" : "up"}
+                size={24}
+                onPress={() => setPrecautionsCollapsed(!isPrecautionsCollapsed)}
+              />
+            </View>
+
+            <Collapsible collapsed={isPrecautionsCollapsed}>
+              <Text style={styles.desc}>{remedy.precautions}</Text>
+            </Collapsible>
           </View>
-          <BookMarkButton
-            onPress={bookMarkRemedy}
-            style={{ backgroundColor: "red", alignItems: "center" }}
-          >
-            {bookMarkText}
-          </BookMarkButton>
+          <View style={{ alignItems: "center" }}>
+            <BookMarkButton onPress={bookMarkRemedy}>
+              {bookMarkText}
+            </BookMarkButton>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -135,6 +160,11 @@ const styles = StyleSheet.create({
   rootContainer: {
     padding: 32,
   },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   title: {
     fontSize: 28,
     fontWeight: "600",
@@ -145,7 +175,6 @@ const styles = StyleSheet.create({
     height: undefined,
     aspectRatio: 1.5,
   },
-  container: {},
   titleCon: {
     alignItems: "center",
   },
