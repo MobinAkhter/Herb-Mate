@@ -121,6 +121,7 @@ function ConditionScreen({ route }) {
       </Text>
 
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={conditions}
         renderItem={({ item }) => (
           <View style={styles.container}>

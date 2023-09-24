@@ -55,9 +55,6 @@ const AppSettingsScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-        <View style={[styles.topSection, { height: topSectionHeight }]}>
-          <Text style={styles.bookmarksText}>Bookmarks</Text>
-        </View>
         <View style={styles.bottomSection}>
           <FlatList
             data={bookmarkCollection}
@@ -88,11 +85,9 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    paddingTop: 25,
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    padding: 16,
     backgroundColor: "#35D96F",
   },
   container: {
