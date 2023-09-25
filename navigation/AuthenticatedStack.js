@@ -44,15 +44,15 @@ function Home() {
   );
 }
 
-function DrawerContent() {
-  return (
-    <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Profile" component={UserProfileScreen} />
-      {/* For now, I think Home and Profile should be inside of drawer navigation, other screens can be added later */}
-    </Drawer.Navigator>
-  );
-}
+// function DrawerContent() {
+//   return (
+//     <Drawer.Navigator initialRouteName="Home">
+//       <Drawer.Screen name="Home" component={Home} />
+//       <Drawer.Screen name="Profile" component={UserProfileScreen} />
+//       {/* For now, I think Home and Profile should be inside of drawer navigation, other screens can be added later */}
+//     </Drawer.Navigator>
+//   );
+// }
 
 function AuthenticatedStack() {
   return (
