@@ -103,7 +103,7 @@ function AboutRemedyScreen({ route }) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  console.log(remedy.image);
+  // console.log(remedy.image);
   return (
     <View style={styles.rootContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>

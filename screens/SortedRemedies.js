@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase";
 
-const PAGE_SIZE = 20; // Number of remedies to fetch at once
+const PAGE_SIZE = 10; // Number of remedies to fetch at once
 
 const SortedRemedies = () => {
   const [herbs, setHerbs] = useState([]);
