@@ -24,7 +24,7 @@ function Navigation() {
   //     setUser(user);
   //   }
   // }
-
+  // Updating EXPO SDK SO that the app can run on physcial device using Expo Go.
   return (
     <NavigationContainer>
       {user ? <AuthenticatedStack /> : <AuthStack />}
