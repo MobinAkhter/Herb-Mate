@@ -25,6 +25,7 @@ function Navigation() {
   //   }
   // }
   // Updating EXPO SDK SO that the app can run on physcial device using Expo Go.
+  // Will try to fix these buttons and make them dynamic, so that the text shows up nicely.
   return (
     <NavigationContainer>
       {user ? <AuthenticatedStack /> : <AuthStack />}
