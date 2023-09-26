@@ -53,6 +53,7 @@ function RemedyListScreen({ route }) {
   return (
     <View style={styles.rootContainer}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={remedies}
         renderItem={({ item }) => (
           <View style={styles.container}>
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 32,
+    // paddingBottom: 10,
   },
   container: {
     flex: 1,
