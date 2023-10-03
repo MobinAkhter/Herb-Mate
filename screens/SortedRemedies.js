@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase";
 
-const PAGE_SIZE = 10; // Number of remedies to fetch at once
+const PAGE_SIZE = 10;
 
 const SortedRemedies = () => {
   const [herbs, setHerbs] = useState([]);
@@ -18,30 +18,28 @@ const SortedRemedies = () => {
   const navigation = useNavigation();
 
   const fetchHerbs = async () => {
-    try {
-      let query = db.collection("Remedies").orderBy("name").limit(PAGE_SIZE);
+    let query = db.collection("Remedies").orderBy("name").limit(PAGE_SIZE);
 
-      if (lastVisibleRemedy) {
-        query = query.startAfter(lastVisibleRemedy);
-      }
-
-      const querySnapshot = await query.get();
-
-      if (querySnapshot.empty) {
-        return;
-      }
-
-      setLastVisibleRemedy(querySnapshot.docs[querySnapshot.docs.length - 1]);
-
-      const herbsArray = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      setHerbs((prevHerbs) => [...prevHerbs, ...herbsArray]);
-    } catch (error) {
-      console.error("Error fetching herbs:", error);
+    if (lastVisibleRemedy) {
+      query = query.startAfter(lastVisibleRemedy);
     }
+
+    const querySnapshot = await query.get();
+
+    if (querySnapshot.empty) {
+      return;
+    }
+
+    const herbsArray = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const newLastVisibleRemedy =
+      querySnapshot.docs[querySnapshot.docs.length - 1];
+    setLastVisibleRemedy(newLastVisibleRemedy);
+
+    setHerbs((prevHerbs) => [...prevHerbs, ...herbsArray]);
   };
 
   useEffect(() => {
@@ -57,7 +55,8 @@ const SortedRemedies = () => {
           <TouchableOpacity
             style={styles.listItem}
             onPress={() => {
-              navigation.navigate("Remedy Details", { rem: item.name });
+              console.log("Navigating with remedy:", item);
+              navigation.navigate("Remedy Details", { rem: item.id });
             }}
           >
             <Image
@@ -72,7 +71,7 @@ const SortedRemedies = () => {
           </TouchableOpacity>
         )}
         onEndReached={fetchHerbs}
-        onEndReachedThreshold={0.1} // Trigger fetch when 90% scrolled
+        onEndReachedThreshold={0.9}
       />
     </View>
   );

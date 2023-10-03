@@ -3,14 +3,14 @@ import { StyleSheet, View, Text, TextInput, FlatList } from "react-native";
 import { db, auth } from "../firebase";
 import Button from "../components//ui/Button";
 import { useNavigation } from "@react-navigation/native";
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
+// import {
+//   LineChart,
+//   BarChart,
+//   PieChart,
+//   ProgressChart,
+//   ContributionGraph,
+//   StackedBarChart,
+// } from "react-native-chart-kit";
 
 const DataAnalyticsScreen = () => {
   const navigation = useNavigation();
