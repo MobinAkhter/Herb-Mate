@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import axios from "axios";
 
@@ -18,7 +20,7 @@ const ChatScreen = () => {
   useEffect(() => {
     const welcomeMessage = {
       id: 1,
-      text: "Hello! I'm HerbalLifeBot. How can I assist you today?",
+      text: "Hello! I'm HerbalLifeBot. How can I assist you today? I can provide herbal remedies based on various body parts and conditions.",
       isUser: false,
     };
 
@@ -66,7 +68,9 @@ const ChatScreen = () => {
   };
 
   const scrollToBottom = () => {
-    flatListRef.current.scrollToEnd();
+    if (flatListRef.current) {
+      flatListRef.current.scrollToEnd({ animated: true });
+    }
   };
 
   const renderItem = ({ item }) => (
@@ -75,45 +79,56 @@ const ChatScreen = () => {
         styles.messageContainer,
         item.isUser ? styles.userMessage : styles.botMessage,
       ]}
+      selectable={true}
     >
       <Text style={styles.messageText}>{item.text}</Text>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.messagesContainer}
-        onContentSizeChange={scrollToBottom}
-        ListFooterComponent={() => {
-          if (isBotTyping) {
-            return (
-              <View style={[styles.messageContainer, styles.botMessage]}>
-                <Text style={styles.messageText}>...</Text>
-              </View>
-            );
-          } else {
-            return null;
-          }
-        }}
-      />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Chat with the chatbot"
-          value={inputText}
-          onSubmitEditing={sendMessage}
-          onChangeText={setInputText}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      style={styles.container}
+    >
+      <View style={{ flex: 1 }}>
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.messagesContainer}
+          onContentSizeChange={scrollToBottom}
+          onLayout={scrollToBottom}
+          ListFooterComponent={() => {
+            if (isBotTyping) {
+              return (
+                <View style={[styles.messageContainer, styles.botMessage]}>
+                  <Text style={styles.messageText}>...</Text>
+                </View>
+              );
+            } else {
+              return null;
+            }
+          }}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          <Text style={styles.sendButtonText}>Send</Text>
-        </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Chat with the chatbot"
+            value={inputText}
+            onSubmitEditing={sendMessage}
+            onChangeText={setInputText}
+            multiline={true}
+            numberOfLines={4}
+            textAlignVertical="top"
+          />
+          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+            <Text style={styles.sendButtonText}>Send</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -155,7 +170,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 40,
+    minHeight: 40,
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: "#CCCCCC",
