@@ -61,7 +61,7 @@ exports.dialogflowGateway = functions.https.onRequest(async (req, res) => {
 
 // This function pushes notifications, will need to see how it works.
 exports.sendPushNotifications = functions.pubsub
-    .schedule("15 17 * * *")
+    .schedule("15 21 * * *")
     .timeZone("America/Toronto")
     .onRun(async (context) => {
       const messages = [];
