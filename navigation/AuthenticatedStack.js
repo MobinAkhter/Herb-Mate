@@ -16,6 +16,7 @@ import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { TouchableOpacity } from "react-native";
+import DonationScreen from "../screens/DonationScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -46,6 +47,7 @@ function Home() {
       <Stack.Screen name="Remedies" component={RemedyListScreen} />
       <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
+      <Stack.Screen name="Donation" component={DonationScreen} />
     </Stack.Navigator>
   );
 }

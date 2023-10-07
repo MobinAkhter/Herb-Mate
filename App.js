@@ -9,6 +9,7 @@ import { auth } from "./firebase";
 import { LogBox } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import UserProfileScreen from "./screens/UserProfileScreen";
+import DonationScreen from "./screens/DonationScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -29,7 +30,15 @@ function DrawerNavigator() {
           headerShown: false,
         }}
       />
-      {/* For now, I think Home and Profile should be inside of drawer navigation, other screens can be added later */}
+      <Drawer.Screen
+        name="Donate"
+        component={DonationScreen}
+        options={{
+          headerTitle: "Donate",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+        }}
+      />
     </Drawer.Navigator>
   );
 }
