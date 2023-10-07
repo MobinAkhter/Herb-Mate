@@ -7,30 +7,40 @@ import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
 import { auth } from "./firebase";
 import { LogBox } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import UserProfileScreen from "./screens/UserProfileScreen";
 
+const Drawer = createDrawerNavigator();
+
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen
+        name="Home"
+        component={AuthenticatedStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={UserProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      {/* For now, I think Home and Profile should be inside of drawer navigation, other screens can be added later */}
+    </Drawer.Navigator>
+  );
+}
 function Navigation() {
   LogBox.ignoreAllLogs();
 
   const { user, setUser } = React.useContext(UserContext);
 
-  // React.useEffect(() => {
-  //   getUser();
-  // }, []);
-
-  // async function getUser() {
-  //   const user = await auth.currentUser;
-  //   if (user !== null) {
-  //     // add a check here to see if user is not null
-  //     setUser(user);
-  //   }
-  // }
-  // Updating EXPO SDK SO that the app can run on physcial device using Expo Go.
-  // Will try to fix these buttons and make them dynamic, so that the text shows up nicely.
-  //Apparently last time, it automatically wanted me to upgrade to 48.0.0, i'll try 47.0.0, if it does not work, then I quit.
-  // Trying once again to update the sdk. Won't quit before I resolve this. Will need to be able to say in the defense it has been tested by other people, we published it on google play for extra points.
   return (
     <NavigationContainer>
-      {user ? <AuthenticatedStack /> : <AuthStack />}
+      {user ? <DrawerNavigator /> : <AuthStack />}
     </NavigationContainer>
   );
 }
