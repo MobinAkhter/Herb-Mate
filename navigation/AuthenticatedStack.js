@@ -17,6 +17,7 @@ import SortedRemedies from "../screens/SortedRemedies";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { TouchableOpacity } from "react-native";
 import DonationScreen from "../screens/DonationScreen";
+import { Platform } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,6 +28,7 @@ function Home() {
       screenOptions={{
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
+        headerTitleAlign: "center",
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
@@ -55,6 +57,9 @@ function Home() {
 function AuthenticatedStack() {
   return (
     <Tab.Navigator
+      tabBarOptions={{
+        keyboardHidesTabBar: Platform.OS === "android" ? true : false,
+      }}
       screenOptions={({ navigation }) => ({
         headerLeft: () => (
           <TouchableOpacity
