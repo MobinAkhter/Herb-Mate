@@ -15,10 +15,10 @@ import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { TouchableOpacity } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
 
 function Home() {
   return (
@@ -32,7 +32,13 @@ function Home() {
       <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
-        options={{ headerLeft: null }}
+        options={({ navigation }) => ({
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+              <Ionicons name="menu-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="Profile" component={UserProfileScreen} />
@@ -44,25 +50,23 @@ function Home() {
   );
 }
 
-// function DrawerContent() {
-//   return (
-//     <Drawer.Navigator initialRouteName="Home">
-//       <Drawer.Screen name="Home" component={Home} />
-//       <Drawer.Screen name="Profile" component={UserProfileScreen} />
-//       {/* For now, I think Home and Profile should be inside of drawer navigation, other screens can be added later */}
-//     </Drawer.Navigator>
-//   );
-// }
-
 function AuthenticatedStack() {
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
+        headerLeft: () => (
+          <TouchableOpacity
+            style={{ marginLeft: 10 }}
+            onPress={() => navigation.goBack()} // This will navigate to the previous screen
+          >
+            <Ionicons name="arrow-back" size={28} color="white" />
+          </TouchableOpacity>
+        ),
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
         headerTitleAlign: "center",
         contentStyle: { backgroundColor: Colors.white },
-      }}
+      })}
     >
       <Tab.Screen
         name="Home"
@@ -115,18 +119,5 @@ function AuthenticatedStack() {
     </Tab.Navigator>
   );
 }
-
-// function AuthenticatedStack() {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen
-//         name="MainTabs"
-//         component={MainTabs}
-//         options={{ headerShown: false }}
-//       />
-//     </Stack.Navigator>
-//   );
-// }
-// Might need to do what has been commented later, i think. The app seems to work perfectly fine so I'll keep as is.
 
 export default AuthenticatedStack;
