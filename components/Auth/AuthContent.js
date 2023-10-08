@@ -28,7 +28,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
   function switchToForgot() {
     if (isLogin) {
-      navigation.replace("ForgotPassword");
+      navigation.replace("Reset Password");
     }
   }
 

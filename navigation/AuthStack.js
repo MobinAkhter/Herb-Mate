@@ -3,12 +3,13 @@ import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
 import { Colors } from "../constants/styles";
 import ForgotPassword from "../screens/ForgotPassword";
-
-// Add references here
+import Icon from "@expo/vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
+  const navigation = useNavigation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -30,9 +31,19 @@ function AuthStack() {
         component={LoginScreen}
       />
       <Stack.Screen
-        options={{ headerBackVisible: false }}
-        name="ForgotPassword"
+        name="Reset Password"
         component={ForgotPassword}
+        options={() => ({
+          headerBackVisible: false,
+          headerLeft: () => (
+            <Icon
+              name="arrow-left"
+              size={24}
+              color="white"
+              onPress={() => navigation.navigate("Login")}
+            />
+          ),
+        })}
       />
     </Stack.Navigator>
   );

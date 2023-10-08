@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { auth } from "../firebase";
+import Icon from "@expo/vector-icons/FontAwesome";
 
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ const ForgotPassword = ({ navigation }) => {
         alert(error);
       });
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.centerizedView}>
@@ -42,7 +44,7 @@ const ForgotPassword = ({ navigation }) => {
             />
           </View>
           <TouchableOpacity style={styles.loginButton} onPress={forgotPassword}>
-            <Text style={styles.loginButtonText}>Send Mail</Text>
+            <Text style={styles.loginButtonText}>Reset Password</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -55,63 +57,78 @@ export default ForgotPassword;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: "relative",
+    backgroundColor: "#35D96F",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    backgroundColor: "#35D96F",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    marginLeft: 20,
+  },
+  backIcon: {
+    padding: 5,
   },
   centerizedView: {
     width: "100%",
-    top: "15%",
+    top: "10%",
+    backgroundColor: "white",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    flex: 1,
+    paddingTop: 40,
+    alignItems: "center",
   },
   authBox: {
-    width: "90%",
-    backgroundColor: "#fafafa",
+    width: "85%",
+    backgroundColor: "white",
     borderRadius: 20,
-    alignSelf: "center",
     paddingHorizontal: 14,
     paddingBottom: 40,
-    shadowColor: "#fff",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   loginTitleText: {
     fontSize: 20,
     fontWeight: "bold",
-    paddingHorizontal: 55,
-    alignItems: "center",
-    justifyContent: "center",
+    paddingBottom: 20,
+    textAlign: "center",
   },
   text: {
     fontSize: 17,
-    alignItems: "center",
-    justifyContent: "center",
+    paddingBottom: 20,
+    textAlign: "center",
   },
   inputBox: {
-    marginTop: 10,
+    marginBottom: 20,
   },
   inputLabel: {
     fontSize: 16,
     marginBottom: 6,
-    paddingTop: 20,
   },
   input: {
     width: "100%",
     height: 40,
-    backgroundColor: "#dfe4ea",
+    backgroundColor: "#e0e0e0",
     borderRadius: 4,
     paddingHorizontal: 10,
-    borderColor: "black",
   },
   loginButton: {
-    backgroundColor: "#035afc",
+    backgroundColor: "#323232",
+    // alternate background color: '#1A8F57', '#789048'
     borderRadius: 4,
     marginTop: 10,
     paddingVertical: 10,
+    width: "100%",
+    alignItems: "center",
   },
   loginButtonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 20,
-    color: "080808",
+    color: "#ffffff",
+    fontSize: 18,
   },
 });
