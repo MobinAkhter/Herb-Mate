@@ -57,7 +57,7 @@ function Navigation() {
 export default function App() {
   return (
     <UserProvider>
-      {/* <StatusBar style="light" /> */}
+      <StatusBar style="light" />
       <Navigation />
     </UserProvider>
   );

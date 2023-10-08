@@ -5,6 +5,7 @@ import { Colors } from "../constants/styles";
 import ForgotPassword from "../screens/ForgotPassword";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
+import OnboardingScreen from "../screens/OnboardingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,6 +13,7 @@ function AuthStack() {
   const navigation = useNavigation();
   return (
     <Stack.Navigator
+      initialRouteName="Onboarding"
       screenOptions={{
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
@@ -20,6 +22,11 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
+      <Stack.Screen
+        name="Onboarding"
+        component={OnboardingScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         options={{ headerBackVisible: false }}
         name="Signup"
