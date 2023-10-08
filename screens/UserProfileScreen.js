@@ -14,13 +14,15 @@ import {
 import firebase from "firebase/app";
 import { useState, useEffect } from "react";
 import Button from "../components/ui/Button";
+import { useNavigation } from "@react-navigation/native";
 
 function UserProfileScreen({ navigation }) {
   const { setUser } = React.useContext(UserContext);
 
   const handleLogout = async () => {
-    console.log("logout");
+    // console.log("logout");
     await auth.signOut();
+    navigation.navigate("Login");
     setUser(null);
   };
 

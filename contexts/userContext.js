@@ -20,7 +20,11 @@ function UserProvider({ children }) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
-        setUser(firebaseUser);
+        if (firebaseUser.emailVerified) {
+          setUser(firebaseUser);
+        } else {
+          // alert("Please verify your email");
+        }
       } else {
         setUser(null);
       }
