@@ -17,7 +17,7 @@ const OnboardingScreen = () => {
         containerStyles={{ paddingHorizontal: 15 }}
         pages={[
           {
-            backgroundColor: "#fff",
+            backgroundColor: "#a7f3d0",
             image: (
               <View style={styles.lottie}>
                 <Lottie
@@ -33,7 +33,7 @@ const OnboardingScreen = () => {
               "Explore a vast collection of herbal solutions tailored to treat various conditions.",
           },
           {
-            backgroundColor: "#fff",
+            backgroundColor: "#fef3c7",
             image: (
               <View style={styles.lottie}>
                 <Lottie
@@ -49,7 +49,7 @@ const OnboardingScreen = () => {
               "Chat with our intelligent bot to find the perfect remedy for your needs.",
           },
           {
-            backgroundColor: "#fff",
+            backgroundColor: "#a78bfa",
             image: (
               <View style={styles.lottie}>
                 <Lottie
