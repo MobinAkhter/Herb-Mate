@@ -83,7 +83,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
       auth
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
-          setUser(authUser.user);
+          // setUser(authUser.user);
           console.log(authUser.user.uid);
           const authId = authUser.user.uid;
           const usersCollection = firestore.collection("users").doc(authId);
@@ -118,8 +118,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
       auth
         .signInWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
-          setUser(authUser.user);
           if (authUser.user.emailVerified) {
+            setUser(authUser.user);
             navigation.navigate("Welcome"); // Navigate to welcome screen if email is verified
           } else {
             Alert.alert(
