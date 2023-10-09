@@ -1,5 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { UserContext } from "./contexts/userContext";
 import UserProvider from "./contexts/userContext";
@@ -10,6 +11,8 @@ import { LogBox } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import DonationScreen from "./screens/DonationScreen";
+import { useEffect } from "react";
+import OnboardingScreen from "./screens/OnboardingScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -46,6 +49,26 @@ function Navigation() {
   LogBox.ignoreAllLogs();
 
   const { user, setUser } = React.useContext(UserContext);
+  const [isFirstLaunch, setIsFirstLaunch] = useState(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem("alreadyLaunched").then((value) => {
+      if (value == null) {
+        AsyncStorage.setItem("alreadyLaunched", "true");
+        setIsFirstLaunch(true);
+      } else {
+        setIsFirstLaunch(false);
+      }
+    });
+  }, []);
+
+  if (isFirstLaunch === null) {
+    return null;
+  }
+
+  if (isFirstLaunch === true) {
+    return <OnboardingScreen />;
+  }
 
   return (
     <NavigationContainer>

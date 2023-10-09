@@ -13,7 +13,6 @@ function AuthStack() {
   const navigation = useNavigation();
   return (
     <Stack.Navigator
-      initialRouteName="Onboarding"
       screenOptions={{
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
