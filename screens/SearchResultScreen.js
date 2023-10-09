@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  searchInput,
+} from "react-native";
+import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase";
+import BigButton from "../components/ui/BigButton";
+import { removeSpace, iconMapper } from "../utils";
+import MIcon from "../components/ui/MIcon";
 
 function SearchResultScreen({ route }) {
   const { searchVal } = route.params;
@@ -10,7 +24,9 @@ function SearchResultScreen({ route }) {
   //gets/sets list of remedies to show in flatlist
   const [conditions, setConditions] = useState([]);
   const [remedies, setRemedies] = useState([]);
+  const [searchValue, setSearchValue] = useState(searchVal);
   const col = db.collection("BodyParts");
+  const remedyCol = db.collection("Remedies");
   const bpList = [
     "Circulatory",
     "Digestive",
@@ -28,97 +44,150 @@ function SearchResultScreen({ route }) {
   var height = Dimensions.get("window").height; //full height
   var rems = db.collectionGroup("Remedies");
 
+  const loadConditions = () => {
+    const conditionList = [];
+    bpList.forEach((element) => {
+      col
+        .doc(element)
+        .collection("Conditions")
+        .orderBy("name")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            if (doc.id.toLowerCase().includes(searchValue.toLowerCase())) {
+              console.log("result: " + doc.id);
+              conditionList.push({
+                ...doc.data(),
+                key: doc.id,
+                bp: element,
+              });
+            }
+          });
+          setConditions(conditionList);
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    });
+  };
+
+  const loadRemedies = () => {
+    const remList = [];
+    //Gets a list of remedies to populate the second flat list depending on search terms entered
+    remedyCol
+      .orderBy("name")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          if (doc.id.toLowerCase().includes(searchValue.toLowerCase())) {
+            console.log("rem result: " + doc.id);
+            remList.push({
+              ...doc.data(),
+              key: doc.id,
+            });
+          }
+        });
+        setRemedies(remList);
+      });
+  };
+
+  const handleSearch = () => {
+    loadConditions();
+    loadRemedies();
+  };
+
   //Fills list of conditions to show in flatlist based on the bodypart selected
   useEffect(() => {
-    // const con = [];
-    // bpList.forEach((element) => {
-    //   col
-    //     .doc(element)
-    //     .collection("Conditions")
-    //     .get()
-    //     .then((querySnapshot) => {
-    //       querySnapshot.forEach((doc) => {
-    //         if (doc.id.toLowerCase().includes(searchVal.toLowerCase())) {
-    //           console.log("result: " + doc.id);
-    //           con.push({
-    //             ...doc.data(),
-    //             key: doc.id,
-    //             bp: element,
-    //           });
-    //         }
-    //         //console.log(doc.id);
-    //       });
-    //       setConditions(con);
-    //     })
-    //     .catch((error) => {
-    //       console.log("Error getting documents: ", error);
-    //     });
-    // });
-    // const remList = [];
-    // //Gets a list of remedies to populate the second flat list depending on search terms entered
-    // rems.get().then((querySnapshot) => {
-    //   querySnapshot.forEach((doc) => {
-    //     if (doc.id.toLowerCase().includes(searchVal.toLowerCase())) {
-    //       console.log("rem result: " + doc.id);
-    //       remList.push({
-    //         ...doc.data(),
-    //         key: doc.id,
-    //       });
-    //     }
-    //     //console.log(doc.id, " => ", doc.data());
-    //   });
-    //   setRemedies(remList);
-    // });
+    loadConditions();
+    loadRemedies();
   }, []);
+
+  // Sort the conditions alphabetically
+  conditions.sort((a, b) => a.name.localeCompare(b.name));
+
+  // Sort the remedies alphabetically
+  remedies.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.title}>Searching for: {searchVal}</Text>
-      {/* <View style={styles.header}>
-        <Text style={styles.title}>Conditions</Text>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search for remedy"
+            keyboardType="default"
+            onChangeText={(input) => setSearchValue(input)}
+            value={searchValue}
+          />
+        </View>
+
+        <TouchableOpacity
+          style={styles.searchBtn}
+          onPress={() => {
+            console.log("nav to search results???");
+            handleSearch();
+          }}
+        >
+          <MagnifyingGlassIcon
+            color="white"
+            size={20}
+            style={styles.searchIcon}
+          />
+        </TouchableOpacity>
       </View>
-      <FlatList
-        style={styles.list}
-        data={conditions}
-        renderItem={({ item }) => (
-          <View style={styles.container}>
-            <BigButton
-              onPress={() => {
-                navigation.navigate("RemedyList", {
-                  bp: item.bp,
-                  con: item.name,
-                  //rem: item.name,
-                });
-              }}
-            >
-              <Text styles={styles.itemText}>{item.name}</Text>
-              {console.log("condition: " + item.name)}
-            </BigButton>
-          </View>
-        )}
-      /> */}
       <View style={styles.header}>
         <Text style={styles.title}>Remedies</Text>
       </View>
-      {/* <FlatList
+
+      <FlatList
         data={remedies}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.container}>
-            <BigButton
-              onPress={() => {
-                navigation.navigate("RemedyList", {
-                  bp: item.bp,
-                  con: item.name,
-                  //rem: item.name,
-                });
-              }}
-            >
-              <Text styles={styles.itemText}>{item.name}</Text>
-              {console.log("condition: " + item.name)}
-            </BigButton>
-          </View>
+          <TouchableOpacity
+            style={styles.listItem}
+            onPress={() => {
+              console.log("Navigating with remedy:", item);
+              navigation.navigate("Remedy Details", { rem: item.key });
+            }}
+          >
+            <Image
+              source={
+                item.image
+                  ? { uri: item.image }
+                  : require("../assets/leaf_icon.jpeg")
+              }
+              style={styles.herbImage}
+            />
+            <Text style={styles.herbName}>{item.name}</Text>
+          </TouchableOpacity>
         )}
-      /> */}
+      />
+
+      <View style={styles.header}>
+        <Text style={styles.title}>Conditions</Text>
+      </View>
+
+      <FlatList
+        data={conditions}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.listItem}
+            onPress={() => {
+              console.log("Navigating with remedy:", item);
+              navigation.navigate("Remedies", {
+                bp: item.bp,
+                con: item.name,
+              });
+            }}
+          >
+            <View style={styles.bpIcon}>
+              <MIcon size={10} {...iconMapper[removeSpace(item.bp)]} />
+            </View>
+            <Text style={styles.herbName}>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 }
@@ -128,7 +197,7 @@ export default SearchResultScreen;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    alignItems: "center",
+    //alignItems: "center",
   },
   title: {
     fontSize: 25,
@@ -138,7 +207,67 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: Dimensions.get("window").width,
     height: 40,
-    backgroundColor: "#35D96F",
+    backgroundColor: "#dfede0",
+    bottomBorderWidth: "0.5px",
+    borderColor: "black",
   },
   list: {},
+  // container: {
+  //   flex: 1,
+  // },
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+  },
+  herbImage: {
+    width: 50,
+    height: 50,
+    //marginRight: 10,
+    borderRadius: 25,
+  },
+  herbName: {
+    fontSize: 18,
+    //marginRight: 70,
+  },
+
+  searchContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 20,
+    height: 50,
+    marginBottom: 10,
+  },
+  searchWrapper: {
+    flex: 1,
+    backgroundColor: "white",
+    marginRight: 12,
+    marginLeft: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 16,
+    height: "100%",
+  },
+  searchInput: {
+    width: "100%",
+    height: "100%",
+    paddingHorizontal: 16,
+  },
+  searchBtn: {
+    width: 45,
+    height: "100%",
+    backgroundColor: "#35D96F",
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bpIcon: {
+    width: 50,
+    height: 50,
+    marginRight: 2,
+    //borderRadius: 25,
+  },
 });
