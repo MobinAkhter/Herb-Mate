@@ -10,6 +10,7 @@ import {
   Modal,
   Alert,
 } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../ui/Button";
 import Input from "./Input";
 import Checkbox from "expo-checkbox";
@@ -26,6 +27,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsModalVisible, setTermsModalVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const navigation = useNavigation();
 
@@ -167,9 +169,16 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         <Input
           label="Password"
           onUpdateValue={updateInputValueHandler.bind(this, "password")}
-          secure
+          secure={!isPasswordVisible}
           value={enteredPassword}
           isInvalid={passwordIsInvalid}
+        />
+        <MaterialIcons
+          name={isPasswordVisible ? "visibility" : "visibility-off"}
+          size={24}
+          color="black"
+          onPress={() => setIsPasswordVisible((prevState) => !prevState)}
+          style={styles.eyeIcon}
         />
 
         {!isLogin && (
@@ -198,7 +207,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         )}
 
         <View style={styles.buttons}>
-          <Button onPress={submitHandler}>
+          <Button onPress={submitHandler} style={styles.signupButton}>
             {isLogin ? "Log In" : "Sign Up"}
           </Button>
         </View>
@@ -249,6 +258,10 @@ export default AuthForm;
 
 const styles = StyleSheet.create({
   buttons: {
+    marginTop: 12,
+  },
+  signupButton: {
+    backgroundColor: "#35D96F",
     marginTop: 12,
   },
   checkboxContainer: {
