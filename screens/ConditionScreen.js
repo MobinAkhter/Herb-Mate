@@ -47,6 +47,7 @@ function ConditionScreen({ route }) {
 
   useEffect(() => {
     loadConditions();
+
   }, []);
 
   // TODO: Uncomment the lines of code below, if there is some caching problem, herbs from db are not showing up etc.
