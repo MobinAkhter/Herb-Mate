@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import { BarChart } from "react-native-chart-kit";
 import Button from "../components//ui/Button";
-import Remedy from './Remedy';
+import Remedy from "./Remedy";
 import RemedyViewModel from "./RemedyViewModel";
 
 const RemediesBarGraphScreen = () => {
@@ -12,79 +11,76 @@ const RemediesBarGraphScreen = () => {
   const [t2, sett2] = useState("");
   const [t3, sett3] = useState("");
 
-  const apiUrl = 'http://127.0.0.1:5000/predict'; // Replace with your API URL
+  const apiUrl = "http://127.0.0.1:5000/predict"; // Replace with your API URL
 
-// Define the data you want to send to the API
- const [blob, setBlob] = useState("");
- const [ray, setRay] = useState("");
+  // Define the data you want to send to the API
+  const [blob, setBlob] = useState("");
+  const [ray, setRay] = useState("");
 
   useEffect(() => {
     const lol = new RemedyViewModel();
 
-   setBlob(lol.screamOne());
-   setRay(lol.screamTwo());
-   
-   console.log(blob)
-   console.log(ray)
-    
+    setBlob(lol.screamOne());
+    setRay(lol.screamTwo());
+
+    console.log(blob);
+    console.log(ray);
   }, []);
 
-// Send a POST request to the API
+  // Send a POST request to the API
 
-function buttonClick()
-{
-  
-  const requestData = {
-    Category: t1,
-    FirstQuestion: t2,
-    SecondQuestion: t3,
-  };
+  function buttonClick() {
+    const requestData = {
+      Category: t1,
+      FirstQuestion: t2,
+      SecondQuestion: t3,
+    };
 
-  fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestData),
-  })
-    
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the API response here
-      console.log('API Response:', data);
-      // Extract the predicted remedy from the API response
-      setPred(data.predicted_remedy);
-      console.log('Predicted Remedy:', pred);
-      console.log(t1)
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
     })
-    .catch((error) => {
-      console.error('API Error:', error);
-    });  
-}
-
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the API response here
+        console.log("API Response:", data);
+        // Extract the predicted remedy from the API response
+        setPred(data.predicted_remedy);
+        console.log("Predicted Remedy:", pred);
+        console.log(t1);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+  }
 
   return (
     <View style={styles.rootContainer}>
-
       <Text> Random name is {blob}</Text>
 
-      <Text> Random desc of {blob} is {ray} </Text>
+      <Text>
+        {" "}
+        Random desc of {blob} is {ray}{" "}
+      </Text>
 
       <TextInput
-      placeholder="useless placeholder"
-      onChangeText={newText => sett1(newText)}
-       value={t1}
+        placeholder="useless placeholder"
+        onChangeText={(newText) => sett1(newText)}
+        value={t1}
       ></TextInput>
 
       <TextInput
-      placeholder="useless placeholder"
-      onChangeText={newText => sett2(newText)}
+        placeholder="useless placeholder"
+        onChangeText={(newText) => sett2(newText)}
         value={t2}
       ></TextInput>
 
       <TextInput
-      placeholder="useless placeholder"
-      onChangeText={newText => sett3(newText)}
+        placeholder="useless placeholder"
+        onChangeText={(newText) => sett3(newText)}
         value={t3}
       ></TextInput>
 
