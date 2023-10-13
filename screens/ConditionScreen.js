@@ -47,6 +47,7 @@ function ConditionScreen({ route }) {
 
   useEffect(() => {
     loadConditions();
+
   }, []);
 
   return (
