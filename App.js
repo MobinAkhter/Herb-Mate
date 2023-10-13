@@ -12,6 +12,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import DonationScreen from "./screens/DonationScreen";
 import { useEffect } from "react";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import OnboardingScreen from "./screens/OnboardingScreen";
 
 const Drawer = createDrawerNavigator();
@@ -80,8 +81,10 @@ function Navigation() {
 export default function App() {
   return (
     <UserProvider>
-      <StatusBar style="light" />
-      <Navigation />
+      <ThemeProvider>
+        <StatusBar style="light" />
+        <Navigation />
+      </ThemeProvider>
     </UserProvider>
   );
 }

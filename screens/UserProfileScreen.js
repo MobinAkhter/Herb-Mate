@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import firebase from "firebase/app";
 import { useState, useEffect } from "react";
+import { useTheme } from "../contexts/ThemeContext";
 import Button from "../components/ui/Button";
 
 function UserProfileScreen({ navigation }) {
@@ -38,6 +39,7 @@ function UserProfileScreen({ navigation }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const firestore = firebase.firestore();
@@ -156,9 +158,18 @@ function UserProfileScreen({ navigation }) {
     ]);
   };
 
+  const getThemeStyles = (theme) => ({
+    background: theme === "dark" ? "black" : "white",
+    color: theme === "dark" ? "white" : "black",
+  });
+
+  const themeStyles = getThemeStyles(theme);
+
   return (
     <>
-      <View style={styles.header}>
+      <View
+        style={[styles.header, { backgroundColor: themeStyles.background }]}
+      >
         <Icon
           style={styles.backIcon}
           name="arrow-left"
@@ -171,7 +182,7 @@ function UserProfileScreen({ navigation }) {
       </View>
       {userData && (
         <>
-          <View style={styles.textContainer}>
+          <View style={[styles.textContainer]}>
             <Text style={styles.text}>First Name: {userData.firstName}</Text>
             <TextInput
               style={styles.textInput}
@@ -212,6 +223,7 @@ function UserProfileScreen({ navigation }) {
               Change Password
             </Button>
 
+            <Button onPress={toggleTheme}>Change App Theme</Button>
             <Modal visible={modalVisible} animationType="slide">
               <View
                 style={{
