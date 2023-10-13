@@ -90,16 +90,19 @@ const WelcomeScreen = ({}) => {
             />
           </View>
 
-          <TouchableOpacity style={styles.searchBtn}>
+          <TouchableOpacity
+            style={styles.searchBtn}
+            onPress={() => {
+              console.log("nav to search results???");
+              navigation.navigate("SearchResult", {
+                searchVal: searchInput,
+              });
+            }}
+          >
             <MagnifyingGlassIcon
               color="white"
               size={20}
               style={styles.searchIcon}
-              onPress={() => {
-                navigation.navigate("SearchResult", {
-                  searchVal: searchInput,
-                });
-              }}
             />
           </TouchableOpacity>
         </View>
