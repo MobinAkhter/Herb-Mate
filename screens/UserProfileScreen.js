@@ -167,9 +167,7 @@ function UserProfileScreen({ navigation }) {
 
   return (
     <>
-      <View
-        style={[styles.header, { backgroundColor: themeStyles.background }]}
-      >
+      <View style={styles.header}>
         <Icon
           style={styles.backIcon}
           name="arrow-left"
