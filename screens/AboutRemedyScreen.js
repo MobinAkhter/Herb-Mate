@@ -1,6 +1,9 @@
 // FROM MY UNDERSTANDING IF YOU INCLUDE THE IMAGE URL IN ROOT COLLECTION "Remedies" AS A IMAGE FILED, THE IMAGES WILL SHOW UP.
 import { useEffect, useState } from "react";
 import {
+  Modal,
+  Button,
+  TextInput,
   StyleSheet,
   View,
   Text,
@@ -10,10 +13,11 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Collapsible from "react-native-collapsible";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import DropDownPicker from "react-native-dropdown-picker";
 
 import "firebase/firestore";
 
@@ -33,11 +37,20 @@ function AboutRemedyScreen({ route }) {
   const user = auth.currentUser.uid;
   const userRef = db.collection("users").doc(user);
 
+  // adding the states required for notes functionality
+  const [remediesList, setRemediesList] = useState([]);
+  const [selectedRemedy, setSelectedRemedy] = useState(rem);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [condition, setCondition] = useState("");
+  const [conditionsList, setConditionsList] = useState([]);
+  const [notes, setNotes] = useState("");
+
   // define the key for AsyncStorage
   //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
 
   useEffect(() => {
-    AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
+    // AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
     setIsLoading(true);
     // define the key for AsyncStorage
     const remedyKey = "remedy-" + rem;
@@ -55,6 +68,13 @@ function AboutRemedyScreen({ route }) {
           return;
         }
       }
+      // userRef
+      //   .collection("bookmarks")
+      //   .doc(rem)
+      //   .get()
+      //   .then((doc) => {
+      //     if (doc.exists) setBookMarkText("Remove Bookmark");
+      //   });
 
       // fetch the remedy from Firestore and save it in the cache
       remediesFirebase
@@ -79,7 +99,47 @@ function AboutRemedyScreen({ route }) {
           setIsLoading(false);
         });
     });
+    remediesFirebase
+      .get()
+      .then((querySnapshot) => {
+        const remedies = querySnapshot.docs.map((doc) => ({
+          label: doc.data().name,
+          value: doc.id,
+        }));
+
+        if (!remedies.some((item) => item.value === rem)) {
+          const currentRemedy = {
+            label: remedy.name,
+            value: rem,
+          };
+          remedies.unshift(currentRemedy);
+        }
+
+        setRemediesList(remedies);
+      })
+      .catch((error) => {
+        console.error("Error fetching remedies list:", error);
+      });
   }, []);
+
+  const saveNotes = () => {
+    if (selectedRemedy && (condition || notes)) {
+      const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
+      userNotesRef
+        .set({
+          herb: selectedRemedy,
+          condition: condition,
+          notes: notes,
+        })
+        .then(() => {
+          Alert.alert("Notes saved successfully!");
+          setModalVisible(false);
+        })
+        .catch((error) => {
+          console.error("Error saving notes:", error);
+        });
+    }
+  };
 
   function bookMarkRemedy() {
     if (!userRef.collection("bookmarks").doc(rem).exists) {
@@ -106,10 +166,54 @@ function AboutRemedyScreen({ route }) {
   // console.log(remedy.image);
   return (
     <View style={styles.rootContainer}>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={{ flex: 1, padding: 20 }}>
+          <Text style={{ fontSize: 24, marginBottom: 20 }}>Add Notes</Text>
+          <DropDownPicker
+            items={remediesList}
+            defaultValue={rem}
+            containerStyle={{ height: 40, width: "100%", marginBottom: 20 }}
+            style={{ backgroundColor: "#fafafa" }}
+            dropDownStyle={{ backgroundColor: "#fafafa" }}
+            onChangeItem={(item) => setSelectedRemedy(item.value)}
+          />
+          <DropDownPicker
+            items={conditionsList}
+            placeholder="Select a condition (optional)"
+            containerStyle={{ height: 40, width: "100%", marginBottom: 20 }}
+            style={{ backgroundColor: "#fafafa" }}
+            dropDownStyle={{ backgroundColor: "#fafafa" }}
+            onChangeItem={(item) => setCondition(item.value)}
+          />
+          <TextInput
+            style={{ borderColor: "gray", borderWidth: 1, marginBottom: 20 }}
+            placeholder="Write your notes here"
+            multiline
+            numberOfLines={4}
+            onChangeText={setNotes}
+            value={notes}
+          />
+          <Button title="Save Notes" onPress={saveNotes} />
+          <Button
+            title="Close"
+            onPress={() => setModalVisible(false)}
+            color="red"
+          />
+        </View>
+      </Modal>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <Text style={styles.title}>{remedy.name}</Text>
 
+          <Entypo
+            name="write"
+            size={24}
+            onPress={() => setModalVisible(true)}
+          />
           <Image
             source={{ uri: remedy.image }}
             style={styles.image}

@@ -173,13 +173,13 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           value={enteredPassword}
           isInvalid={passwordIsInvalid}
         />
-        <MaterialIcons
+        {/* <MaterialIcons
           name={isPasswordVisible ? "visibility" : "visibility-off"}
           size={24}
           color="black"
           onPress={() => setIsPasswordVisible((prevState) => !prevState)}
           style={styles.eyeIcon}
-        />
+        /> */}
 
         {!isLogin && (
           <Input
