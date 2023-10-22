@@ -22,7 +22,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import "firebase/firestore";
 
 function AboutRemedyScreen({ route }) {
-  const { rem } = route.params;
+  const { rem, bp } = route.params;
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState("BookMark");
   const [isLoading, setIsLoading] = useState(true);
@@ -40,16 +40,44 @@ function AboutRemedyScreen({ route }) {
   // adding the states required for notes functionality
   const [remediesList, setRemediesList] = useState([]);
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
-
+  const col = db.collection("BodyParts");
   const [modalVisible, setModalVisible] = useState(false);
   const [condition, setCondition] = useState("");
-  const [conditionsList, setConditionsList] = useState([]);
   const [notes, setNotes] = useState("");
+
+  const loadConditions = async () => {
+    try {
+      const cacheKey = `conditions_${bp}`;
+      const cachedConditions = await AsyncStorage.getItem(cacheKey);
+
+      if (cachedConditions !== null) {
+        console.log(`Fetching conditions from cache for body part: ${bp}`);
+        setCondition(JSON.parse(cachedConditions));
+      } else {
+        console.log(`Fetching conditions from Firestore for body part: ${bp}`);
+        const con = [];
+        const querySnapshot = await col.doc(bp).collection("Conditions").get();
+
+        querySnapshot.forEach((doc) => {
+          con.push({
+            ...doc.data(),
+            key: doc.id,
+          });
+        });
+
+        await AsyncStorage.setItem(cacheKey, JSON.stringify(con));
+        setCondition(con);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // define the key for AsyncStorage
   //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
 
   useEffect(() => {
+    loadConditions();
     // AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
     setIsLoading(true);
     // define the key for AsyncStorage
@@ -116,6 +144,7 @@ function AboutRemedyScreen({ route }) {
         }
 
         setRemediesList(remedies);
+        console.log("Remedies List:", remediesList);
       })
       .catch((error) => {
         console.error("Error fetching remedies list:", error);
@@ -123,6 +152,7 @@ function AboutRemedyScreen({ route }) {
   }, []);
 
   const saveNotes = () => {
+    console.log("Save notes got executed");
     if (selectedRemedy && (condition || notes)) {
       const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
       userNotesRef
@@ -174,15 +204,23 @@ function AboutRemedyScreen({ route }) {
         <View style={{ flex: 1, padding: 20 }}>
           <Text style={{ fontSize: 24, marginBottom: 20 }}>Add Notes</Text>
           <DropDownPicker
+            dropDownContainerStyle={{
+              backgroundColor: "white",
+              zIndex: 1000,
+              elevation: 1000,
+            }}
             items={remediesList}
             defaultValue={rem}
-            containerStyle={{ height: 40, width: "100%", marginBottom: 20 }}
+            placeholder="Select a herb"
             style={{ backgroundColor: "#fafafa" }}
             dropDownStyle={{ backgroundColor: "#fafafa" }}
             onChangeItem={(item) => setSelectedRemedy(item.value)}
           />
           <DropDownPicker
-            items={conditionsList}
+            items={condition.map((condition) => ({
+              label: condition.name,
+              value: condition.key,
+            }))}
             placeholder="Select a condition (optional)"
             containerStyle={{ height: 40, width: "100%", marginBottom: 20 }}
             style={{ backgroundColor: "#fafafa" }}
@@ -284,7 +322,7 @@ const styles = StyleSheet.create({
   },
   desc: {
     fontSize: 16,
-    lineHeight: "24px",
+    lineHeight: 24,
   },
   head: {
     fontSize: 28,
