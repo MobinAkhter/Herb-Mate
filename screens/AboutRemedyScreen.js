@@ -11,7 +11,11 @@ import {
   Alert,
   Image,
   ActivityIndicator,
+  SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
@@ -23,6 +27,8 @@ import RNPickerSelect from "react-native-picker-select";
 import "firebase/firestore";
 
 function AboutRemedyScreen({ route }) {
+  const navigation = useNavigation();
+
   const { rem, bp } = route.params;
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState("BookMark");
@@ -73,6 +79,16 @@ function AboutRemedyScreen({ route }) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <SimpleLineIcons name="note" size={24} color="black" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   // define the key for AsyncStorage
   //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
@@ -202,7 +218,7 @@ function AboutRemedyScreen({ route }) {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={{ flex: 1, padding: 20 }}>
+        <SafeAreaView style={styles.modal}>
           <Text style={{ fontSize: 24, marginBottom: 20 }}>Add Notes</Text>
           {/* <DropDownPicker
             dropDownContainerStyle={{
@@ -217,13 +233,22 @@ function AboutRemedyScreen({ route }) {
             dropDownStyle={{ backgroundColor: "#fafafa" }}
             onChangeItem={(item) => setSelectedRemedy(item.value)}
           /> */}
-          <RNPickerSelect
-            onValueChange={(value) => setSelectedRemedy(value)}
-            items={remediesList}
-            placeholder={{ label: "Select a herb", value: null }}
-            value={selectedRemedy}
-          />
-          {/* <DropDownPicker
+          <View>
+            <RNPickerSelect
+              onValueChange={(value) => setSelectedRemedy(value)}
+              items={remediesList}
+              placeholder={{ label: "Select a herb", value: null }}
+              value={selectedRemedy}
+              style={{
+                inputIOS: {
+                  height: 30,
+                  fontSize: 18,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                },
+              }}
+            />
+            {/* <DropDownPicker
             items={condition.map((condition) => ({
               label: condition.name,
               value: condition.key,
@@ -234,40 +259,46 @@ function AboutRemedyScreen({ route }) {
             dropDownStyle={{ backgroundColor: "#fafafa" }}
             onChangeItem={(item) => setCondition(item.value)}
           /> */}
-          <RNPickerSelect
-            onValueChange={(value) => setCondition(value)}
-            items={condition}
-            placeholder={{
-              label: "Select a condition (optional)",
-              value: null,
-            }}
-            value={condition}
-          />
-          <TextInput
-            style={{ borderColor: "gray", borderWidth: 1, marginBottom: 20 }}
-            placeholder="Write your notes here"
-            multiline
-            numberOfLines={4}
-            onChangeText={setNotes}
-            value={notes}
-          />
+            <RNPickerSelect
+              onValueChange={(value) => setCondition(value)}
+              items={condition}
+              placeholder={{
+                label: "Select a condition (optional)",
+                value: null,
+              }}
+              value={condition}
+              style={{
+                inputIOS: {
+                  marginTop: 16,
+                  marginBottom: 16,
+                  height: 30,
+                  fontSize: 18,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                },
+              }}
+            />
+            <TextInput
+              placeholder="Write your notes here"
+              multiline
+              numberOfLines={4}
+              onChangeText={setNotes}
+              value={notes}
+              style={styles.input}
+            />
+          </View>
           <Button title="Save Notes" onPress={saveNotes} />
           <Button
             title="Close"
             onPress={() => setModalVisible(false)}
             color="red"
           />
-        </View>
+        </SafeAreaView>
       </Modal>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <Text style={styles.title}>{remedy.name}</Text>
 
-          <Entypo
-            name="write"
-            size={24}
-            onPress={() => setModalVisible(true)}
-          />
           <Image
             source={{ uri: remedy.image }}
             style={styles.image}
@@ -346,4 +377,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 16,
   },
+  modal: {
+    margin: 20,
+  },
+  input: {
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 20,
+    height: 30,
+  },
 });
+// style={{ borderColor: "gray", borderWidth: 1, marginBottom: 20 }}
