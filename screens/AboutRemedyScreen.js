@@ -46,7 +46,8 @@ function AboutRemedyScreen({ route }) {
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const col = db.collection("BodyParts");
   const [modalVisible, setModalVisible] = useState(false);
-  const [condition, setCondition] = useState([]);
+  const [conditionsList, setConditionsList] = useState([]);
+  const [selectedCondition, setSelectedCondition] = useState();
   const [notes, setNotes] = useState("");
 
   const loadConditions = async () => {
@@ -56,7 +57,7 @@ function AboutRemedyScreen({ route }) {
 
       if (cachedConditions !== null) {
         console.log(`Fetching conditions from cache for body part: ${bp}`);
-        setCondition(JSON.parse(cachedConditions));
+        setConditionsList(JSON.parse(cachedConditions));
       } else {
         console.log(`Fetching conditions from Firestore for body part: ${bp}`);
         const con = [];
@@ -70,7 +71,7 @@ function AboutRemedyScreen({ route }) {
         });
 
         await AsyncStorage.setItem(cacheKey, JSON.stringify(con));
-        setCondition(con);
+        setConditionsList(con);
       }
     } catch (error) {
       console.log(error);
@@ -158,7 +159,6 @@ function AboutRemedyScreen({ route }) {
         }
 
         setRemediesList(remedies);
-        console.log("Remedies List:", remediesList);
       })
       .catch((error) => {
         console.error("Error fetching remedies list:", error);
@@ -167,7 +167,7 @@ function AboutRemedyScreen({ route }) {
 
   const saveNotes = () => {
     console.log("Save notes got executed");
-    if (selectedRemedy && (condition || notes)) {
+    if (selectedRemedy && (selectedCondition || notes)) {
       const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
       userNotesRef
         .set({
@@ -216,8 +216,7 @@ function AboutRemedyScreen({ route }) {
         onRequestClose={() => setModalVisible(false)}
       >
         <SafeAreaView style={styles.modal}>
-          <Text style={{ fontSize: 24, marginBottom: 20 }}>Add Notes</Text>
-
+          <Text style={styles.header}>Add Notes</Text>
           <View>
             <RNPickerSelect
               onValueChange={(value) => setSelectedRemedy(value)}
@@ -226,6 +225,10 @@ function AboutRemedyScreen({ route }) {
               value={selectedRemedy}
               style={{
                 inputIOS: {
+                  marginTop: 10,
+                  marginBottom: 10,
+                  borderRadius: 8,
+                  padding: 8,
                   height: 30,
                   fontSize: 18,
                   borderWidth: 1,
@@ -235,17 +238,19 @@ function AboutRemedyScreen({ route }) {
             />
 
             <RNPickerSelect
-              onValueChange={(value) => setCondition(value)}
-              items={condition}
+              onValueChange={(value) => setSelectedCondition(value)}
+              items={conditionsList}
               placeholder={{
                 label: "Select a condition (optional)",
                 value: null,
               }}
-              value={condition}
+              value={selectedCondition}
               style={{
                 inputIOS: {
-                  marginTop: 16,
-                  marginBottom: 16,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  borderRadius: 8,
+                  padding: 8,
                   height: 30,
                   fontSize: 18,
                   borderWidth: 1,
@@ -262,12 +267,16 @@ function AboutRemedyScreen({ route }) {
               style={styles.input}
             />
           </View>
-          <Button title="Save Notes" onPress={saveNotes} />
-          <Button
-            title="Close"
+          <TouchableOpacity onPress={saveNotes} style={styles.saveButton}>
+            <Text style={styles.buttonText}>Save Note</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             onPress={() => setModalVisible(false)}
-            color="red"
-          />
+            style={styles.closeButton}
+          >
+            <Text style={styles.buttonText}>Close</Text>
+          </TouchableOpacity>
         </SafeAreaView>
       </Modal>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -353,11 +362,43 @@ const styles = StyleSheet.create({
   },
   modal: {
     margin: 20,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    elevation: 5,
+  },
+  header: {
+    fontSize: 26,
+    marginBottom: 20,
+    fontWeight: "bold",
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    borderRadius: 8,
   },
   input: {
     borderColor: "gray",
     borderWidth: 1,
+    marginTop: 15,
     marginBottom: 20,
-    height: 30,
+    height: 120,
+    padding: 12,
+    borderRadius: 8,
+    fontSize: 18,
+  },
+  saveButton: {
+    backgroundColor: "#4CAF50",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  closeButton: {
+    backgroundColor: "#FF5733",
+    padding: 12,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
 });
