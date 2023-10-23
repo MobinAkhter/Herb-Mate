@@ -1,4 +1,3 @@
-// FROM MY UNDERSTANDING IF YOU INCLUDE THE IMAGE URL IN ROOT COLLECTION "Remedies" AS A IMAGE FILED, THE IMAGES WILL SHOW UP.
 import { useEffect, useState } from "react";
 import {
   Modal,
@@ -17,11 +16,10 @@ import {
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import DropDownPicker from "react-native-dropdown-picker";
 import RNPickerSelect from "react-native-picker-select";
 
 import "firebase/firestore";
@@ -33,7 +31,6 @@ function AboutRemedyScreen({ route }) {
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState("BookMark");
   const [isLoading, setIsLoading] = useState(true);
-  //const [checkBookMark, setCheckBookMark] = useState("");
 
   // Creating the collapsable state for description and precautions
   const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
@@ -220,19 +217,7 @@ function AboutRemedyScreen({ route }) {
       >
         <SafeAreaView style={styles.modal}>
           <Text style={{ fontSize: 24, marginBottom: 20 }}>Add Notes</Text>
-          {/* <DropDownPicker
-            dropDownContainerStyle={{
-              backgroundColor: "white",
-              zIndex: 5000,
-              elevation: 1000,
-            }}
-            items={remediesList}
-            defaultValue={selectedRemedy}
-            placeholder="Select a herb"
-            style={{ backgroundColor: "#fafafa" }}
-            dropDownStyle={{ backgroundColor: "#fafafa" }}
-            onChangeItem={(item) => setSelectedRemedy(item.value)}
-          /> */}
+
           <View>
             <RNPickerSelect
               onValueChange={(value) => setSelectedRemedy(value)}
@@ -248,17 +233,7 @@ function AboutRemedyScreen({ route }) {
                 },
               }}
             />
-            {/* <DropDownPicker
-            items={condition.map((condition) => ({
-              label: condition.name,
-              value: condition.key,
-            }))}
-            placeholder="Select a condition (optional)"
-            containerStyle={{ height: 40, width: "100%", marginBottom: 20 }}
-            style={{ backgroundColor: "#fafafa" }}
-            dropDownStyle={{ backgroundColor: "#fafafa" }}
-            onChangeItem={(item) => setCondition(item.value)}
-          /> */}
+
             <RNPickerSelect
               onValueChange={(value) => setCondition(value)}
               items={condition}
@@ -303,7 +278,6 @@ function AboutRemedyScreen({ route }) {
             source={{ uri: remedy.image }}
             style={styles.image}
             resizeMode="contain"
-            // PlaceholderContent={<ActivityIndicator />}
           />
 
           <View style={styles.info}>
@@ -387,4 +361,3 @@ const styles = StyleSheet.create({
     height: 30,
   },
 });
-// style={{ borderColor: "gray", borderWidth: 1, marginBottom: 20 }}

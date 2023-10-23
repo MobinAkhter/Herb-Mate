@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import BigButton from "../components/ui/BigButton";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../firebase";
 
 function ConditionScreen({ route }) {

@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../constants/styles";
+import { TouchableOpacity } from "react-native";
+import { Platform } from "react-native";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ConditionScreen from "../screens/ConditionScreen";
@@ -14,10 +16,7 @@ import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { TouchableOpacity } from "react-native";
 import DonationScreen from "../screens/DonationScreen";
-import { Platform } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -95,7 +94,6 @@ function AuthenticatedStack() {
           ),
         }}
       />
-      {/* changed App Settings to Settings, revert if something breaks */}
       <Tab.Screen
         name="Bookmarks"
         component={AppSettingsScreen}

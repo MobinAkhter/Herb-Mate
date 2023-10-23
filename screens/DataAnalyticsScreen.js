@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, TextInput, FlatList } from "react-native";
-import { db, auth } from "../firebase";
-import Button from "../components//ui/Button";
-import { useNavigation } from "@react-navigation/native";
-// import {
-//   LineChart,
-//   BarChart,
-//   PieChart,
-//   ProgressChart,
-//   ContributionGraph,
-//   StackedBarChart,
-// } from "react-native-chart-kit";
+import { StyleSheet, View, Text } from "react-native";
+import { db } from "../firebase";
+import Button from "../components/ui/Button";
 
 const DataAnalyticsScreen = () => {
-  const navigation = useNavigation();
-
   const [remedy1, setRemedy1] = useState("");
   const [remedy2, setRemedy2] = useState("");
   const [remedy3, setRemedy3] = useState("");
@@ -55,29 +44,6 @@ const DataAnalyticsScreen = () => {
 
   const remedyNames = [];
 
-  const barData = {
-    datasets: [
-      {
-        data: [10, 20, 30, 40, 20],
-        colors: [
-          (opacity = 1) => "#01FD1A",
-          (opacity = 1) => "#1F51FF",
-          (opacity = 1) => "#FD0131",
-          (opacity = 1) => "#FD6101",
-          (opacity = 1) => "#6D01FD",
-        ],
-      },
-    ],
-  };
-
-  const chartConfig = {
-    backgroundGradientFrom: "#fff", // white background
-    backgroundGradientTo: "#fff", // white background
-    decimalPlaces: 0, // Hide decimals in the y-axis labels
-    color: (opacity = 0) => "#FFFFFF", // blue color for bars
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // black color for labels
-  };
-
   useEffect(() => {}, []);
 
   const getData = () => {
@@ -91,10 +57,6 @@ const DataAnalyticsScreen = () => {
         );
       });
     });
-  };
-
-  const formatYLabel = (value) => {
-    return "f";
   };
 
   const getTopFive = () => {
