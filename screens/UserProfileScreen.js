@@ -1,7 +1,6 @@
 import { UserContext } from "../contexts/userContext";
 import Icon from "@expo/vector-icons/FontAwesome";
 import React from "react";
-import { auth } from "../firebase";
 import {
   Text,
   StyleSheet,
@@ -11,10 +10,11 @@ import {
   Modal,
   Button as RNButton,
 } from "react-native";
-import firebase from "firebase/app";
 import { useState, useEffect } from "react";
-import { useTheme } from "../contexts/ThemeContext";
 import Button from "../components/ui/Button";
+import { useTheme } from "../contexts/ThemeContext";
+import firebase from "firebase/app";
+import { auth } from "../firebase";
 
 function UserProfileScreen({ navigation }) {
   const { setUser } = React.useContext(UserContext);

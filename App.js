@@ -1,17 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { UserContext } from "./contexts/userContext";
 import UserProvider from "./contexts/userContext";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
-import { auth } from "./firebase";
 import { LogBox } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import DonationScreen from "./screens/DonationScreen";
-import { useEffect } from "react";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import OnboardingScreen from "./screens/OnboardingScreen";
 

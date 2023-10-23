@@ -13,7 +13,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import BigButton from "../components/ui/BigButton";
 import { db } from "../firebase";
-// import Button from "../ui/Button";
 import { Entypo } from "@expo/vector-icons";
 import { removeSpace, iconMapper } from "../utils";
 import MIcon from "../components/ui/MIcon";

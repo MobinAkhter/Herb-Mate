@@ -4,21 +4,17 @@ import {
   View,
   Text,
   FlatList,
-  Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { db, auth } from "../firebase";
 import BigButton from "../components/ui/BigButton";
 import { useNavigation } from "@react-navigation/native";
+import { db, auth } from "../firebase";
 
 const AppSettingsScreen = () => {
   const navigation = useNavigation();
   const user = auth.currentUser.uid;
   const userRef = db.collection("users").doc(user);
   const [bookmarkCollection, setBookmarkCollection] = useState([]);
-
-  const windowHeight = Dimensions.get("window").height;
-  const topSectionHeight = windowHeight * 0.08;
 
   const fetchBookmarks = async () => {
     try {

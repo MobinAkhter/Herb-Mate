@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { auth } from "../firebase";
-import Icon from "@expo/vector-icons/FontAwesome";
 
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");

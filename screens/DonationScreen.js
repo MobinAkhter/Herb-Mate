@@ -37,13 +37,6 @@ const DonationScreen = () => {
         <Ionicons name="md-cafe" size={24} color="white" />
         <Text style={styles.buttonText}>Buy Me A Coffee</Text>
       </TouchableOpacity>
-      {/* <TouchableOpacity
-        style={styles.button}
-        onPress={() => Linking.openURL("")}
-      >
-        <Ionicons name="logo-paypal" size={24} color="white" />
-        <Text style={styles.buttonText}>Donate with PayPal</Text>
-      </TouchableOpacity> */}
     </View>
   );
 };

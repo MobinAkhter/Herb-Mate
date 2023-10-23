@@ -8,19 +8,18 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  searchInput,
 } from "react-native";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
-import { db } from "../firebase";
-import BigButton from "../components/ui/BigButton";
-import { removeSpace, iconMapper } from "../utils";
 import MIcon from "../components/ui/MIcon";
+import { removeSpace, iconMapper } from "../utils";
+import { db } from "../firebase";
 
 function SearchResultScreen({ route }) {
   const { searchVal } = route.params;
   console.log(searchVal);
   const navigation = useNavigation();
+
   //gets/sets list of remedies to show in flatlist
   const [conditions, setConditions] = useState([]);
   const [remedies, setRemedies] = useState([]);
