@@ -6,23 +6,87 @@ import { UserContext } from "./contexts/userContext";
 import UserProvider from "./contexts/userContext";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
-import { LogBox } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { LogBox, Text, View } from "react-native";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+import { auth } from "./firebase";
+
 import UserProfileScreen from "./screens/UserProfileScreen";
 import DonationScreen from "./screens/DonationScreen";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import OnboardingScreen from "./screens/OnboardingScreen";
+import NotesScreen from "./screens/NotesScreen";
 
 const Drawer = createDrawerNavigator();
 
-function DrawerNavigator() {
+function CustomDrawerContent(props) {
+  const { setUser } = props;
+  const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    await auth.signOut();
+    navigation.navigate("Login");
+    setUser(null);
+  };
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <DrawerContentScrollView {...props} style={{ backgroundColor: "#e0f2e9" }}>
+      {/* Header Logo */}
+      <View style={{ marginTop: 15, marginLeft: 20, marginBottom: 20 }}>
+        <View
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 40,
+            backgroundColor: "#a8d5ba",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 40, color: "white" }}>🌿</Text>
+          {/* Went for simple logo implementation, can use image later instead of text. */}
+        </View>
+      </View>
+
+      {/* Drawer Items */}
+      <DrawerItemList {...props} />
+
+      {/* Logout */}
+      <DrawerItem
+        label="Logout"
+        icon={({ color, size }) => (
+          <Icon name="exit-outline" color={color} size={size} />
+        )}
+        onPress={() => {
+          handleLogout();
+        }}
+      />
+    </DrawerContentScrollView>
+  );
+}
+function DrawerNavigator() {
+  const { setUser } = React.useContext(UserContext);
+  return (
+    <Drawer.Navigator
+      initialRouteName="Home"
+      drawerContent={(props) => (
+        <CustomDrawerContent setUser={setUser} {...props} />
+      )}
+      drawerStyle={{ backgroundColor: "#e0f2e9" }}
+    >
       <Drawer.Screen
         name="Home"
         component={AuthenticatedStack}
         options={{
           headerShown: false,
+          drawerIcon: ({ color, size }) => (
+            <Icon name="home-outline" color={color} size={size} />
+          ),
         }}
       />
       <Drawer.Screen
@@ -30,6 +94,9 @@ function DrawerNavigator() {
         component={UserProfileScreen}
         options={{
           headerShown: false,
+          drawerIcon: ({ color, size }) => (
+            <Icon name="person-outline" color={color} size={size} />
+          ),
         }}
       />
       <Drawer.Screen
@@ -39,6 +106,21 @@ function DrawerNavigator() {
           headerTitle: "Donate",
           headerStyle: { backgroundColor: "#35D96F" },
           headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Icon name="heart-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="My Notes"
+        component={NotesScreen}
+        options={{
+          headerTitle: "Notes",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Icon name="document-text-outline" color={color} size={size} />
+          ),
         }}
       />
     </Drawer.Navigator>
