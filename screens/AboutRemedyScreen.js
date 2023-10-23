@@ -18,6 +18,7 @@ import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DropDownPicker from "react-native-dropdown-picker";
+import RNPickerSelect from "react-native-picker-select";
 
 import "firebase/firestore";
 
@@ -42,7 +43,7 @@ function AboutRemedyScreen({ route }) {
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const col = db.collection("BodyParts");
   const [modalVisible, setModalVisible] = useState(false);
-  const [condition, setCondition] = useState("");
+  const [condition, setCondition] = useState([]);
   const [notes, setNotes] = useState("");
 
   const loadConditions = async () => {
@@ -203,20 +204,26 @@ function AboutRemedyScreen({ route }) {
       >
         <View style={{ flex: 1, padding: 20 }}>
           <Text style={{ fontSize: 24, marginBottom: 20 }}>Add Notes</Text>
-          <DropDownPicker
+          {/* <DropDownPicker
             dropDownContainerStyle={{
               backgroundColor: "white",
-              zIndex: 1000,
+              zIndex: 5000,
               elevation: 1000,
             }}
             items={remediesList}
-            defaultValue={rem}
+            defaultValue={selectedRemedy}
             placeholder="Select a herb"
             style={{ backgroundColor: "#fafafa" }}
             dropDownStyle={{ backgroundColor: "#fafafa" }}
             onChangeItem={(item) => setSelectedRemedy(item.value)}
+          /> */}
+          <RNPickerSelect
+            onValueChange={(value) => setSelectedRemedy(value)}
+            items={remediesList}
+            placeholder={{ label: "Select a herb", value: null }}
+            value={selectedRemedy}
           />
-          <DropDownPicker
+          {/* <DropDownPicker
             items={condition.map((condition) => ({
               label: condition.name,
               value: condition.key,
@@ -226,6 +233,15 @@ function AboutRemedyScreen({ route }) {
             style={{ backgroundColor: "#fafafa" }}
             dropDownStyle={{ backgroundColor: "#fafafa" }}
             onChangeItem={(item) => setCondition(item.value)}
+          /> */}
+          <RNPickerSelect
+            onValueChange={(value) => setCondition(value)}
+            items={condition}
+            placeholder={{
+              label: "Select a condition (optional)",
+              value: null,
+            }}
+            value={condition}
           />
           <TextInput
             style={{ borderColor: "gray", borderWidth: 1, marginBottom: 20 }}
