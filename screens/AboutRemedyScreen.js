@@ -64,10 +64,17 @@ function AboutRemedyScreen({ route }) {
         const querySnapshot = await col.doc(bp).collection("Conditions").get();
 
         querySnapshot.forEach((doc) => {
+          const label = doc.data().name || "Default Label";
           con.push({
-            ...doc.data(),
+            label: label,
             key: doc.id,
           });
+        });
+
+        con.forEach((item, index) => {
+          if (!item.label || !item.value) {
+            console.error(`Missing data in item at index ${index}`, item);
+          }
         });
 
         await AsyncStorage.setItem(cacheKey, JSON.stringify(con));
@@ -172,8 +179,9 @@ function AboutRemedyScreen({ route }) {
       userNotesRef
         .set({
           herb: selectedRemedy,
-          condition: condition,
+          condition: selectedCondition || "Not specified",
           notes: notes,
+          // createdAt: new Date().toISOString,
         })
         .then(() => {
           Alert.alert("Notes saved successfully!");
