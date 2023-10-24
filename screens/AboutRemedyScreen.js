@@ -304,6 +304,9 @@ function AboutRemedyScreen({ route }) {
                 name={isDescriptionCollapsed ? "down" : "up"}
                 size={24}
                 onPress={() => setDescriptionCollapsed(!isDescriptionCollapsed)}
+                style={{
+                  paddingHorizontal: 5,
+                }}
               />
             </View>
 
@@ -316,6 +319,9 @@ function AboutRemedyScreen({ route }) {
                 name={isPrecautionsCollapsed ? "down" : "up"}
                 size={24}
                 onPress={() => setPrecautionsCollapsed(!isPrecautionsCollapsed)}
+                style={{
+                  paddingHorizontal: 5,
+                }}
               />
             </View>
 

@@ -87,7 +87,7 @@ function NotesScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {notes.map((note) => (
         <View key={note.id} style={styles.note}>
           <View style={styles.noteTitleContainer}>
@@ -97,13 +97,18 @@ function NotesScreen() {
               size={24}
               color="red"
               onPress={() => confirmDelete(note.id)}
-              style={{ marginLeft: 80 }}
+              style={{
+                position: "absolute",
+                marginLeft: "80%",
+                alignItems: "center",
+              }}
             />
             <AntDesign
               name="edit"
               size={24}
               color="blue"
               onPress={() => openEditModal(note)}
+              style={{ alignItems: "center" }}
             />
           </View>
 
