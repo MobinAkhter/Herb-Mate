@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   textInput: {
     padding: 20,
     backgroundColor: "white",
-    borderRadius: "50%",
+    borderRadius: 50,
     marginBottom: 15,
   },
 });
