@@ -15,6 +15,7 @@ const client = new SessionsClient({
   keyFilename: "./fir-auth-b5f8a-b5371b052504.json",
 });
 
+// Check if all these herbs exist in our app. Used gpt to give me all these messages text. Phew, saved a lot of time coming up with them.
 const notificationMessages = [
   "Aloe Vera soothes sunburns. Discover more remedies on HerbalLife!",
   "Chamomile: More than tea – a remedy for insomnia. Learn more!",
@@ -110,6 +111,7 @@ exports.dialogflowGateway = functions.https.onRequest(async (req, res) => {
 });
 
 // This function pushes notifications, will need to see how it works.
+// TODO: This function only works if the app is running in background. Will need to ensure it notifies the user even if the app is not running!
 exports.sendPushNotifications = functions.pubsub
   .schedule("15 21 * * *")
   .timeZone("America/Toronto")

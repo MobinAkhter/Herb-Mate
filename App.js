@@ -16,12 +16,13 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "./firebase";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import DonationScreen from "./screens/DonationScreen";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import NotesScreen from "./screens/NotesScreen";
+import ContactScreen from "./screens/ContactScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -49,7 +50,7 @@ function CustomDrawerContent(props) {
           }}
         >
           <Text style={{ fontSize: 40, color: "white" }}>🌿</Text>
-          {/* Went for simple logo implementation, can use image later instead of text. */}
+          {/* Went for simple logo implementation, can use our app image later instead of text. */}
         </View>
       </View>
 
@@ -120,6 +121,22 @@ function DrawerNavigator() {
           headerTintColor: "white",
           drawerIcon: ({ color, size }) => (
             <Icon name="document-text-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Contact Us"
+        component={ContactScreen}
+        options={{
+          headerTitle: "Contact Us",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="email-outline"
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
