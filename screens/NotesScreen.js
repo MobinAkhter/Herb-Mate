@@ -6,9 +6,14 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  Modal,
+  TextInput,
+  Button,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
+import { SafeAreaView } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 function NotesScreen() {
   const [notes, setNotes] = useState([]);
@@ -24,6 +29,11 @@ function NotesScreen() {
   };
 
   const saveEditedNote = () => {
+    const updatedNotes = notes.map((note) => {
+      if (note.id === currentNote.id) return currentNote;
+      return note;
+    });
+    setNotes(updatedNotes);
     userRef
       .collection("notes")
       .doc(currentNote.id)
@@ -121,6 +131,41 @@ function NotesScreen() {
           </Text> */}
         </View>
       ))}
+      {editModalVisible && (
+        <Modal
+          animationType="fade" // or we can use slide
+          visible={editModalVisible}
+          onRequestClose={() => setEditModalVisible(false)}
+        >
+          <SafeAreaView style={styles.modal}>
+            <Text style={styles.header}>Edit Note</Text>
+            <Text style={styles.text}>Herb Name: {currentNote.herb}</Text>
+            <Text style={styles.text}>Condtion: {currentNote.condition}</Text>
+            <TextInput
+              value={currentNote.notes}
+              onChangeText={(text) =>
+                setCurrentNote((prev) => ({ ...prev, notes: text }))
+              }
+              placeholder="Notes"
+              style={styles.input}
+              textAlignVertical="top"
+              multiline={true}
+            />
+            <TouchableOpacity
+              onPress={saveEditedNote}
+              style={styles.saveButton}
+            >
+              <Text style={styles.buttonText}>Save Note</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setEditModalVisible(false)}
+              style={styles.closeButton}
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+        </Modal>
+      )}
     </ScrollView>
   );
 }
@@ -151,5 +196,50 @@ const styles = StyleSheet.create({
   noteDetail: {
     fontSize: 16,
     marginBottom: 8,
+  },
+  modal: {
+    margin: 20,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    elevation: 5,
+  },
+  header: {
+    fontSize: 26,
+    marginBottom: 20,
+    fontWeight: "bold",
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    borderRadius: 8,
+  },
+  input: {
+    borderColor: "gray",
+    borderWidth: 1,
+    marginTop: 15,
+    marginBottom: 20,
+    height: 100,
+    padding: 12,
+    borderRadius: 8,
+    fontSize: 18,
+  },
+  saveButton: {
+    backgroundColor: "#4CAF50",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  closeButton: {
+    backgroundColor: "#FF5733",
+    padding: 12,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
+  },
+  text: {
+    fontSize: 20,
+    paddingVertical: 12,
   },
 });

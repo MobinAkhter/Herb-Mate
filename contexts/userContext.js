@@ -30,7 +30,6 @@ function UserProvider({ children }) {
       }
     });
 
-    // Cleanup the listener
     return () => unsubscribe();
   }, []);
 
@@ -44,6 +43,9 @@ function UserProvider({ children }) {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
+      console.warn(
+        "Failed to get push token for push notification. Also before production, get rid of the alert message"
+      );
       alert("Failed to get push token for push notification!");
       return;
     }
