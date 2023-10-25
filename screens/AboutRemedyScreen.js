@@ -20,6 +20,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
 
 import "firebase/firestore";
@@ -291,11 +292,19 @@ function AboutRemedyScreen({ route }) {
         <View style={styles.container}>
           <Text style={styles.title}>{remedy.name}</Text>
 
-          <Image
-            source={{ uri: remedy.image }}
-            style={styles.image}
-            resizeMode="contain"
-          />
+          <Swiper
+            style={styles.wrapper}
+            showsButtons={true}
+            loop={remedy.image.length > 1}
+          >
+            {remedy.image.map((imageUri) => (
+              <Image
+                source={{ uri: imageUri }}
+                style={styles.image}
+                resizeMode="contain"
+              />
+            ))}
+          </Swiper>
 
           <View style={styles.info}>
             <View style={styles.titleRow}>
@@ -355,6 +364,9 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "600",
     marginBottom: 24,
+  },
+  wrapper: {
+    height: 200,
   },
   image: {
     width: "100%",
