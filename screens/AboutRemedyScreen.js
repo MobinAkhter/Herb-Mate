@@ -296,6 +296,10 @@ function AboutRemedyScreen({ route }) {
             style={styles.wrapper}
             showsButtons={true}
             loop={remedy.image.length > 1}
+            showsPagination={false} // Remove this if we want to show pagination; removed it bcz of terrible styling
+            buttonWrapperStyle={styles.buttonWrapper}
+            nextButton={<Text style={styles.swipeButton}>›</Text>}
+            prevButton={<Text style={styles.swipeButton}>‹</Text>}
           >
             {remedy.image.map((imageUri) => (
               <Image
@@ -368,6 +372,17 @@ const styles = StyleSheet.create({
   wrapper: {
     height: 200,
   },
+  buttonWrapper: {
+    // backgroundColor: "rgba(255, 255, 255, 0.5)",
+    paddingHorizontal: 10,
+  },
+  swipeButton: {
+    color: "white",
+    fontSize: 70,
+
+    // fontWeight: "bold",
+  },
+
   image: {
     width: "100%",
     height: undefined,
