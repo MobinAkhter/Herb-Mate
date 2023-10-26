@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../constants/styles";
 import { TouchableOpacity } from "react-native";
 import { Platform } from "react-native";
-
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ConditionScreen from "../screens/ConditionScreen";
 import RemedyListScreen from "../screens/RemedyListScreen";
@@ -14,6 +13,11 @@ import UserProfileScreen from "../screens/UserProfileScreen";
 import AppSettingsScreen from "../screens/AppSettingsScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
+import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
+import QuestionTier2Screen from "../screens/QuestionTier2Screen";
+import QuestionTier3Screen from "../screens/QuestionTier3Screen";
+import RecommendedRemedyScreen from "../screens/RecommendedRemedyScreen";
+import { Colors } from "../constants/styles";
 import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
 import DonationScreen from "../screens/DonationScreen";
@@ -49,6 +53,13 @@ function Home() {
       <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
       <Stack.Screen name="Donation" component={DonationScreen} />
+      <Stack.Screen name="RemediesBar" component={RemediesBarGraphScreen} />
+      <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
+      <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
+      <Stack.Screen
+        name="RecommendedRemedyScreen"
+        component={RecommendedRemedyScreen}
+      />
     </Stack.Navigator>
   );
 }
