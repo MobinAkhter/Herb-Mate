@@ -305,7 +305,7 @@ function AboutRemedyScreen({ route }) {
               <Image
                 source={{ uri: imageUri }}
                 style={styles.image}
-                resizeMode="contain"
+                // resizeMode="contain"
               />
             ))}
           </Swiper>
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: "100%",
+    width: 400,
     height: undefined,
     aspectRatio: 1.5,
   },
