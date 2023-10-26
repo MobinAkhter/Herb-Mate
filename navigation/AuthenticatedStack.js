@@ -57,6 +57,8 @@ function AuthenticatedStack() {
   return (
     <Tab.Navigator
       tabBarOptions={{
+        activeTintColor: "#35D96F", // REMOVE THIS TO HAVE IT DEFAULT BLUE AGAIN
+        inactiveTintColor: "#A9A9A9",
         keyboardHidesTabBar: Platform.OS === "android" ? true : false,
       }}
       screenOptions={({ navigation }) => ({
@@ -99,7 +101,7 @@ function AuthenticatedStack() {
         component={AppSettingsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="md-settings" size={size} color={color} />
+            <Ionicons name="bookmarks-outline" size={size} color={color} />
           ),
         }}
       />
