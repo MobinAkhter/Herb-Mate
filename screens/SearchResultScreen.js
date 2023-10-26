@@ -151,8 +151,8 @@ function SearchResultScreen({ route }) {
           >
             <Image
               source={
-                item.image
-                  ? { uri: item.image }
+                item.image && item.image.length > 0
+                  ? { uri: item.image[0] }
                   : require("../assets/leaf_icon.jpeg")
               }
               style={styles.herbImage}
