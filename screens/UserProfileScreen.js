@@ -9,6 +9,7 @@ import {
   TextInput,
   Modal,
   Button as RNButton,
+  TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
 import Button from "../components/ui/Button";
@@ -176,7 +177,19 @@ function UserProfileScreen({ navigation }) {
           onPress={() => navigation.goBack()}
         />
         <Text style={styles.title}>User Profile</Text>
-        <RNButton color="white" title={"Logout"} onPress={handleLogout} />
+        <TouchableOpacity onPress={handleLogout}>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 18,
+              padding: 9,
+              textAlign: "center",
+            }}
+          >
+            Logout
+          </Text>
+        </TouchableOpacity>
+        {/* <RNButton color="white" title={"Logout"} onPress={handleLogout} /> */}
       </View>
       {userData && (
         <>
