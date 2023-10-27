@@ -17,7 +17,6 @@ import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
 import QuestionTier2Screen from "../screens/QuestionTier2Screen";
 import QuestionTier3Screen from "../screens/QuestionTier3Screen";
 import RecommendedRemedyScreen from "../screens/RecommendedRemedyScreen";
-import { Colors } from "../constants/styles";
 import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
 import DonationScreen from "../screens/DonationScreen";
