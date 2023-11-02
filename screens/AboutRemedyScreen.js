@@ -22,6 +22,7 @@ import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
+// import ImageViewer from "react-native-image-zoom-viewer";
 
 import "firebase/firestore";
 
@@ -30,12 +31,13 @@ function AboutRemedyScreen({ route }) {
 
   const { rem, bp } = route.params;
   const [remedy, setRemedy] = useState({});
-  const [bookMarkText, setBookMarkText] = useState("BookMark");
+  const [bookMarkText, setBookMarkText] = useState("Bookmark");
   const [isLoading, setIsLoading] = useState(true);
 
-  // Creating the collapsable state for description and precautions
+  // Creating the collapsable state for description and precautions and properties
   const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
   const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
+  const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
 
   // access firestore
   const remediesFirebase = db.collection("Remedies");
@@ -200,6 +202,7 @@ function AboutRemedyScreen({ route }) {
         name: remedy.name,
         description: remedy.description,
         precautions: remedy.precautions,
+        properties: remedy.properties,
       });
 
       Alert.alert(`${remedy.name} has been bookmarked!`);
@@ -310,6 +313,12 @@ function AboutRemedyScreen({ route }) {
             ))}
           </Swiper>
 
+          {/* <ImageViewer
+            style={{ flex: 1 }}
+            imageUrls={remedy.image.map((uri) => ({ url: uri }))}
+            renderIndicator={() => null}
+          /> */}
+
           <View style={styles.info}>
             <View style={styles.titleRow}>
               <Text style={styles.head}>Description</Text>
@@ -341,6 +350,23 @@ function AboutRemedyScreen({ route }) {
             <Collapsible collapsed={isPrecautionsCollapsed}>
               <Text style={styles.desc}>{remedy.precautions}</Text>
             </Collapsible>
+
+            {/* Adding properties section for herbs */}
+            <View style={styles.titleRow}>
+              <Text style={styles.head}>Properties</Text>
+              <AntDesign
+                name={isPropertiesCollapsed ? "down" : "up"}
+                size={24}
+                onPress={() => setPropertiesCollapsed(!isPropertiesCollapsed)}
+                style={{
+                  paddingHorizontal: 5,
+                }}
+              />
+            </View>
+
+            <Collapsible collapsed={isPropertiesCollapsed}>
+              <Text style={styles.desc}>{remedy.properties}</Text>
+            </Collapsible>
           </View>
           <View style={{ alignItems: "center" }}>
             <BookMarkButton onPress={bookMarkRemedy}>
@@ -365,7 +391,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "600",
     marginBottom: 24,
   },
@@ -396,7 +422,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   head: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "600",
     marginTop: 16,
     marginBottom: 16,

@@ -1,10 +1,9 @@
-class Remedy
-{
-    constructor(id, name, description,precautions)
-    {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.precautions = precautions;
-    }
+class Remedy {
+  constructor(id, name, description, precautions, properties) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.precautions = precautions;
+    this.properties = properties;
+  }
 }

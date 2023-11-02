@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Onboarding from "react-native-onboarding-swiper";
@@ -9,11 +10,16 @@ const { width } = Dimensions.get("window");
 const OnboardingScreen = () => {
   const navigation = useNavigation();
 
+  const handleFinishOnboarding = async () => {
+    await AsyncStorage.setItem("alreadyLaunched", "true");
+    navigation.replace("Signup");
+  };
+
   return (
     <View style={styles.container}>
       <Onboarding
-        onDone={() => navigation.replace("Signup")}
-        onSkip={() => navigation.replace("Signup")}
+        onDone={handleFinishOnboarding}
+        onSkip={handleFinishOnboarding}
         containerStyles={{ paddingHorizontal: 15 }}
         pages={[
           {

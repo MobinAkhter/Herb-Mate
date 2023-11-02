@@ -32,8 +32,8 @@ function CustomDrawerContent(props) {
 
   const handleLogout = async () => {
     await auth.signOut();
-    navigation.navigate("Login");
     setUser(null);
+    navigation.navigate("Login");
   };
   return (
     <DrawerContentScrollView {...props} style={{ backgroundColor: "#e0f2e9" }}>
@@ -151,6 +151,7 @@ function Navigation() {
 
   useEffect(() => {
     AsyncStorage.getItem("alreadyLaunched").then((value) => {
+      console.log(value);
       if (value == null) {
         AsyncStorage.setItem("alreadyLaunched", "true");
         setIsFirstLaunch(true);
@@ -165,14 +166,16 @@ function Navigation() {
   }
 
   if (isFirstLaunch === true) {
+    console.log("Showing Onboarding Screen");
     return <OnboardingScreen />;
+  } else {
+    console.log("Skipping Onboarding Screen");
+    return (
+      <NavigationContainer>
+        {user ? <DrawerNavigator /> : <AuthStack />}
+      </NavigationContainer>
+    );
   }
-
-  return (
-    <NavigationContainer>
-      {user ? <DrawerNavigator /> : <AuthStack />}
-    </NavigationContainer>
-  );
 }
 
 export default function App() {
