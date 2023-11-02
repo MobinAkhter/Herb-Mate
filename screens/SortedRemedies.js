@@ -15,6 +15,7 @@ const PAGE_SIZE = 10;
 const SortedRemedies = () => {
   const [herbs, setHerbs] = useState([]);
   const [lastVisibleRemedy, setLastVisibleRemedy] = useState(null);
+  const [allHerbsLoaded, setAllHerbsLoaded] = useState(false);
   const navigation = useNavigation();
 
   const fetchHerbs = async () => {
@@ -27,6 +28,7 @@ const SortedRemedies = () => {
     const querySnapshot = await query.get();
 
     if (querySnapshot.empty) {
+      setAllHerbsLoaded(true);
       return;
     }
 
@@ -46,6 +48,11 @@ const SortedRemedies = () => {
     fetchHerbs();
   }, []);
 
+  const navigateToDetails = (id) => {
+    console.log("Navigating with remedy:", id);
+    navigation.navigate("Remedy Details", { rem: id });
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -54,10 +61,7 @@ const SortedRemedies = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.listItem}
-            onPress={() => {
-              console.log("Navigating with remedy:", item);
-              navigation.navigate("Remedy Details", { rem: item.id });
-            }}
+            onPress={() => navigateToDetails(item.id)}
           >
             <Image
               source={
@@ -70,7 +74,7 @@ const SortedRemedies = () => {
             <Text style={styles.herbName}>{item.name}</Text>
           </TouchableOpacity>
         )}
-        onEndReached={fetchHerbs}
+        onEndReached={allHerbsLoaded ? null : fetchHerbs}
         onEndReachedThreshold={0.9}
       />
     </View>
