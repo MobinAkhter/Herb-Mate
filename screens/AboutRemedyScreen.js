@@ -33,7 +33,7 @@ function AboutRemedyScreen({ route }) {
 
   const { rem, bp } = route.params;
   const [remedy, setRemedy] = useState({});
-  const [bookMarkText, setBookMarkText] = useState("Bookmark");
+  const [bookMarkText, setBookMarkText] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   // Creating the collapsable state for description and precautions and properties
@@ -113,7 +113,11 @@ function AboutRemedyScreen({ route }) {
           console.error("Error fetching remedy from Firestore:", error);
           setIsLoading(false);
         });
+
+        
     });
+
+
 
   
   }, []);
@@ -141,6 +145,34 @@ function AboutRemedyScreen({ route }) {
         });
     }
   };
+
+  useEffect(() => {
+    checkBookMark()
+  },[])
+
+ function checkBookMark()
+ {
+  const userDoc = userRef;
+  userDoc.get()
+    .then((doc) => {
+      if (doc.exists) {
+        // Get the user's current bookmarks array (if it exists)
+        const currentBookmarks = doc.data().bookmarks || [];
+
+        // Check if the current remedy is already bookmarked
+        const isRemedyBookmarked = currentBookmarks.some(item => item.name === remedy);
+
+        if (isRemedyBookmarked) {
+          console.log("its in")
+          setBookMarkText("UNBOOKMARK")
+        }
+        else{
+          setBookMarkText('BOOKMARK')
+        }
+      }
+    }
+    )
+ }
  
   //bookmark remedy function
   function bookMarkRemedy() {
