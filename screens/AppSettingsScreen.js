@@ -18,17 +18,30 @@ const AppSettingsScreen = () => {
 
   const fetchBookmarks = async () => {
     try {
-      const querySnapshot = await userRef.collection("bookmarks").get();
-      const bookmarks = [];
-      querySnapshot.forEach((doc) => {
-        bookmarks.push({
-          ...doc.data(),
-          key: doc.id,
-        });
-      });
-      setBookmarkCollection(bookmarks);
+      // Get the user's document reference
+      const userDocRef = db.collection("users").doc(user);
+  
+      // Use the get() method to fetch the user's document
+      const userDocSnapshot = await userDocRef.get();
+  
+      if (userDocSnapshot.exists) {
+        // Check if the document exists
+        const userData = userDocSnapshot.data();
+        
+        if (userData && userData.bookmarks) {
+          // Check if the 'bookmarks' property exists in the user's data
+          // userData.bookmarks should be an array containing the bookmarked items
+          setBookmarkCollection(userData.bookmarks);
+        } else {
+          // Handle the case where 'bookmarks' property does not exist or is empty
+          setBookmarkCollection([]);
+        }
+      } else {
+        // Handle the case where the user's document does not exist
+        setBookmarkCollection([]);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching bookmarks:", error);
     }
   };
 
@@ -59,11 +72,11 @@ const AppSettingsScreen = () => {
                 <BigButton
                   onPress={() => {
                     navigation.navigate("Remedy Details", {
-                      rem: item.name,
+                      rem: item,
                     });
                   }}
                 >
-                  <Text>{item.name}</Text>
+                  <Text>{item}</Text>
                 </BigButton>
               </View>
             )}
