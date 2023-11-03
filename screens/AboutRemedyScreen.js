@@ -22,6 +22,8 @@ import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
+import RemedyViewModel from '../ViewModels/RemedyViewModel';
+import Remedy from '../Models/Remedy';
 // import ImageViewer from "react-native-image-zoom-viewer";
 
 import "firebase/firestore";
@@ -53,40 +55,7 @@ function AboutRemedyScreen({ route }) {
   const [selectedCondition, setSelectedCondition] = useState();
   const [notes, setNotes] = useState("");
 
-  const loadConditions = async () => {
-    try {
-      const cacheKey = `conditions_${bp}`;
-      const cachedConditions = await AsyncStorage.getItem(cacheKey);
-
-      if (cachedConditions !== null) {
-        console.log(`Fetching conditions from cache for body part: ${bp}`);
-        setConditionsList(JSON.parse(cachedConditions));
-      } else {
-        console.log(`Fetching conditions from Firestore for body part: ${bp}`);
-        const con = [];
-        const querySnapshot = await col.doc(bp).collection("Conditions").get();
-
-        querySnapshot.forEach((doc) => {
-          const label = doc.data().name || "Default Label";
-          con.push({
-            label: label,
-            key: doc.id,
-          });
-        });
-
-        con.forEach((item, index) => {
-          if (!item.label || !item.value) {
-            console.error(`Missing data in item at index ${index}`, item);
-          }
-        });
-
-        await AsyncStorage.setItem(cacheKey, JSON.stringify(con));
-        setConditionsList(con);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
   useEffect(() => {
     navigation.setOptions({
@@ -102,7 +71,7 @@ function AboutRemedyScreen({ route }) {
   //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
 
   useEffect(() => {
-    loadConditions();
+    
     // AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
     setIsLoading(true);
     // define the key for AsyncStorage
@@ -121,13 +90,6 @@ function AboutRemedyScreen({ route }) {
           return;
         }
       }
-      // userRef
-      //   .collection("bookmarks")
-      //   .doc(rem)
-      //   .get()
-      //   .then((doc) => {
-      //     if (doc.exists) setBookMarkText("Remove Bookmark");
-      //   });
 
       // fetch the remedy from Firestore and save it in the cache
       remediesFirebase
@@ -152,29 +114,13 @@ function AboutRemedyScreen({ route }) {
           setIsLoading(false);
         });
     });
-    remediesFirebase
-      .get()
-      .then((querySnapshot) => {
-        const remedies = querySnapshot.docs.map((doc) => ({
-          label: doc.data().name,
-          value: doc.id,
-        }));
 
-        if (!remedies.some((item) => item.value === rem)) {
-          const currentRemedy = {
-            label: remedy.name,
-            value: rem,
-          };
-          remedies.unshift(currentRemedy);
-        }
-
-        setRemediesList(remedies);
-      })
-      .catch((error) => {
-        console.error("Error fetching remedies list:", error);
-      });
+  
   }, []);
+  
 
+
+  //saves notes function
   const saveNotes = () => {
     console.log("Save notes got executed");
     if (selectedRemedy && (selectedCondition || notes)) {
@@ -195,24 +141,54 @@ function AboutRemedyScreen({ route }) {
         });
     }
   };
-
+ 
+  //bookmark remedy function
   function bookMarkRemedy() {
-    if (!userRef.collection("bookmarks").doc(rem).exists) {
-      userRef.collection("bookmarks").doc(rem).set({
-        name: remedy.name,
-        description: remedy.description,
-        precautions: remedy.precautions,
-        properties: remedy.properties,
-      });
+    // Reference to the user's document
+  const userDoc = userRef;
 
-      Alert.alert(`${remedy.name} has been bookmarked!`);
-      setBookMarkText("UNBOOKMARK");
-    } else {
-      userRef.collection("bookmarks").doc(rem).delete();
+  // Update the user's document to add or remove the bookmarked remedy from the array
+  userDoc.get()
+    .then((doc) => {
+      if (doc.exists) {
+        // Get the user's current bookmarks array (if it exists)
+        const currentBookmarks = doc.data().bookmarks || [];
 
-      Alert.alert(`${remedy.name} has been removed from your bookmarks!`);
-      setBookMarkText("BOOKMARK");
-    }
+        // Check if the current remedy is already bookmarked
+        const remedyIndex = currentBookmarks.indexOf(rem);
+
+        if (remedyIndex === -1) {
+          // If the remedy is not bookmarked, add it to the bookmarks array
+          currentBookmarks.push(rem);
+          // Update the user's document to store the updated bookmarks array
+          userDoc.update({ bookmarks: currentBookmarks })
+            .then(() => {
+              Alert.alert(`${remedy.name} has been bookmarked!`);
+              setBookMarkText("UNBOOKMARK");
+            })
+            .catch((error) => {
+              console.error("Error adding bookmark:", error);
+            });
+        } else {
+          // If the remedy is already bookmarked, remove it from the bookmarks array
+          currentBookmarks.splice(remedyIndex, 1);
+          // Update the user's document to store the updated bookmarks array
+          userDoc.update({ bookmarks: currentBookmarks })
+            .then(() => {
+              Alert.alert(`${remedy.name} has been removed from your bookmarks!`);
+              setBookMarkText("BOOKMARK");
+            })
+            .catch((error) => {
+              console.error("Error removing bookmark:", error);
+            });
+        }
+      } else {
+        console.error("User document does not exist.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error checking user document:", error);
+    });
   }
 
   if (isLoading) {
