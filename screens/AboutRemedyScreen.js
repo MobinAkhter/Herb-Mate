@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Modal,
   Button,
@@ -13,10 +13,11 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
 import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -38,6 +39,9 @@ function AboutRemedyScreen({ route }) {
   const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
   const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
   const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
+  const [isDosageCollapsed, setDosageCollapsed] = useState(true);
+
+  const [isPressed, setIsPressed] = useState(false);
 
   // access firestore
   const remediesFirebase = db.collection("Remedies");
@@ -53,6 +57,7 @@ function AboutRemedyScreen({ route }) {
   const [selectedCondition, setSelectedCondition] = useState();
   const [notes, setNotes] = useState("");
 
+  const scrollViewRef = useRef();
   const loadConditions = async () => {
     try {
       const cacheKey = `conditions_${bp}`;
@@ -88,6 +93,26 @@ function AboutRemedyScreen({ route }) {
     }
   };
 
+  // Putting it here right now, could be better to re use this in multiple places of the app.
+  // Make it a ui component later.
+
+  const buttonStyle = {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    backgroundColor: isPressed ? "#dedede" : "white",
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+  };
+
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -103,7 +128,7 @@ function AboutRemedyScreen({ route }) {
 
   useEffect(() => {
     loadConditions();
-    // AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
+    AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
     setIsLoading(true);
     // define the key for AsyncStorage
     const remedyKey = "remedy-" + rem;
@@ -203,6 +228,7 @@ function AboutRemedyScreen({ route }) {
         description: remedy.description,
         precautions: remedy.precautions,
         properties: remedy.properties,
+        dosage: remedy.dosage,
       });
 
       Alert.alert(`${remedy.name} has been bookmarked!`);
@@ -223,7 +249,7 @@ function AboutRemedyScreen({ route }) {
   return (
     <View style={styles.rootContainer}>
       <Modal
-        animationType="slide"
+        animationType="fade"
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
@@ -277,6 +303,7 @@ function AboutRemedyScreen({ route }) {
               onChangeText={setNotes}
               value={notes}
               style={styles.input}
+              accessibilityLabel="Notes input field"
             />
           </View>
           <TouchableOpacity onPress={saveNotes} style={styles.saveButton}>
@@ -291,7 +318,7 @@ function AboutRemedyScreen({ route }) {
           </TouchableOpacity>
         </SafeAreaView>
       </Modal>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} ref={scrollViewRef}>
         <View style={styles.container}>
           <Text style={styles.title}>{remedy.name}</Text>
 
@@ -331,10 +358,10 @@ function AboutRemedyScreen({ route }) {
                 }}
               />
             </View>
-
             <Collapsible collapsed={isDescriptionCollapsed}>
               <Text style={styles.desc}>{remedy.description}</Text>
             </Collapsible>
+            <View style={styles.divider} />
             <View style={styles.titleRow}>
               <Text style={styles.head}>Precautions</Text>
               <AntDesign
@@ -346,11 +373,10 @@ function AboutRemedyScreen({ route }) {
                 }}
               />
             </View>
-
             <Collapsible collapsed={isPrecautionsCollapsed}>
               <Text style={styles.desc}>{remedy.precautions}</Text>
             </Collapsible>
-
+            <View style={styles.divider} />
             {/* Adding properties section for herbs */}
             <View style={styles.titleRow}>
               <Text style={styles.head}>Properties</Text>
@@ -363,18 +389,58 @@ function AboutRemedyScreen({ route }) {
                 }}
               />
             </View>
-
             <Collapsible collapsed={isPropertiesCollapsed}>
               <Text style={styles.desc}>{remedy.properties}</Text>
             </Collapsible>
+            <View style={styles.divider} />
+            {/* Adding dosage section for herbs */}
+            <View style={styles.titleRow}>
+              <Text style={styles.head}>Dosage Forms</Text>
+              <AntDesign
+                name={isDosageCollapsed ? "down" : "up"}
+                size={24}
+                onPress={() => setDosageCollapsed(!isDosageCollapsed)}
+                style={{
+                  paddingHorizontal: 5,
+                }}
+              />
+            </View>
+            <Collapsible collapsed={isDosageCollapsed}>
+              {remedy.dosage &&
+                Object.entries(remedy.dosage[0]).map(
+                  ([field, value], index) => (
+                    <View key={index} style={styles.dosageRow}>
+                      <Text style={styles.dosageField}>{field}: </Text>
+                      <Text style={styles.desc}>{value}</Text>
+                    </View>
+                  )
+                )}
+            </Collapsible>
+            <View style={styles.divider} />
           </View>
+
           <View style={{ alignItems: "center" }}>
             <BookMarkButton onPress={bookMarkRemedy}>
+              {/* Tried adding an icon, did not look good, need margin, but the way code is written, its not as easy as I thought it would be. */}
+              {/* <FontAwesome5 name="bookmark" style={styles.bookmarkIcon} /> */}
               {bookMarkText}
             </BookMarkButton>
           </View>
         </View>
       </ScrollView>
+      <TouchableOpacity
+        onPressIn={() => setIsPressed(true)}
+        onPressOut={() => setIsPressed(false)}
+        onPress={() => scrollViewRef.current.scrollTo({ y: 0, animated: true })}
+        style={buttonStyle}
+        activeOpacity={1}
+      >
+        <FontAwesome
+          name="arrow-up"
+          size={24}
+          color={isPressed ? "white" : "gray"}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -383,7 +449,7 @@ export default AboutRemedyScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    padding: 32,
+    padding: 24,
   },
   titleRow: {
     flexDirection: "row",
@@ -392,11 +458,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: "bold",
     marginBottom: 24,
   },
   wrapper: {
     height: 200,
+    marginBottom: 16,
   },
   buttonWrapper: {
     // backgroundColor: "rgba(255, 255, 255, 0.5)",
@@ -405,8 +472,15 @@ const styles = StyleSheet.create({
   swipeButton: {
     color: "white",
     fontSize: 70,
+    fontWeight: "600",
 
     // fontWeight: "bold",
+  },
+
+  bookmarkIcon: {
+    fontSize: 24,
+    color: "white",
+    marginRight: 4,
   },
 
   image: {
@@ -420,12 +494,14 @@ const styles = StyleSheet.create({
   desc: {
     fontSize: 16,
     lineHeight: 24,
+    textAlign: "left",
   },
   head: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "600",
     marginTop: 16,
     marginBottom: 16,
+    alignSelf: "flex-start",
   },
   modal: {
     margin: 20,
@@ -467,5 +543,22 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 18,
+  },
+  dosageRow: {
+    // flexDirection: "row",
+    paddingVertical: 5,
+  },
+  dosageField: {
+    fontWeight: "bold",
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  dosageValue: {
+    marginLeft: 10,
+  },
+  divider: {
+    borderBottomColor: "gainsboro",
+    borderBottomWidth: 1,
+    marginVertical: 9,
   },
 });

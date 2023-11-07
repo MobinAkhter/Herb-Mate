@@ -23,6 +23,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import NotesScreen from "./screens/NotesScreen";
 import ContactScreen from "./screens/ContactScreen";
+import AboutUsScreen from "./screens/AboutUsScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -134,6 +135,22 @@ function DrawerNavigator() {
           drawerIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="email-outline"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="About Us"
+        component={AboutUsScreen}
+        options={{
+          headerTitle: "About Us",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="account-group-outline"
               size={size}
               color={color}
             />
