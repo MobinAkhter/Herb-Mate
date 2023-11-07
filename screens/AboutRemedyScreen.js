@@ -347,7 +347,7 @@ function AboutRemedyScreen({ route }) {
           /> */}
 
           <View style={styles.info}>
-            <View style={styles.titleRow}>
+            <View style={[styles.titleRow, { marginTop: 10 }]}>
               <Text style={styles.head}>Description</Text>
               <AntDesign
                 name={isDescriptionCollapsed ? "down" : "up"}
