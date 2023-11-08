@@ -9,17 +9,6 @@ import {
 } from "react-native";
 
 const AboutUsScreen = () => {
-  // Function to handle external links; not needed for now, can uncomment later
-  //   const handlePress = (url) => {
-  //     Linking.canOpenURL(url).then((supported) => {
-  //       if (supported) {
-  //         Linking.openURL(url);
-  //       } else {
-  //         console.log(`Don't know how to open URL: ${url}`);
-  //       }
-  //     });
-  //   };
-
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>About Us</Text>
@@ -42,15 +31,6 @@ const AboutUsScreen = () => {
         </Text>
       </View>
 
-      {/* Features Section */}
-      {/* <View style={styles.section}>
-        <Text style={styles.subHeader}>Features</Text>
-        <Text style={styles.text}>
-          Explore herbs, discover their uses, and educate yourself on how to use
-          them to improve your health.
-        </Text>
-      </View> */}
-
       {/* Team Section */}
       <View style={styles.section}>
         <Text style={styles.subHeader}>Meet the Team</Text>
@@ -61,15 +41,6 @@ const AboutUsScreen = () => {
         </Text>
       </View>
 
-      {/* Philosophy Section */}
-      {/* <View style={styles.section}>
-        <Text style={styles.subHeader}>Our Philosophy</Text>
-        <Text style={styles.text}>
-          We believe in holistic health where mind, body, and environment
-          coalesce to form a balanced well-being.
-        </Text>
-      </View> */}
-
       {/* Contact Information */}
       <View style={styles.section}>
         <Text style={styles.subHeader}>Contact Information</Text>
@@ -78,20 +49,6 @@ const AboutUsScreen = () => {
           sheridancapstone@gmail.com
         </Text>
       </View>
-
-      {/* Social Media Links. This is how we can add later, when/if we create them.*/}
-      {/* <View style={styles.section}>
-        <Text style={styles.subHeader}>Follow Us</Text>
-        <TouchableOpacity onPress={() => handlePress("#Instagram")}>
-          <Text style={styles.link}>Instagram</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handlePress("#Facebook")}>
-          <Text style={styles.link}>Facebook</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handlePress("#Twitter")}>
-          <Text style={styles.link}>Twitter</Text>
-        </TouchableOpacity>
-      </View> */}
 
       {/* Reference Section */}
       <View style={styles.section}>
@@ -107,7 +64,6 @@ const AboutUsScreen = () => {
           - "The Modern Herbal Dispensatory: A Medicine-Making Guide" by Thomas
           Easley | Steven Horne
         </Text>
-        {/* <Text style={styles.text}>- "Medical Herbalism" by David Hoffmann</Text> */}
       </View>
     </ScrollView>
   );

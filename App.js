@@ -189,7 +189,13 @@ function Navigation() {
     console.log("Skipping Onboarding Screen");
     return (
       <NavigationContainer>
-        {user ? <DrawerNavigator /> : <AuthStack />}
+        {isFirstLaunch ? (
+          <OnboardingScreen />
+        ) : user ? (
+          <DrawerNavigator />
+        ) : (
+          <AuthStack />
+        )}
       </NavigationContainer>
     );
   }

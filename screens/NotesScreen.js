@@ -9,6 +9,8 @@ import {
   Modal,
   TextInput,
   Button,
+  Image,
+  Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
@@ -23,6 +25,8 @@ function NotesScreen() {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [currentNote, setCurrentNote] = useState(null);
 
+  const { width, height } = Dimensions.get("window");
+
   const openEditModal = (note) => {
     setCurrentNote(note);
     setEditModalVisible(true);
@@ -30,18 +34,23 @@ function NotesScreen() {
 
   const saveEditedNote = () => {
     const updatedNotes = notes.map((note) => {
-      if (note.id === currentNote.id) return currentNote;
+      if (note.id === currentNote.id) {
+        return { ...currentNote, updatedAt: new Date() };
+      }
       return note;
     });
     setNotes(updatedNotes);
     userRef
       .collection("notes")
       .doc(currentNote.id)
-      .set({
-        herb: currentNote.herb,
-        condition: currentNote.condition,
-        notes: currentNote.notes,
-      })
+      .set(
+        {
+          herb: currentNote.herb,
+          notes: currentNote.notes,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      )
       .then(() => {
         setEditModalVisible(false);
         Alert.alert("Note updated successfully!");
@@ -81,10 +90,24 @@ function NotesScreen() {
 
   useEffect(() => {
     const unsubscribe = userRef.collection("notes").onSnapshot((snapshot) => {
-      const fetchedNotes = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const fetchedNotes = snapshot.docs
+        .map((doc) => {
+          const data = doc.data();
+          console.log(doc.id, data);
+
+          const createdAt = data.createdAt?.toDate() ?? new Date();
+          const updatedAt = data.updatedAt?.toDate();
+
+          return {
+            id: doc.id,
+            ...data,
+            createdAt,
+            updatedAt,
+          };
+        })
+        .sort((a, b) => {
+          return (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt);
+        });
       setNotes(fetchedNotes);
       setIsLoading(false);
     });
@@ -94,6 +117,18 @@ function NotesScreen() {
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  if (notes.length === 0) {
+    return (
+      <View style={{ flex: 1 }}>
+        <Image
+          source={require("../assets/noNotes.png")}
+          style={{ width: "100%", height: "100%" }}
+          resizeMode="cover"
+        />
+      </View>
+    );
   }
 
   return (
@@ -122,13 +157,18 @@ function NotesScreen() {
             />
           </View>
 
-          {note.condition && (
-            <Text style={styles.noteDetail}>Condition: {note.condition}</Text>
-          )}
           <Text style={styles.noteDetail}>Notes: {note.notes}</Text>
-          {/* <Text style={styles.noteDetail}>
-            Created on: {new Date(note.createdAt).toLocaleDateString()}
-          </Text> */}
+          <Text style={styles.noteDetail}>
+            {note.updatedAt
+              ? `Last Edited on: ${note.updatedAt.toLocaleDateString()} at ${note.updatedAt.toLocaleTimeString(
+                  [],
+                  { hour: "numeric", minute: "2-digit" }
+                )}`
+              : `Created on: ${note.createdAt.toLocaleDateString()} at ${note.createdAt.toLocaleTimeString(
+                  [],
+                  { hour: "numeric", minute: "2-digit" }
+                )}`}
+          </Text>
         </View>
       ))}
       {editModalVisible && (
@@ -140,7 +180,7 @@ function NotesScreen() {
           <SafeAreaView style={styles.modal}>
             <Text style={styles.header}>Edit Note</Text>
             <Text style={styles.text}>Herb Name: {currentNote.herb}</Text>
-            <Text style={styles.text}>Condtion: {currentNote.condition}</Text>
+            {/* <Text style={styles.text}>Condtion: {currentNote.condition}</Text> */}
             <TextInput
               value={currentNote.notes}
               onChangeText={(text) =>
