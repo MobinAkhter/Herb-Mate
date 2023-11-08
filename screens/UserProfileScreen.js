@@ -40,6 +40,7 @@ function UserProfileScreen({ navigation }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [emailChangeVisible, setEmailChangeVisible] = useState(false)
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -215,63 +216,89 @@ function UserProfileScreen({ navigation }) {
             ></TextInput>
           </View>
 
-          <View style={styles.textContainer}>
-            <Text style={styles.text}> Email: {userData.email}</Text>
-            <TextInput
-              autoCapitalize="none"
-              style={styles.textInput}
-              secureTextEntry={false}
-              value={newEmail}
-              onChangeText={setEmail}
-              placeholder="Enter new email"
-            ></TextInput>
-          </View>
-
           <Button onPress={updateUser}>Update</Button>
 
           <View>
-            <Button onPress={() => setModalVisible(true)}>
-              Change Password
-            </Button>
+  <Button onPress={() => setModalVisible(true)}>
+    Change Password
+  </Button>
+  <Button onPress={() => setEmailChangeVisible(true)}>
+    Change Email
+  </Button>
 
-            <Button onPress={toggleTheme}>Change App Theme</Button>
-            <Modal visible={modalVisible} animationType="slide">
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <TextInput
-                  placeholder="Enter Old Password"
-                  secureTextEntry
-                  value={oldPassword}
-                  onChangeText={setOldPassword}
-                />
-                <TextInput
-                  placeholder="Enter New Password"
-                  secureTextEntry
-                  value={newPassword}
-                  onChangeText={setNewPassword}
-                />
-                <TextInput
-                  placeholder="Enter Confirm Password"
-                  secureTextEntry
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                />
-                <Button title="Submit" onPress={handleChangePassword}>
-                  {" "}
-                  Submit
-                </Button>
-                <Button title="Cancel" onPress={() => setModalVisible(false)}>
-                  {" "}
-                  Cancel{" "}
-                </Button>
-              </View>
-            </Modal>
-          </View>
+  <Modal visible={modalVisible} animationType="slide">
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <TextInput
+        placeholder="Enter Old Password"
+        secureTextEntry
+        value={oldPassword}
+        onChangeText={setOldPassword}
+        placeholderTextColor={"black"}
+        style={textInputstyles.textInput}
+      />
+
+      <TextInput
+        placeholder="Enter New Password"
+        secureTextEntry
+        value={newPassword}
+        onChangeText={setNewPassword}
+        placeholderTextColor={"black"}
+        style={textInputstyles.textInput}
+      />
+
+      <TextInput
+        placeholder="Re-Enter New Password"
+        secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        placeholderTextColor={"black"}
+        style={textInputstyles.textInput}
+      />
+
+      <View style={{ marginTop: 10, marginBottom: 10 }}>
+          <Button title="Submit" onPress={handleChangePassword}>
+            Submit
+          </Button>
+      </View>
+      
+      <Button title="Cancel" onPress={() => setModalVisible(false)}>
+        Cancel
+      </Button>
+    </View>
+  </Modal>
+
+  <Modal visible={emailChangeVisible} animationType="slide">
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <TextInput
+        placeholder="Enter New Email"
+        secureTextEntry
+        value={oldPassword}
+        onChangeText={setOldPassword}
+        placeholderTextColor={"black"}
+        style={textInputstyles.textInput}
+      />
+
+      <TextInput
+        placeholder="Enter Password"
+        secureTextEntry
+        value={newPassword}
+        onChangeText={setNewPassword}
+        placeholderTextColor={"black"}
+        style={textInputstyles.textInput}
+      />
+      <View style={{ marginTop: 10, marginBottom: 10 }}>
+          <Button title="Submit" onPress={handleChangePassword}>
+            Submit
+          </Button>
+      </View>
+      
+      <Button title="Cancel" onPress={() => setEmailChangeVisible(false)}>
+        Cancel
+      </Button>
+    </View>
+  </Modal>
+</View>
+
         </>
       )}
     </>
@@ -313,4 +340,16 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 15,
   },
+});
+
+
+const textInputstyles = StyleSheet.create({
+  textInput: {
+    borderColor: 'black',      // Add a black border
+    borderWidth: 1,           // Specify the border width
+    padding: 10,              // Add some padding for spacing
+    marginBottom: 10,         // Add margin to separate text inputs
+    width: "90%",            // Make sure the width is 100%
+  },
+
 });

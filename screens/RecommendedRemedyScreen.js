@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
+import Button from "../components//ui/Button";
+import { useNavigation } from "@react-navigation/native";
 
 const RecommendedRemedyScreen = ({ route }) => {
   const { category } = route.params;
   const { question1 } = route.params;
   const { question2 } = route.params;
   const [pred, setPred] = useState("");
+  const navigation = useNavigation();
   const apiUrl = "http://127.0.0.1:5000/predict"; // Replace with your API URL
 
   useEffect(() => {
@@ -36,10 +39,28 @@ const RecommendedRemedyScreen = ({ route }) => {
       });
   }, []);
 
+  function buttonClick()
+  {
+    navigation.navigate("Remedy Details", {
+      rem: pred
+    });
+  }
+
   return (
+    <>
     <View style={styles.rootContainer}>
       <Text>Your recommended remedy is {pred}</Text>
+
+     <View style={{ marginTop: 10, marginBottom: 10 }}>
+     <Button 
+       onPress={() => buttonClick()}>
+        View {pred} </Button>
+     </View>
+    
+     <Button> Try Again </Button>
+
     </View>
+    </>
   );
 };
 
@@ -47,7 +68,6 @@ export default RecommendedRemedyScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    marginTop: 160,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
