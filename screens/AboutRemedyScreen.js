@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Modal,
-  Button,
   TextInput,
   StyleSheet,
   View,
@@ -12,24 +11,71 @@ import {
   ActivityIndicator,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
 import { AntDesign } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
 import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
-// import ImageViewer from "react-native-image-zoom-viewer";
 
+import firebase from "firebase";
 import "firebase/firestore";
+
+function HerbScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: "herbInfo", title: "About Remedy" },
+    { key: "herbDetails", title: "Herb Details" },
+  ]);
+
+  const AboutRemedyTab = () => {
+    return <AboutRemedyScreen route={route} navigation={navigation} />;
+  };
+
+  const HerbDetails = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <Text>NO TEXT HERE AT THE MOMENT. </Text>
+        <Text>WILL ADD HERB INTERACTIONS HERE. </Text>
+      </View>
+    );
+  };
+  const renderScene = SceneMap({
+    herbInfo: AboutRemedyTab,
+    herbDetails: HerbDetails,
+  });
+
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: "green" }}
+      style={{ backgroundColor: "white" }}
+      labelStyle={{ color: "black" }}
+    />
+  );
+
+  const initialLayout = { width: Dimensions.get("window").width };
+  return (
+    <TabView
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={initialLayout}
+      renderTabBar={renderTabBar}
+    />
+  );
+}
 
 function AboutRemedyScreen({ route }) {
   const navigation = useNavigation();
-
   const { rem, bp } = route.params;
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState("Bookmark");
@@ -58,40 +104,6 @@ function AboutRemedyScreen({ route }) {
   const [notes, setNotes] = useState("");
 
   const scrollViewRef = useRef();
-  const loadConditions = async () => {
-    try {
-      const cacheKey = `conditions_${bp}`;
-      const cachedConditions = await AsyncStorage.getItem(cacheKey);
-
-      if (cachedConditions !== null) {
-        console.log(`Fetching conditions from cache for body part: ${bp}`);
-        setConditionsList(JSON.parse(cachedConditions));
-      } else {
-        console.log(`Fetching conditions from Firestore for body part: ${bp}`);
-        const con = [];
-        const querySnapshot = await col.doc(bp).collection("Conditions").get();
-
-        querySnapshot.forEach((doc) => {
-          const label = doc.data().name || "Default Label";
-          con.push({
-            label: label,
-            key: doc.id,
-          });
-        });
-
-        con.forEach((item, index) => {
-          if (!item.label || !item.value) {
-            console.error(`Missing data in item at index ${index}`, item);
-          }
-        });
-
-        await AsyncStorage.setItem(cacheKey, JSON.stringify(con));
-        setConditionsList(con);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // Putting it here right now, could be better to re use this in multiple places of the app.
   // Make it a ui component later.
@@ -123,11 +135,8 @@ function AboutRemedyScreen({ route }) {
     });
   }, [navigation]);
 
-  // define the key for AsyncStorage
-  //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
-
   useEffect(() => {
-    loadConditions();
+    // loadConditions();
     AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
     setIsLoading(true);
     // define the key for AsyncStorage
@@ -146,13 +155,6 @@ function AboutRemedyScreen({ route }) {
           return;
         }
       }
-      // userRef
-      //   .collection("bookmarks")
-      //   .doc(rem)
-      //   .get()
-      //   .then((doc) => {
-      //     if (doc.exists) setBookMarkText("Remove Bookmark");
-      //   });
 
       // fetch the remedy from Firestore and save it in the cache
       remediesFirebase
@@ -204,13 +206,19 @@ function AboutRemedyScreen({ route }) {
     console.log("Save notes got executed");
     if (selectedRemedy && (selectedCondition || notes)) {
       const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
+      const timestamp = new Date();
+      // const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       userNotesRef
-        .set({
-          herb: selectedRemedy,
-          condition: selectedCondition || "Not specified",
-          notes: notes,
-          // createdAt: new Date().toISOString,
-        })
+        .set(
+          {
+            herb: selectedRemedy,
+            // condition: selectedCondition || "Not specified",
+            notes: notes,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            // createdAt: new Date().toISOString,
+          },
+          { merge: true }
+        )
         .then(() => {
           Alert.alert("Notes saved successfully!");
           setModalVisible(false);
@@ -275,27 +283,6 @@ function AboutRemedyScreen({ route }) {
               }}
             />
 
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedCondition(value)}
-              items={conditionsList}
-              placeholder={{
-                label: "Select a condition (optional)",
-                value: null,
-              }}
-              value={selectedCondition}
-              style={{
-                inputIOS: {
-                  marginTop: 10,
-                  marginBottom: 10,
-                  borderRadius: 8,
-                  padding: 8,
-                  height: 30,
-                  fontSize: 18,
-                  borderWidth: 1,
-                  borderColor: "gray",
-                },
-              }}
-            />
             <TextInput
               placeholder="Write your notes here"
               multiline
@@ -445,7 +432,7 @@ function AboutRemedyScreen({ route }) {
   );
 }
 
-export default AboutRemedyScreen;
+export default HerbScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
