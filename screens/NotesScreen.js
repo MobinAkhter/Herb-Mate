@@ -8,7 +8,6 @@ import {
   Alert,
   Modal,
   TextInput,
-  Button,
   Image,
   Dimensions,
 } from "react-native";
