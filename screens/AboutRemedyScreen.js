@@ -35,105 +35,19 @@ function HerbScreen() {
     { key: "herbInfo", title: "About Remedy" },
     { key: "herbDetails", title: "Herb Details" },
   ]);
-
-  const AboutRemedyTab = () => {
-    return <AboutRemedyScreen route={route} navigation={navigation} />;
-  };
-
-  const HerbDetails = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <Text>NO TEXT HERE AT THE MOMENT. </Text>
-        <Text>WILL ADD HERB INTERACTIONS HERE. </Text>
-      </View>
-    );
-  };
-  const renderScene = SceneMap({
-    herbInfo: AboutRemedyTab,
-    herbDetails: HerbDetails,
-  });
-
-  const renderTabBar = (props) => (
-    <TabBar
-      {...props}
-      indicatorStyle={{ backgroundColor: "green" }}
-      style={{ backgroundColor: "white" }}
-      labelStyle={{ color: "black" }}
-    />
-  );
-
-  const initialLayout = { width: Dimensions.get("window").width };
-  return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={initialLayout}
-      renderTabBar={renderTabBar}
-    />
-  );
-}
-
-function AboutRemedyScreen({ route }) {
-  const navigation = useNavigation();
-  const { rem, bp } = route.params;
   const [remedy, setRemedy] = useState({});
-  const [bookMarkText, setBookMarkText] = useState("Bookmark");
   const [isLoading, setIsLoading] = useState(true);
-
-  // Creating the collapsable state for description and precautions and properties
-  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
-  const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
-  const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
-  const [isDosageCollapsed, setDosageCollapsed] = useState(true);
-
-  const [isPressed, setIsPressed] = useState(false);
-
-  // access firestore
+  const { rem } = route.params || {};
   const remediesFirebase = db.collection("Remedies");
-  const user = auth.currentUser.uid;
-  const userRef = db.collection("users").doc(user);
+  const [remediesList, setRemediesList] = useState([]);
 
   // adding the states required for notes functionality
-  const [remediesList, setRemediesList] = useState([]);
-  const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const col = db.collection("BodyParts");
-  const [modalVisible, setModalVisible] = useState(false);
-  const [conditionsList, setConditionsList] = useState([]);
-  const [selectedCondition, setSelectedCondition] = useState();
-  const [notes, setNotes] = useState("");
+  // const [conditionsList, setConditionsList] = useState([]);
 
-  const scrollViewRef = useRef();
+  // Creating the collapsable state for description and precautions and properties
 
-  // Putting it here right now, could be better to re use this in multiple places of the app.
-  // Make it a ui component later.
-
-  const buttonStyle = {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    backgroundColor: isPressed ? "#dedede" : "white",
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 1,
-  };
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <SimpleLineIcons name="note" size={24} color="black" />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // access firestore
 
   useEffect(() => {
     // loadConditions();
@@ -196,11 +110,133 @@ function AboutRemedyScreen({ route }) {
         }
 
         setRemediesList(remedies);
+        console.log("This is the remedies list", remediesList);
       })
       .catch((error) => {
         console.error("Error fetching remedies list:", error);
       });
-  }, []);
+  }, [rem]);
+
+  const AboutRemedyTab = () => {
+    return (
+      <AboutRemedyScreen
+        remedy={remedy}
+        remediesList={remediesList}
+        route={route}
+        navigation={navigation}
+      />
+    );
+  };
+  const HerbDetailsTab = () => {
+    return <HerbDetails interactions={remedy.interactions} />;
+  };
+  const renderScene = SceneMap({
+    herbInfo: AboutRemedyTab,
+    herbDetails: HerbDetailsTab,
+  });
+
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: "green" }}
+      style={{ backgroundColor: "white" }}
+      labelStyle={{ color: "black" }}
+    />
+  );
+
+  const initialLayout = { width: Dimensions.get("window").width };
+
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+  return (
+    <TabView
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={initialLayout}
+      renderTabBar={renderTabBar}
+    />
+  );
+
+  // console.log(remedy.image);
+}
+const HerbDetails = ({ interactions }) => {
+  return (
+    <View style={{ flex: 1 }}>
+      <Text>Herb Interactions:</Text>
+      {interactions &&
+        Object.entries(interactions).map(([key, value]) => {
+          const content = typeof value === "string" ? value : value.text;
+          const evidence = typeof value === "object" ? value.evidence : null;
+
+          return (
+            <View key={key} style={{ marginBottom: 20 }}>
+              <Text style={{ fontWeight: "bold" }}>{key}:</Text>
+              <Text>{content}</Text>
+              {evidence && <Text>Evidence: {evidence}</Text>}
+            </View>
+          );
+        })}
+    </View>
+  );
+};
+
+function AboutRemedyScreen({ remedy, navigation, remediesList }) {
+  console.log("THIS IS REMEDY", remedy);
+  const route = useRoute();
+
+  const { rem } = route.params || {};
+  console.log("THIS IS REM", rem);
+
+  const [selectedRemedy, setSelectedRemedy] = useState(rem);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
+  const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
+  const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
+  const [isDosageCollapsed, setDosageCollapsed] = useState(true);
+  const scrollViewRef = useRef();
+
+  const [isPressed, setIsPressed] = useState(false);
+  // const [remediesList, setRemediesList] = useState([]);
+
+  const [selectedCondition, setSelectedCondition] = useState();
+  const [notes, setNotes] = useState("");
+
+  const [bookMarkText, setBookMarkText] = useState("Bookmark");
+  const user = auth.currentUser.uid;
+
+  const userRef = db.collection("users").doc(user);
+
+  // Putting it here right now, could be better to re use this in multiple places of the app.
+  // Make it a ui component later.
+
+  const buttonStyle = {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    backgroundColor: isPressed ? "#dedede" : "white",
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <SimpleLineIcons name="note" size={24} color="black" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   const saveNotes = () => {
     console.log("Save notes got executed");
@@ -248,12 +284,6 @@ function AboutRemedyScreen({ route }) {
       setBookMarkText("BOOKMARK");
     }
   }
-
-  if (isLoading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
-  // console.log(remedy.image);
   return (
     <View style={styles.rootContainer}>
       <Modal
@@ -328,10 +358,10 @@ function AboutRemedyScreen({ route }) {
           </Swiper>
 
           {/* <ImageViewer
-            style={{ flex: 1 }}
-            imageUrls={remedy.image.map((uri) => ({ url: uri }))}
-            renderIndicator={() => null}
-          /> */}
+              style={{ flex: 1 }}
+              imageUrls={remedy.image.map((uri) => ({ url: uri }))}
+              renderIndicator={() => null}
+            /> */}
 
           <View style={styles.info}>
             <View style={[styles.titleRow, { marginTop: 10 }]}>
@@ -431,7 +461,6 @@ function AboutRemedyScreen({ route }) {
     </View>
   );
 }
-
 export default HerbScreen;
 
 const styles = StyleSheet.create({
