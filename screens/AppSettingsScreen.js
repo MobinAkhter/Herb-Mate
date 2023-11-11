@@ -26,6 +26,7 @@ const AppSettingsScreen = () => {
   
       if (userDocSnapshot.exists) {
         // Check if the document exists
+        
         const userData = userDocSnapshot.data();
         
         if (userData && userData.bookmarks) {
