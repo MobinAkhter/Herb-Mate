@@ -10,6 +10,7 @@ import {
   Modal,
   Button as RNButton,
   TouchableOpacity,
+  Pressable
 } from "react-native";
 import { useState, useEffect } from "react";
 import Button from "../components/ui/Button";
@@ -195,36 +196,38 @@ function UserProfileScreen({ navigation }) {
       {userData && (
         <>
           <View style={[styles.textContainer]}>
-            <Text style={styles.text}>First Name: {userData.firstName}</Text>
+            <Text style={styles.text}>First Name*</Text>
             <TextInput
               style={styles.textInput}
               secureTextEntry={false}
               value={newFirstName}
               onChangeText={setFirstName}
-              placeholder="Enter new first name"
+              placeholder={userData.firstName}
             ></TextInput>
           </View>
 
           <View style={styles.textContainer}>
-            <Text style={styles.text}>Last Name: {userData.lastName}</Text>
+            <Text style={styles.text}>Last Name*</Text>
             <TextInput
               style={styles.textInput}
               secureTextEntry={false}
               value={newLastName}
               onChangeText={setLastName}
-              placeholder="Enter new last name"
+              placeholder={userData.lastName}
             ></TextInput>
           </View>
 
-          <Button onPress={updateUser}>Update</Button>
+          <Pressable onPress={updateUser}>
+            <Text>Update</Text>
+          </Pressable>
 
           <View>
-  <Button onPress={() => setModalVisible(true)}>
-    Change Password
-  </Button>
-  <Button onPress={() => setEmailChangeVisible(true)}>
-    Change Email
-  </Button>
+  < Pressable onPress={() => setModalVisible(true)}>
+    <Text> Change Password </Text>
+  </ Pressable>
+  <Pressable onPress={() => setEmailChangeVisible(true)}>
+    <Text>Change Email </Text>
+  </Pressable>
 
   <Modal visible={modalVisible} animationType="slide">
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

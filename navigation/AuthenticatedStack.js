@@ -116,7 +116,7 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="Data Analytics"
+        name="Recommendation System"
         component={DataAnalyticsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
