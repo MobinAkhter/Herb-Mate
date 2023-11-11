@@ -52,12 +52,11 @@ const AppSettingsScreen = () => {
 
     return unsubscribe;
   }, [navigation]);
-
   return (
     <View style={styles.rootContainer}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Welcome")}
+          onPress={() => navigation.navigate('Welcome')}
           style={styles.iconContainer}
         >
           {/* Add your arrow-left icon component here */}
@@ -68,24 +67,44 @@ const AppSettingsScreen = () => {
           <FlatList
             data={bookmarkCollection}
             renderItem={({ item }) => (
-              <View style={styles.bigButtonContainer}>
-                <BigButton
-                  onPress={() => {
-                    navigation.navigate("Remedy Details", {
-                      rem: item,
-                    });
-                  }}
-                >
-                  <Text>{item}</Text>
-                </BigButton>
-              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Remedy Details', {
+                    rem: item,
+                  });
+                }}
+              >
+                <View style={listItemStyle.rootContainer}>
+                    <Text style={listItemStyle.Text}>{item}</Text>
+                </View>
+                   
+              </TouchableOpacity>
             )}
-          ></FlatList>
+          />
         </View>
       </View>
     </View>
   );
 };
+
+const listItemStyle = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    alignItems: "flex-start",
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 10,
+    borderBottomWidth: 1, // Add a border width for the black line
+    borderBottomColor: "grey"
+  },
+
+  Text:{
+    fontSize: 20,
+    color: "green",
+    fontWeight: "bold"
+  }
+  
+})
 
 const styles = StyleSheet.create({
   rootContainer: {
