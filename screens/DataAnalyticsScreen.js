@@ -46,6 +46,10 @@ const DataAnalyticsScreen = () => {
     });
   }
 
+  function lolClick(){
+    navigation.navigate("RecommendedRemediesScreen");
+  }
+
   const Item = ({ title }) => (
     <View>
       <Pressable 
@@ -60,6 +64,11 @@ const DataAnalyticsScreen = () => {
   return (
     <>
       <View style={styles.rootContainer}>
+        <Pressable
+        onPress={() => lolClick()}
+        >
+          <Text>CLICK HHHH</Text>
+        </Pressable>
       <Text style={styles.title}> Select a category </Text>
       <FlatList 
         data={DATA}
