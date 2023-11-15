@@ -161,33 +161,75 @@ function HerbScreen() {
 
   // console.log(remedy.image);
 }
-const HerbDetails = ({ interactions }) => {
-  return (
-    <View style={{ flex: 1 }}>
-      <Text>Herb Interactions:</Text>
-      {interactions &&
-        Object.entries(interactions).map(([key, value]) => {
-          const content = typeof value === "string" ? value : value.text;
-          const evidence = typeof value === "object" ? value.evidence : null;
 
-          return (
-            <View key={key} style={{ marginBottom: 20 }}>
-              <Text style={{ fontWeight: "bold" }}>{key}:</Text>
-              <Text>{content}</Text>
-              {evidence && <Text>Evidence: {evidence}</Text>}
-            </View>
-          );
-        })}
+const HerbDetails = ({ interactions }) => {
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  const { overview, ...otherInteractions } = interactions || {};
+  const hasDetails =
+    overview ||
+    (otherInteractions && Object.keys(otherInteractions).length > 0);
+
+  return hasDetails ? (
+    <ScrollView
+      style={{ flex: 1, margin: 24 }}
+      showsVerticalScrollIndicator={false}
+    >
+      {overview && (
+        <View style={{ marginBottom: 20 }}>
+          <Text style={styles.herbDetailHeader}>Interactions:</Text>
+          <Text style={styles.interactionHeader}>
+            {capitalizeFirstLetter("overview")}:
+          </Text>
+          <Text style={styles.interactionContent}>
+            {typeof overview === "string" ? overview : overview.text}
+          </Text>
+          {/* Render evidence if it exists */}
+          {overview.evidence && (
+            <Text style={styles.evidenceText}>
+              Clinical Evidence: {overview.evidence}
+            </Text>
+          )}
+        </View>
+      )}
+
+      {Object.entries(otherInteractions).map(([key, value]) => {
+        const content = typeof value === "string" ? value : value.text;
+        const evidence = typeof value === "object" ? value.evidence : null;
+
+        return (
+          <View key={key} style={{ marginBottom: 20 }}>
+            <Text style={styles.interactionHeader}>
+              {capitalizeFirstLetter(key)}:
+            </Text>
+            <Text style={styles.interactionContent}>{content}</Text>
+            {evidence && (
+              <Text style={styles.evidenceText}>
+                Clinical Evidence: {evidence}
+              </Text>
+            )}
+          </View>
+        );
+      })}
+    </ScrollView>
+  ) : (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Image
+        source={require("../assets/nuh.png")}
+        style={styles.interactionContent}
+        resizeMode="cover"
+      />
     </View>
   );
 };
 
 function AboutRemedyScreen({ remedy, navigation, remediesList }) {
-  console.log("THIS IS REMEDY", remedy);
+  // console.log("THIS IS REMEDY", remedy);
   const route = useRoute();
 
   const { rem } = route.params || {};
-  console.log("THIS IS REM", rem);
+  // console.log("THIS IS REM", rem);
 
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const [modalVisible, setModalVisible] = useState(false);
@@ -272,7 +314,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
         description: remedy.description,
         precautions: remedy.precautions,
         properties: remedy.properties,
-        dosage: remedy.dosage,
+        // dosage: remedy.dosage,
       });
 
       Alert.alert(`${remedy.name} has been bookmarked!`);
@@ -576,5 +618,24 @@ const styles = StyleSheet.create({
     borderBottomColor: "gainsboro",
     borderBottomWidth: 1,
     marginVertical: 9,
+  },
+  herbDetailHeader: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginVertical: 10,
+  },
+  interactionHeader: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  interactionContent: {
+    fontSize: 14,
+    width: "100%",
+    flex: 1,
+  },
+  evidenceText: {
+    fontStyle: "italic",
+    fontSize: 14,
+    marginTop: 10,
   },
 });
