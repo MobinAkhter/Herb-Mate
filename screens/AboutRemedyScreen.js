@@ -23,7 +23,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
 import RemedyViewModel from '../ViewModels/RemedyViewModel';
-import Remedy from '../Models/Remedy';
 // import ImageViewer from "react-native-image-zoom-viewer";
 
 import "firebase/firestore";
