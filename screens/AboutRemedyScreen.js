@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  Share,
 } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
@@ -270,15 +271,69 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
     shadowRadius: 1,
   };
 
+  const shareHerbDetails = async (selectedRemedy) => {
+    let message = `Check out this herb: ${selectedRemedy}.\n\n`;
+
+    if (remedy.description) {
+      message += `Description: ${remedy.description}\n`;
+    }
+
+    if (remedy.properties) {
+      message += `Properties: ${remedy.properties}\n`;
+    }
+
+    if (remedy.precautions) {
+      message += `Precautions: ${remedy.precautions}\n`;
+    }
+
+    console.log("Sharing Message: ", message);
+
+    if (remedy.dosage) {
+      message += `Dosage: ${remedy.dosage}\n`;
+    }
+
+    try {
+      const result = await Share.share({
+        message: message,
+        title: "Learn about ${remedy.name}",
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log("Shared with activity type: ", result.activityType);
+        } else {
+          alert("Thanks for sharing!");
+        }
+      } else if (result.action === Share.dismissedAction) {
+        alert("Share cancelled.");
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  useEffect(() => {
+    if (rem) {
+      setSelectedRemedy(rem);
+    }
+  }, [rem]);
+
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <SimpleLineIcons name="note" size={24} color="black" />
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={{ marginRight: 16 }}
+            onPress={() => shareHerbDetails(selectedRemedy)}
+          >
+            <SimpleLineIcons name="share" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <SimpleLineIcons name="note" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, selectedRemedy]);
 
   const saveNotes = () => {
     console.log("Save notes got executed");
