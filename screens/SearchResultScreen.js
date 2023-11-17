@@ -187,6 +187,7 @@ function SearchResultScreen({ route }) {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <TouchableOpacity
+          key={item.id}
           style={styles.listItem}
           onPress={() => {
             console.log("Navigating with remedy:", item);
@@ -213,6 +214,7 @@ function SearchResultScreen({ route }) {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <TouchableOpacity
+          key={item.id}
           style={styles.listItem}
           onPress={() => {
             console.log("Navigating with remedy:", item);
