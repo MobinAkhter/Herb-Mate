@@ -20,6 +20,7 @@ import RecommendedRemedyScreen from "../screens/RecommendedRemedyScreen";
 import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
 import DonationScreen from "../screens/DonationScreen";
+import RecommendedRemediesScreen from "../screens/RecommendedRemediesScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -58,6 +59,10 @@ function Home() {
       <Stack.Screen
         name="RecommendedRemedyScreen"
         component={RecommendedRemedyScreen}
+      />
+      <Stack.Screen
+        name="RecommendedRemediesScreen"
+        component={RecommendedRemediesScreen}
       />
     </Stack.Navigator>
   );
@@ -116,7 +121,7 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="Data Analytics"
+        name="Recommendation System"
         component={DataAnalyticsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (

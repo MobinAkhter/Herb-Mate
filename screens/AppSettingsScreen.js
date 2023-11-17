@@ -18,17 +18,31 @@ const AppSettingsScreen = () => {
 
   const fetchBookmarks = async () => {
     try {
-      const querySnapshot = await userRef.collection("bookmarks").get();
-      const bookmarks = [];
-      querySnapshot.forEach((doc) => {
-        bookmarks.push({
-          ...doc.data(),
-          key: doc.id,
-        });
-      });
-      setBookmarkCollection(bookmarks);
+      // Get the user's document reference
+      const userDocRef = db.collection("users").doc(user);
+  
+      // Use the get() method to fetch the user's document
+      const userDocSnapshot = await userDocRef.get();
+  
+      if (userDocSnapshot.exists) {
+        // Check if the document exists
+        
+        const userData = userDocSnapshot.data();
+        
+        if (userData && userData.bookmarks) {
+          // Check if the 'bookmarks' property exists in the user's data
+          // userData.bookmarks should be an array containing the bookmarked items
+          setBookmarkCollection(userData.bookmarks);
+        } else {
+          // Handle the case where 'bookmarks' property does not exist or is empty
+          setBookmarkCollection([]);
+        }
+      } else {
+        // Handle the case where the user's document does not exist
+        setBookmarkCollection([]);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching bookmarks:", error);
     }
   };
 
@@ -39,12 +53,11 @@ const AppSettingsScreen = () => {
 
     return unsubscribe;
   }, [navigation]);
-
   return (
     <View style={styles.rootContainer}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Welcome")}
+          onPress={() => navigation.navigate('Welcome')}
           style={styles.iconContainer}
         >
           {/* Add your arrow-left icon component here */}
@@ -55,24 +68,44 @@ const AppSettingsScreen = () => {
           <FlatList
             data={bookmarkCollection}
             renderItem={({ item }) => (
-              <View style={styles.bigButtonContainer}>
-                <BigButton
-                  onPress={() => {
-                    navigation.navigate("Remedy Details", {
-                      rem: item.name,
-                    });
-                  }}
-                >
-                  <Text>{item.name}</Text>
-                </BigButton>
-              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Remedy Details', {
+                    rem: item,
+                  });
+                }}
+              >
+                <View style={listItemStyle.rootContainer}>
+                    <Text style={listItemStyle.Text}>{item}</Text>
+                </View>
+                   
+              </TouchableOpacity>
             )}
-          ></FlatList>
+          />
         </View>
       </View>
     </View>
   );
 };
+
+const listItemStyle = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    alignItems: "flex-start",
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 10,
+    borderBottomWidth: 1, // Add a border width for the black line
+    borderBottomColor: "grey"
+  },
+
+  Text:{
+    fontSize: 20,
+    color: "green",
+    fontWeight: "bold"
+  }
+  
+})
 
 const styles = StyleSheet.create({
   rootContainer: {
