@@ -13,7 +13,7 @@ import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import MIcon from "../components/ui/MIcon";
 import { removeSpace, iconMapper } from "../utils";
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
 function SearchResultScreen({ route }) {
@@ -46,6 +46,7 @@ function SearchResultScreen({ route }) {
   var width = Dimensions.get("window").width; //full width
   var height = Dimensions.get("window").height; //full height
   var rems = db.collectionGroup("Remedies");
+  const user = auth.currentUser.uid;
 
   const loadConditions = async () => {
     const conditionList = [];
@@ -150,6 +151,33 @@ function SearchResultScreen({ route }) {
     // setRemedies(filteredRemedies);
     //loadConditions();
     //loadRemedies();
+  };
+
+  const searchCondition = async (conditionName) => {
+    // Get the user's document reference
+    const userDocRef = db.collection("users").doc(user);
+
+    // Use the get() method to fetch the user's document
+    const userDocSnapshot = await userDocRef.get();
+
+    if (userDocSnapshot.exists) {
+      // Check if the document exists
+      const userData = userDocSnapshot.data();
+
+      //check if the searches property of the user is at least 20
+      if (userData && userData.searches) {
+        if (userData.searches.length <= 19) {
+          userData.searches.push(conditionName);
+
+          // Update the user's document in the database
+          await userDocRef.update({
+            searches: userData.searches,
+          });
+        } else {
+          console.log("Cannot add conditions anymore");
+        }
+      }
+    }
   };
 
   //Fills list of conditions to show in flatlist based on the bodypart selected
@@ -306,6 +334,8 @@ function SearchResultScreen({ route }) {
                 bp: item.bp,
                 con: item.name,
               });
+              searchCondition(item.name)
+              console.log("Navigation to condition ", item.name)
             }}
           >
             <View style={styles.bpIcon}>

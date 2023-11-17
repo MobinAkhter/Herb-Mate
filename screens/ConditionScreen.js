@@ -8,13 +8,15 @@ import { Ionicons } from "@expo/vector-icons";
 import BigButton from "../components/ui/BigButton";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db } from "../firebase";
+import { db , auth} from "../firebase";
 
 function ConditionScreen({ route }) {
   const { bp } = route.params;
   const navigation = useNavigation();
   const [conditions, setConditions] = useState([]);
   const col = db.collection("BodyParts");
+  let limit = false;
+  const user = auth.currentUser.uid;
 
   // Loads the conditions from cache or database
   const loadConditions = async () => {
@@ -49,6 +51,41 @@ function ConditionScreen({ route }) {
     loadConditions();
 
   }, []);
+
+  //console log the selected condition
+  const selectedCondition = async (conditionName) => {
+    console.log("Selected the following condition"+ conditionName)
+
+    // Get the user's document reference
+    const userDocRef = db.collection("users").doc(user);
+  
+    // Use the get() method to fetch the user's document
+    const userDocSnapshot = await userDocRef.get();
+
+    if (userDocSnapshot.exists) {
+      // Check if the document exists
+      const userData = userDocSnapshot.data();
+
+      //check if the searches property of the user is at least 20
+       if(userData && userData.searches)
+       {
+         if(userData.searches.length <= 19)
+         {
+          userData.searches.push(conditionName);
+
+             // Update the user's document in the database
+          await userDocRef.update({
+          searches: userData.searches
+        });
+
+         }
+         else{
+          console.log("Cannot add conditions anymore")
+         }
+       }
+    }
+
+  }
 
   // TODO: Uncomment the lines of code below, if there is some caching problem, herbs from db are not showing up etc.
   // useEffect(() => {
@@ -132,6 +169,10 @@ function ConditionScreen({ route }) {
                   bp: bp,
                   con: item.name,
                 });
+                
+                  selectedCondition(item.name)
+               
+              
               }}
             >
               <Text style={styles.itemText}>{item.name}</Text>

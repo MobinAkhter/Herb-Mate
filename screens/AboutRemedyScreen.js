@@ -37,6 +37,7 @@ function HerbScreen() {
     { key: "herbDetails", title: "Herb Details" },
   ]);
   const [remedy, setRemedy] = useState({});
+  const [bookMarkText, setBookMarkText] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { rem } = route.params || {};
   const remediesFirebase = db.collection("Remedies");
@@ -101,7 +102,6 @@ function HerbScreen() {
           label: doc.data().name,
           value: doc.id,
         }));
-
         if (!remedies.some((item) => item.value === rem)) {
           const currentRemedy = {
             label: remedy.name,
@@ -109,7 +109,6 @@ function HerbScreen() {
           };
           remedies.unshift(currentRemedy);
         }
-
         setRemediesList(remedies);
         console.log("This is the remedies list", remediesList);
       })
@@ -335,6 +334,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
     });
   }, [navigation, selectedRemedy]);
 
+  //saves notes function
   const saveNotes = () => {
     console.log("Save notes got executed");
     if (selectedRemedy && (selectedCondition || notes)) {
@@ -362,24 +362,84 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
     }
   };
 
+  useEffect(() => {
+    checkBookMark();
+  }, []);
+
+  function checkBookMark() {
+    const userDoc = userRef;
+    userDoc.get().then((doc) => {
+      if (doc.exists) {
+        // Get the user's current bookmarks array (if it exists)
+        const currentBookmarks = doc.data().bookmarks || [];
+
+        // Check if the current remedy is already bookmarked
+        const isRemedyBookmarked = currentBookmarks.some(
+          (item) => item.name === remedy
+        );
+
+        if (isRemedyBookmarked) {
+          console.log("its in");
+          setBookMarkText("UNBOOKMARK");
+        } else {
+          setBookMarkText("BOOKMARK");
+        }
+      }
+    });
+  }
+
+  //bookmark remedy function
   function bookMarkRemedy() {
-    if (!userRef.collection("bookmarks").doc(rem).exists) {
-      userRef.collection("bookmarks").doc(rem).set({
-        name: remedy.name,
-        description: remedy.description,
-        precautions: remedy.precautions,
-        properties: remedy.properties,
-        // dosage: remedy.dosage,
+    // Reference to the user's document
+    const userDoc = userRef;
+
+    // Update the user's document to add or remove the bookmarked remedy from the array
+    userDoc
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          // Get the user's current bookmarks array (if it exists)
+          const currentBookmarks = doc.data().bookmarks || [];
+
+          // Check if the current remedy is already bookmarked
+          const remedyIndex = currentBookmarks.indexOf(rem);
+
+          if (remedyIndex === -1) {
+            // If the remedy is not bookmarked, add it to the bookmarks array
+            currentBookmarks.push(rem);
+            // Update the user's document to store the updated bookmarks array
+            userDoc
+              .update({ bookmarks: currentBookmarks })
+              .then(() => {
+                Alert.alert(`${remedy.name} has been bookmarked!`);
+                setBookMarkText("UNBOOKMARK");
+              })
+              .catch((error) => {
+                console.error("Error adding bookmark:", error);
+              });
+          } else {
+            // If the remedy is already bookmarked, remove it from the bookmarks array
+            currentBookmarks.splice(remedyIndex, 1);
+            // Update the user's document to store the updated bookmarks array
+            userDoc
+              .update({ bookmarks: currentBookmarks })
+              .then(() => {
+                Alert.alert(
+                  `${remedy.name} has been removed from your bookmarks!`
+                );
+                setBookMarkText("BOOKMARK");
+              })
+              .catch((error) => {
+                console.error("Error removing bookmark:", error);
+              });
+          }
+        } else {
+          console.error("User document does not exist.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking user document:", error);
       });
-
-      Alert.alert(`${remedy.name} has been bookmarked!`);
-      setBookMarkText("UNBOOKMARK");
-    } else {
-      userRef.collection("bookmarks").doc(rem).delete();
-
-      Alert.alert(`${remedy.name} has been removed from your bookmarks!`);
-      setBookMarkText("BOOKMARK");
-    }
   }
   return (
     <View style={styles.rootContainer}>

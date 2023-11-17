@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import Button from "../components//ui/Button";
-import RemedyViewModel from "./RemedyViewModel";
+
 
 const RemediesBarGraphScreen = () => {
   const [pred, setPred] = useState("");
@@ -16,16 +16,7 @@ const RemediesBarGraphScreen = () => {
   const [blob, setBlob] = useState("");
   const [ray, setRay] = useState("");
 
-  useEffect(() => {
-    const lol = new RemedyViewModel();
-
-    setBlob(lol.screamOne());
-    setRay(lol.screamTwo());
-
-    console.log(blob);
-    console.log(ray);
-  }, []);
-
+  
   // Send a POST request to the API
 
   function buttonClick() {
