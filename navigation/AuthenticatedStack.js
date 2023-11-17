@@ -20,6 +20,7 @@ import RecommendedRemedyScreen from "../screens/RecommendedRemedyScreen";
 import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
 import DonationScreen from "../screens/DonationScreen";
+import PreparationScreen from "../screens/PreparationScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -59,6 +60,7 @@ function Home() {
         name="RecommendedRemedyScreen"
         component={RecommendedRemedyScreen}
       />
+      <Stack.Screen name="PreparationScreen" component={PreparationScreen} />
     </Stack.Navigator>
   );
 }
