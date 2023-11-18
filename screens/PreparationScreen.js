@@ -10,43 +10,39 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase";
 
-const PAGE_SIZE = 10;
-
 const PreparationScreen = () => {
   const [preparations, setPreparations] = useState([]);
-  //const [lastVisibleRemedy, setLastVisibleRemedy] = useState(null);
-  //const [allHerbsLoaded, setAllHerbsLoaded] = useState(false);
   const navigation = useNavigation();
 
+  //getting the list of preparation methods
   const fetchPreparations = async () => {
     let query = db.collection("Preparations");
 
     const querySnapshot = await query.get();
 
-    if (querySnapshot.empty) {
-      setAllHerbsLoaded(true);
-      return;
-    }
-
     const prepArray = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-
+    //console.log("prep array: " + prepArray[1].name);
     setPreparations(prepArray);
   };
 
-  const renderPreparation = ({ item }) => (
-    <TouchableOpacity style={styles.cardContainer}>
+  const renderPreparation = ({ item, index }) => (
+    <TouchableOpacity
+      key={item.name}
+      style={styles.cardContainer}
+      onPress={() => navigateToDetails(item.name)}
+    >
       <Image
         source={
           item.image && item.image.length > 0
             ? { uri: item.image }
             : require("../assets/leaf_icon.jpeg")
         }
-        style={styles.herbImage}
+        style={styles.prepImage}
       />
-      <Text style={styles.herbName}>{item.name}</Text>
+      <Text style={styles.prepName}>{item.name}</Text>
     </TouchableOpacity>
   );
 
@@ -56,17 +52,18 @@ const PreparationScreen = () => {
 
   const navigateToDetails = (id) => {
     console.log("Navigating to prep: ", id);
-    navigation.navigate("Remedy Details", { rem: id });
+    navigation.navigate("Preparation Details", { method: id });
   };
 
   return (
     <View style={styles.container}>
       <FlatList
         data={preparations}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderPreparation}
         numColumns={2}
         columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -99,13 +96,13 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  herbImage: {
+  prepImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
     marginBottom: 8,
   },
-  herbName: {
+  prepName: {
     fontSize: 16,
     textAlign: "center",
   },
