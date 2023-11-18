@@ -163,6 +163,25 @@ function HerbScreen() {
 }
 
 const HerbDetails = ({ interactions }) => {
+  const [isPressed, setIsPressed] = useState(false);
+  const scrollViewRef = useRef();
+
+  const buttonStyle = {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    backgroundColor: isPressed ? "#dedede" : "white",
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+  };
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -172,47 +191,63 @@ const HerbDetails = ({ interactions }) => {
     (otherInteractions && Object.keys(otherInteractions).length > 0);
 
   return hasDetails ? (
-    <ScrollView
-      style={{ flex: 1, margin: 24 }}
-      showsVerticalScrollIndicator={false}
-    >
-      {overview && (
-        <View style={{ marginBottom: 20 }}>
-          <Text style={styles.herbDetailHeader}>Interactions:</Text>
-          <Text style={styles.interactionHeader}>
-            {capitalizeFirstLetter("overview")}:
-          </Text>
-          <Text style={styles.interactionContent}>
-            {typeof overview === "string" ? overview : overview.text}
-          </Text>
-          {/* Render evidence if it exists */}
-          {overview.evidence && (
-            <Text style={styles.evidenceText}>
-              Clinical Evidence: {overview.evidence}
-            </Text>
-          )}
-        </View>
-      )}
-
-      {Object.entries(otherInteractions).map(([key, value]) => {
-        const content = typeof value === "string" ? value : value.text;
-        const evidence = typeof value === "object" ? value.evidence : null;
-
-        return (
-          <View key={key} style={{ marginBottom: 20 }}>
+    <>
+      <ScrollView
+        style={{ flex: 1, margin: 24 }}
+        showsVerticalScrollIndicator={false}
+        ref={scrollViewRef}
+      >
+        {overview && (
+          <View style={{ marginBottom: 20 }}>
+            <Text style={styles.herbDetailHeader}>Interactions:</Text>
             <Text style={styles.interactionHeader}>
-              {capitalizeFirstLetter(key)}:
+              {capitalizeFirstLetter("overview")}:
             </Text>
-            <Text style={styles.interactionContent}>{content}</Text>
-            {evidence && (
+            <Text style={styles.interactionContent}>
+              {typeof overview === "string" ? overview : overview.text}
+            </Text>
+            {/* Render evidence if it exists */}
+            {overview.evidence && (
               <Text style={styles.evidenceText}>
-                Clinical Evidence: {evidence}
+                Clinical Evidence: {overview.evidence}
               </Text>
             )}
           </View>
-        );
-      })}
-    </ScrollView>
+        )}
+
+        {Object.entries(otherInteractions).map(([key, value]) => {
+          const content = typeof value === "string" ? value : value.text;
+          const evidence = typeof value === "object" ? value.evidence : null;
+
+          return (
+            <View key={key} style={{ marginBottom: 20 }}>
+              <Text style={styles.interactionHeader}>
+                {capitalizeFirstLetter(key)}:
+              </Text>
+              <Text style={styles.interactionContent}>{content}</Text>
+              {evidence && (
+                <Text style={styles.evidenceText}>
+                  Clinical Evidence: {evidence}
+                </Text>
+              )}
+            </View>
+          );
+        })}
+      </ScrollView>
+      <TouchableOpacity
+        onPressIn={() => setIsPressed(true)}
+        onPressOut={() => setIsPressed(false)}
+        onPress={() => scrollViewRef.current.scrollTo({ y: 0, animated: true })}
+        style={buttonStyle}
+        activeOpacity={1}
+      >
+        <FontAwesome
+          name="arrow-up"
+          size={24}
+          color={isPressed ? "white" : "gray"}
+        />
+      </TouchableOpacity>
+    </>
   ) : (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Image
@@ -233,7 +268,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
 
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
+  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(false);
   const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
   const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
   const [isDosageCollapsed, setDosageCollapsed] = useState(true);
