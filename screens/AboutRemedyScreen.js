@@ -474,6 +474,17 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
                     </View>
                   )
                 )}
+              <TouchableOpacity
+                style={styles.prepBlock}
+                onPress={() => {
+                  navigation.navigate("PreparationScreen");
+                }}
+              >
+                <Text>
+                  For information on how to prepare herbs, visit{" "}
+                  <Text style={styles.prepLink}>preparations</Text>
+                </Text>
+              </TouchableOpacity>
             </Collapsible>
             <View style={styles.divider} />
           </View>
@@ -637,5 +648,12 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontSize: 14,
     marginTop: 10,
+  },
+  prepBlock: {
+    marginTop: 15,
+  },
+  prepLink: {
+    textDecorationLine: "underline",
+    color: "blue",
   },
 });
