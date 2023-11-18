@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Pressable } from "react-native";
+import { StyleSheet, View, Text, FlatList, Pressable, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import BigButton from "../components/ui/BigButton";
 
 const DataAnalyticsScreen = () => {
   const navigation = useNavigation();
@@ -40,7 +41,42 @@ const DataAnalyticsScreen = () => {
     },
   ];
 
+  const [userInput, setUserInput] = useState('');
+  const [prediction, setPrediction] = useState('');
+
+  const handlePredict = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/category', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_input: userInput,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      console.log('Response:', data); // Log the entire response
+      setPrediction(data.predicted_category);
+
+      buttonClick(prediction)
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+
   function buttonClick(title) {
+    if(title == "Skin Conditions")
+    {
+      title = "Skin Condition"
+    }
+    console.log("This iss a " + prediction)
+   
     navigation.navigate("QuestionTier2", {
       prevQuestion: title,
     });
@@ -63,6 +99,20 @@ const DataAnalyticsScreen = () => {
 
   return (
     <>
+    <View>
+
+      <TextInput
+          placeholder="Enter user input"
+          value={userInput}
+          onChangeText={(text) => setUserInput(text)}
+      />
+
+      <BigButton title="Predict" onPress={handlePredict} />
+
+      <Text>This is your category {prediction}</Text>
+
+    </View>
+
       <View style={styles.rootContainer}>
         <Pressable
         onPress={() => lolClick()}

@@ -13,6 +13,11 @@ const QuestionTier2Screen = ({ route }) => {
   const documentRef = category.doc(prevQuestion);
 
   useEffect(() => {
+    
+    if (!prevQuestion) {
+      console.error("prevQuestion is empty or undefined");
+      return;
+    }
     console.log(prevQuestion);
 
     // Get the data from the document
