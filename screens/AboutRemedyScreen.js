@@ -521,76 +521,99 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
             /> */}
 
           <View style={styles.info}>
-            <View style={[styles.titleRow, { marginTop: 10 }]}>
-              <Text style={styles.head}>Description</Text>
-              <AntDesign
-                name={isDescriptionCollapsed ? "down" : "up"}
-                size={24}
-                onPress={() => setDescriptionCollapsed(!isDescriptionCollapsed)}
-                style={{
-                  paddingHorizontal: 5,
-                }}
-              />
-            </View>
-            <Collapsible collapsed={isDescriptionCollapsed}>
-              <Text style={styles.desc}>{remedy.description}</Text>
-            </Collapsible>
-            <View style={styles.divider} />
-            <View style={styles.titleRow}>
-              <Text style={styles.head}>Precautions</Text>
-              <AntDesign
-                name={isPrecautionsCollapsed ? "down" : "up"}
-                size={24}
-                onPress={() => setPrecautionsCollapsed(!isPrecautionsCollapsed)}
-                style={{
-                  paddingHorizontal: 5,
-                }}
-              />
-            </View>
-            <Collapsible collapsed={isPrecautionsCollapsed}>
-              <Text style={styles.desc}>{remedy.precautions}</Text>
-            </Collapsible>
-            <View style={styles.divider} />
+            {remedy.description && remedy.description.trim().length > 0 && (
+              <>
+                <View style={[styles.titleRow, { marginTop: 10 }]}>
+                  <Text style={styles.head}>Description</Text>
+                  <AntDesign
+                    name={isDescriptionCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() =>
+                      setDescriptionCollapsed(!isDescriptionCollapsed)
+                    }
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isDescriptionCollapsed}>
+                  <Text style={styles.desc}>{remedy.description}</Text>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
+
             {/* Adding properties section for herbs */}
-            <View style={styles.titleRow}>
-              <Text style={styles.head}>Properties</Text>
-              <AntDesign
-                name={isPropertiesCollapsed ? "down" : "up"}
-                size={24}
-                onPress={() => setPropertiesCollapsed(!isPropertiesCollapsed)}
-                style={{
-                  paddingHorizontal: 5,
-                }}
-              />
-            </View>
-            <Collapsible collapsed={isPropertiesCollapsed}>
-              <Text style={styles.desc}>{remedy.properties}</Text>
-            </Collapsible>
-            <View style={styles.divider} />
+            {remedy.properties && remedy.properties.trim().length > 0 && (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.head}>Properties</Text>
+                  <AntDesign
+                    name={isPropertiesCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() =>
+                      setPropertiesCollapsed(!isPropertiesCollapsed)
+                    }
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isPropertiesCollapsed}>
+                  <Text style={styles.desc}>{remedy.properties}</Text>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
+            {remedy.precautions && remedy.precautions.trim().length > 0 && (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.head}>Precautions</Text>
+                  <AntDesign
+                    name={isPrecautionsCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() =>
+                      setPrecautionsCollapsed(!isPrecautionsCollapsed)
+                    }
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isPrecautionsCollapsed}>
+                  <Text style={styles.desc}>{remedy.precautions}</Text>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
             {/* Adding dosage section for herbs */}
-            <View style={styles.titleRow}>
-              <Text style={styles.head}>Dosage Forms</Text>
-              <AntDesign
-                name={isDosageCollapsed ? "down" : "up"}
-                size={24}
-                onPress={() => setDosageCollapsed(!isDosageCollapsed)}
-                style={{
-                  paddingHorizontal: 5,
-                }}
-              />
-            </View>
-            <Collapsible collapsed={isDosageCollapsed}>
-              {remedy.dosage &&
-                Object.entries(remedy.dosage[0]).map(
-                  ([field, value], index) => (
-                    <View key={index} style={styles.dosageRow}>
-                      <Text style={styles.dosageField}>{field}: </Text>
-                      <Text style={styles.desc}>{value}</Text>
-                    </View>
-                  )
-                )}
-            </Collapsible>
-            <View style={styles.divider} />
+            {remedy.dosage && remedy.dosage.length > 0 && (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.head}>Dosage Forms</Text>
+                  <AntDesign
+                    name={isDosageCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() => setDosageCollapsed(!isDosageCollapsed)}
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isDosageCollapsed}>
+                  {remedy.dosage &&
+                    Object.entries(remedy.dosage[0]).map(
+                      ([field, value], index) => (
+                        <View key={index} style={styles.dosageRow}>
+                          <Text style={styles.dosageField}>{field}: </Text>
+                          <Text style={styles.desc}>{value}</Text>
+                        </View>
+                      )
+                    )}
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
           </View>
 
           <View style={{ alignItems: "center" }}>
@@ -736,7 +759,7 @@ const styles = StyleSheet.create({
   },
   herbDetailHeader: {
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 22,
     marginVertical: 10,
   },
   interactionHeader: {
