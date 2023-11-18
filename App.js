@@ -24,6 +24,7 @@ import OnboardingScreen from "./screens/OnboardingScreen";
 import NotesScreen from "./screens/NotesScreen";
 import ContactScreen from "./screens/ContactScreen";
 import AboutUsScreen from "./screens/AboutUsScreen";
+import PreparationScreen from "./screens/PreparationScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -154,6 +155,18 @@ function DrawerNavigator() {
               size={size}
               color={color}
             />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Preparation"
+        component={PreparationScreen}
+        options={{
+          headerTitle: "Herb Preparation",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Icon name="eyedrop-outline" color={color} size={size} />
           ),
         }}
       />
