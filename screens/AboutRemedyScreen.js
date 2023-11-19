@@ -300,8 +300,8 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
     shadowRadius: 1,
   };
 
-  const shareHerbDetails = async (selectedRemedy) => {
-    let message = `Check out this herb: ${selectedRemedy}.\n\n`;
+  const shareHerbDetails = async () => {
+    let message = `Check out this herb: ${remedy.name}.\n\n`;
 
     if (remedy.description) {
       message += `Description: ${remedy.description}\n`;
