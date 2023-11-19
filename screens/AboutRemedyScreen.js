@@ -281,6 +281,8 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   // Putting it here right now, could be better to re use this in multiple places of the app.
   // Make it a ui component later.
 
+  //TODO: Put this in components and reuse it
+
   const buttonStyle = {
     position: "absolute",
     bottom: 10,
