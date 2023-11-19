@@ -10,7 +10,6 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../ui/Button";
 import Input from "./Input";
 import Checkbox from "expo-checkbox";
