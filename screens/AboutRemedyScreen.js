@@ -51,7 +51,7 @@ function HerbScreen() {
     AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
     setIsLoading(true);
     // define the key for AsyncStorage
-    const remedyKey = "remedy-" + rem;
+    const remedyKey = "remedy-" + rem.id;
 
     // check if the remedy is in the cache and if the data is still fresh
     AsyncStorage.getItem(remedyKey).then((cachedData) => {
@@ -69,7 +69,7 @@ function HerbScreen() {
 
       // fetch the remedy from Firestore and save it in the cache
       remediesFirebase
-        .doc(rem)
+        .doc(rem.id)
         .get()
         .then((doc) => {
           const data = doc.data();
@@ -646,7 +646,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
                   <TouchableOpacity
                     style={styles.prepBlock}
                     onPress={() => {
-                      navigation.navigate("PreparationScreen");
+                      navigation.navigate("Preparation Screen");
                     }}
                   >
                     <Text>
