@@ -66,7 +66,7 @@ function Home() {
         name="RecommendedRemediesScreen"
         component={RecommendedRemediesScreen}
       />
-      <Stack.Screen name="PreparationScreen" component={PreparationScreen} />
+      <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
       <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
   );

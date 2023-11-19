@@ -34,7 +34,9 @@ function RemedyListScreen({ route }) {
                     .collection("Remedies")
                     .doc(remedyName)
                     .get();
-                  return remedyDoc.exists ? remedyDoc.data() : null;
+                  return remedyDoc.exists
+                    ? { id: remedyDoc.id, ...remedyDoc.data() }
+                    : null;
                 })
               );
               const validRemedies = remediesDetails.filter(Boolean);
@@ -78,7 +80,7 @@ function RemedyListScreen({ route }) {
 
     const learnMorePressed = (item) => {
       console.log("Navigating to details with item: ", item);
-      navigation.navigate("Remedy Details", { remedy: item });
+      navigation.navigate("Remedy Details", { rem: item });
     };
     return (
       <View style={styles.card}>
