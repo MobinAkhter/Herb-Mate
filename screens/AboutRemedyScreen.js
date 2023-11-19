@@ -43,13 +43,8 @@ function HerbScreen() {
   const remediesFirebase = db.collection("Remedies");
   const [remediesList, setRemediesList] = useState([]);
 
-  // adding the states required for notes functionality
   const col = db.collection("BodyParts");
   // const [conditionsList, setConditionsList] = useState([]);
-
-  // Creating the collapsable state for description and precautions and properties
-
-  // access firestore
 
   useEffect(() => {
     // loadConditions();
@@ -158,8 +153,6 @@ function HerbScreen() {
       renderTabBar={renderTabBar}
     />
   );
-
-  // console.log(remedy.image);
 }
 
 const HerbDetails = ({ interactions }) => {
@@ -268,7 +261,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
 
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(false);
+  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
   const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
   const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
   const [isDosageCollapsed, setDosageCollapsed] = useState(true);
@@ -322,9 +315,11 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
 
     console.log("Sharing Message: ", message);
 
-    if (remedy.dosage) {
-      message += `Dosage: ${remedy.dosage}\n`;
-    }
+    //TODO: If we want to share dosage, logic should be updated since dosage is an array.
+    // Did not implement this, cause why give the message recipient all this info. Download the app 🤷🏻‍♂️
+    // if (remedy.dosage) {
+    //   message += `Dosage: ${remedy.dosage}\n`;
+    // }
 
     try {
       const result = await Share.share({
@@ -370,6 +365,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   }, [navigation, selectedRemedy]);
 
   //saves notes function
+  //TODO: This does not work on Herb Details tab. FIX ME
   const saveNotes = () => {
     console.log("Save notes got executed");
     if (selectedRemedy && (selectedCondition || notes)) {
