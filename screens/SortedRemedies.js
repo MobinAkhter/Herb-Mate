@@ -61,7 +61,7 @@ const SortedRemedies = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.listItem}
-            onPress={() => navigateToDetails(item.id)}
+            onPress={() => navigateToDetails(item)}
           >
             <Image
               source={
