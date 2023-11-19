@@ -26,6 +26,7 @@ function ConditionScreen({ route }) {
 
   // Loads the conditions from cache or database
   const loadConditions = async () => {
+    // AsyncStorage.clear();
     try {
       const cacheKey = `conditions_${bp}`;
       const cachedConditions = await AsyncStorage.getItem(cacheKey);

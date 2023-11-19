@@ -40,7 +40,14 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props} style={{ backgroundColor: "#e0f2e9" }}>
       {/* Header Logo */}
-      <View style={{ marginTop: 15, marginLeft: 20, marginBottom: 20 }}>
+      <View
+        style={{
+          marginTop: 15,
+          marginLeft: 20,
+          marginBottom: 20,
+          flexDirection: "row",
+        }}
+      >
         <View
           style={{
             width: 80,
@@ -53,6 +60,17 @@ function CustomDrawerContent(props) {
         >
           <Text style={{ fontSize: 40, color: "white" }}>🌿</Text>
           {/* Went for simple logo implementation, can use our app image later instead of text. */}
+        </View>
+        <View
+          style={{
+            marginLeft: 16,
+            justifyContent: "center",
+          }}
+        >
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: "#30a46c" }}>
+            HerbalLife
+          </Text>
+          {/* You can replace 'AppName' with your actual app name */}
         </View>
       </View>
 
@@ -103,18 +121,6 @@ function DrawerNavigator() {
         }}
       />
       <Drawer.Screen
-        name="Donate"
-        component={DonationScreen}
-        options={{
-          headerTitle: "Donate",
-          headerStyle: { backgroundColor: "#35D96F" },
-          headerTintColor: "white",
-          drawerIcon: ({ color, size }) => (
-            <Icon name="heart-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Drawer.Screen
         name="My Notes"
         component={NotesScreen}
         options={{
@@ -126,6 +132,31 @@ function DrawerNavigator() {
           ),
         }}
       />
+      <Drawer.Screen
+        name="Preparation"
+        component={PreparationScreen}
+        options={{
+          headerTitle: "Herb Preparation",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Icon name="eyedrop-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Donate"
+        component={DonationScreen}
+        options={{
+          headerTitle: "Donate",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Icon name="heart-outline" color={color} size={size} />
+          ),
+        }}
+      />
+
       <Drawer.Screen
         name="Contact Us"
         component={ContactScreen}
@@ -155,18 +186,6 @@ function DrawerNavigator() {
               size={size}
               color={color}
             />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Preparation"
-        component={PreparationScreen}
-        options={{
-          headerTitle: "Herb Preparation",
-          headerStyle: { backgroundColor: "#35D96F" },
-          headerTintColor: "white",
-          drawerIcon: ({ color, size }) => (
-            <Icon name="eyedrop-outline" color={color} size={size} />
           ),
         }}
       />
