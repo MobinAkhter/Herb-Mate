@@ -347,7 +347,11 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
       setSelectedRemedy(rem);
     }
   }, [rem]);
-
+  const openModalWithSelectedRemedy = () => {
+    console.log("THIS IS REM BRUV", rem);
+    setSelectedRemedy(rem);
+    setModalVisible(true);
+  };
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -358,7 +362,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
           >
             <SimpleLineIcons name="share" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <TouchableOpacity onPress={openModalWithSelectedRemedy}>
             <SimpleLineIcons name="note" size={24} color="black" />
           </TouchableOpacity>
         </View>
@@ -372,7 +376,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
     console.log("Save notes got executed");
     if (selectedRemedy && (selectedCondition || notes)) {
       const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
-      const timestamp = new Date();
+      // const timestamp = new Date();
       // const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       userNotesRef
         .set(
@@ -474,6 +478,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
         console.error("Error checking user document:", error);
       });
   }
+
   return (
     <View style={styles.rootContainer}>
       <Modal
