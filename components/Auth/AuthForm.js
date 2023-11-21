@@ -121,7 +121,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         .then((authUser) => {
           if (authUser.user.emailVerified) {
             setUser(authUser.user);
-            navigation.navigate("Welcome"); // Navigate to welcome screen if email is verified
+            navigation.navigate("Home"); // Navigate to welcome screen if email is verified
           } else {
             Alert.alert(
               "Email Verification Required",

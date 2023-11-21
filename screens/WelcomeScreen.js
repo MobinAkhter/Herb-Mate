@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   rootContainer: {
     justifyContent: "center",
     alignItems: "center",
-    padding: 18,
+    paddingTop: 18,
   },
   searchContainer: {
     justifyContent: "center",
