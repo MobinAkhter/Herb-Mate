@@ -38,7 +38,7 @@ function Home() {
       }}
     >
       <Stack.Screen
-        name="Welcome"
+        name="Home"
         component={WelcomeScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -79,6 +79,10 @@ function AuthenticatedStack() {
         activeTintColor: "#35D96F", // REMOVE THIS TO HAVE IT DEFAULT BLUE AGAIN
         inactiveTintColor: "#A9A9A9",
         keyboardHidesTabBar: Platform.OS === "android" ? true : false,
+
+        labelStyle: {
+          fontSize: 11,
+        },
       }}
       screenOptions={({ navigation }) => ({
         headerLeft: () => (

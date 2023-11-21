@@ -56,7 +56,7 @@ const AppSettingsScreen = () => {
     <View style={styles.rootContainer}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Welcome")}
+          onPress={() => navigation.navigate("Home")}
           style={styles.iconContainer}
         >
           {/* Add your arrow-left icon component here */}

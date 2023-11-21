@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Share,
+  Slider,
 } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
@@ -24,10 +25,10 @@ import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
-
+import * as Speech from "expo-speech";
+import Icon from "react-native-vector-icons/FontAwesome";
 import firebase from "firebase";
 import "firebase/firestore";
-
 function HerbScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -158,6 +159,22 @@ function HerbScreen() {
 const HerbDetails = ({ interactions }) => {
   const [isPressed, setIsPressed] = useState(false);
   const scrollViewRef = useRef();
+  const [voices, setVoices] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const preferredVoices = [
+    { name: "Rishi", identifier: "com.apple.voice.compact.en-IN.Rishi" },
+    { name: "Samantha", identifier: "com.apple.voice.compact.en-US.Samantha" },
+    { name: "Daniel", identifier: "com.apple.voice.compact.en-GB.Daniel" },
+    { name: "Karen", identifier: "com.apple.voice.compact.en-AU.Karen" },
+    { name: "Moira", identifier: "com.apple.voice.compact.en-IE.Moira" },
+  ];
+  const [selectedVoice, setSelectedVoice] = useState(
+    preferredVoices[2].identifier
+  );
+  const [speechRate, setSpeechRate] = useState(1.0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [spokenText, setSpokenText] = useState("");
 
   const buttonStyle = {
     position: "absolute",
@@ -183,6 +200,99 @@ const HerbDetails = ({ interactions }) => {
     overview ||
     (otherInteractions && Object.keys(otherInteractions).length > 0);
 
+  const speak = (text, rate = 1.0) => {
+    if (isSpeaking) {
+      Speech.stop();
+      setIsPaused(true);
+    } else {
+      Speech.speak(text, {
+        rate,
+        voice: selectedVoice,
+        onStart: onSpeechStart,
+        onDone: onSpeechDone,
+      });
+      setIsSpeaking(true);
+      setIsPaused(false);
+      setSpokenText(text);
+    }
+  };
+  const stopSpeech = () => {
+    Speech.stop();
+    setIsSpeaking(false);
+    setIsPaused(false);
+  };
+
+  const resumeSpeech = () => {
+    if (isPaused) {
+      Speech.speak(spokenText, {
+        rate: speechRate,
+        voice: selectedVoice,
+        onStart: onSpeechStart,
+        onDone: onSpeechDone,
+      });
+      setIsSpeaking(true);
+      setIsPaused(false);
+    }
+  };
+
+  const onSpeechStart = () => {
+    setIsSpeaking(true);
+  };
+
+  const onSpeechDone = () => {
+    setIsSpeaking(false);
+    setIsPaused(false);
+    setSpokenText("");
+  };
+  const handleVoiceChange = (newVoiceIdentifier) => {
+    Speech.stop();
+    setSelectedVoice(newVoiceIdentifier);
+  };
+  useEffect(() => {
+    let isMounted = true;
+    Speech.getAvailableVoicesAsync().then((availableVoices) => {
+      if (isMounted) {
+        // Filter only the preferred voices
+        const filteredVoices = availableVoices.filter((voice) =>
+          preferredVoices.some(
+            (pVoice) => pVoice.identifier === voice.identifier
+          )
+        );
+        setVoices(filteredVoices);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      Speech.stop();
+    };
+  }, []);
+  // const handleSpeak = () => {
+  //   if (isSpeaking) {
+  //     Speech.stop();
+  //   } else {
+  //     // Speak from the beginning or where it was left off
+  //     Speech.speak(spokenText || text, {
+  //       onDone: () => {
+  //         // Reset when done speaking
+  //         setSpokenText("");
+  //         setIsSpeaking(false);
+  //       },
+  //       onStopped: () => {
+  //         // Keep track of what has been spoken until now
+  //         setSpokenText(text);
+  //       },
+  //     });
+  //     setIsSpeaking(true);
+  //   }
+  // };
+
+  // const handleStop = () => {
+  //   Speech.stop();
+  //   setIsSpeaking(false);
+  //   // Optionally reset spokenText if you want to start from beginning next time
+  //   // setSpokenText('');
+  // };
   return hasDetails ? (
     <>
       <ScrollView
@@ -192,7 +302,75 @@ const HerbDetails = ({ interactions }) => {
       >
         {overview && (
           <View style={{ marginBottom: 20 }}>
-            <Text style={styles.herbDetailHeader}>Interactions:</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.herbDetailHeader}>Interactions:</Text>
+              <TouchableOpacity
+                style={{ marginLeft: 100 }}
+                onPress={
+                  isSpeaking
+                    ? stopSpeech
+                    : () => speak(composeTextToSpeak(interactions), speechRate)
+                }
+              >
+                <Icon
+                  name={isSpeaking ? "stop" : "play"}
+                  size={30}
+                  color="#000"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={resumeSpeech} disabled={!isPaused}>
+                {/* <Icon name="play" size={30} color="#000" /> */}
+              </TouchableOpacity>
+              {/* <Slider
+                style={{
+                  width: 150,
+                  height: 40,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                minimumValue={0.5}
+                maximumValue={2.0}
+                value={speechRate}
+                onValueChange={(value) => setSpeechRate(value)}
+              /> */}
+              <RNPickerSelect
+                onValueChange={(value) => handleVoiceChange(value)}
+                items={voices.map((voice) => ({
+                  label: voice.name,
+                  value: voice.identifier,
+                }))}
+                style={{
+                  inputIOS: {
+                    fontSize: 16,
+                    paddingVertical: 12,
+                    paddingHorizontal: 10,
+                    borderWidth: 1,
+                    borderColor: "gray",
+                    borderRadius: 4,
+                    color: "black",
+                    paddingRight: 30, // to ensure the text is never behind the icon
+                  },
+                  inputAndroid: {
+                    fontSize: 16,
+                    paddingHorizontal: 10,
+                    paddingVertical: 8,
+                    borderWidth: 0.5,
+                    borderColor: "purple",
+                    borderRadius: 8,
+                    color: "black",
+                    paddingRight: 30, // to ensure the text is never behind the icon
+                  },
+                }}
+                value={selectedVoice}
+                placeholder={{ label: "Select a voice...", value: null }}
+              />
+            </View>
             <Text style={styles.interactionHeader}>
               {capitalizeFirstLetter("overview")}:
             </Text>
@@ -251,6 +429,43 @@ const HerbDetails = ({ interactions }) => {
     </View>
   );
 };
+
+function composeTextToSpeak(interactions) {
+  let textToSpeak = "Interactions: ";
+
+  // Add the overview text, if it exists.
+  if (interactions.overview) {
+    textToSpeak += `\nOverview: ${interactions.overview}`;
+  }
+
+  // Loop through each interaction.
+  for (const [key, value] of Object.entries(interactions)) {
+    if (key !== "overview") {
+      // Skip the overview since it's already added.
+      // Check if the value is a string and not empty.
+      if (typeof value === "string" && value.trim() !== "") {
+        textToSpeak += `\n${capitalizeFirstLetter(key)}: ${value}`;
+      }
+      // If it's an object with text and evidence properties.
+      else if (typeof value === "object") {
+        if (value.text && value.text.trim() !== "") {
+          textToSpeak += `\n${capitalizeFirstLetter(key)}: ${value.text}`;
+        }
+        if (value.evidence && value.evidence.trim() !== "") {
+          textToSpeak += `\nClinical Evidence for ${capitalizeFirstLetter(
+            key
+          )}: ${value.evidence}`;
+        }
+      }
+    }
+  }
+
+  return textToSpeak;
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   // console.log("THIS IS REMEDY", remedy);
