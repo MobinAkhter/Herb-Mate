@@ -25,10 +25,11 @@ import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
-import * as Speech from "expo-speech";
+import * as Speech from "expo-speech"; // This is better cause the other lib wanted me to link it or something. Extra steps for expo managed workflow.
 import Icon from "react-native-vector-icons/FontAwesome";
 import firebase from "firebase";
 import "firebase/firestore";
+
 function HerbScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -252,7 +253,7 @@ const HerbDetails = ({ interactions }) => {
     let isMounted = true;
     Speech.getAvailableVoicesAsync().then((availableVoices) => {
       if (isMounted) {
-        // Filter only the preferred voices
+        // Filter only the 5 preferred voices. Daniel will be the initial voice, cause that guy sounds best imo.
         const filteredVoices = availableVoices.filter((voice) =>
           preferredVoices.some(
             (pVoice) => pVoice.identifier === voice.identifier
@@ -271,15 +272,12 @@ const HerbDetails = ({ interactions }) => {
   //   if (isSpeaking) {
   //     Speech.stop();
   //   } else {
-  //     // Speak from the beginning or where it was left off
   //     Speech.speak(spokenText || text, {
   //       onDone: () => {
-  //         // Reset when done speaking
   //         setSpokenText("");
   //         setIsSpeaking(false);
   //       },
   //       onStopped: () => {
-  //         // Keep track of what has been spoken until now
   //         setSpokenText(text);
   //       },
   //     });
@@ -290,8 +288,6 @@ const HerbDetails = ({ interactions }) => {
   // const handleStop = () => {
   //   Speech.stop();
   //   setIsSpeaking(false);
-  //   // Optionally reset spokenText if you want to start from beginning next time
-  //   // setSpokenText('');
   // };
   return hasDetails ? (
     <>
@@ -430,6 +426,8 @@ const HerbDetails = ({ interactions }) => {
   );
 };
 
+// TODO: Provide user with option to resume from the same place they stopped. Let them increase audio speed.
+// TODO: Instad of the same play button becoming pause button, have different buttons.
 function composeTextToSpeak(interactions) {
   let textToSpeak = "Interactions: ";
 
@@ -441,7 +439,6 @@ function composeTextToSpeak(interactions) {
   // Loop through each interaction.
   for (const [key, value] of Object.entries(interactions)) {
     if (key !== "overview") {
-      // Skip the overview since it's already added.
       // Check if the value is a string and not empty.
       if (typeof value === "string" && value.trim() !== "") {
         textToSpeak += `\n${capitalizeFirstLetter(key)}: ${value}`;
