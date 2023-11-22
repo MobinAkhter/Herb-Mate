@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
 import Button from "../components//ui/Button";
 import { useNavigation } from "@react-navigation/native";
 
@@ -50,23 +50,42 @@ const RecommendedRemedyScreen = ({ route }) => {
     });
   }
 
+  /**
+  <Text>{category}</Text>
+  <Text>{question}</Text>
+  <Text>{age}</Text>
+  <Text>{gender}</Text>
+  <Text>{rating}</Text>
+  <Text>Your recommended remedy is {pred}</Text> */ 
+
   return (
     <>
     <View style={styles.rootContainer}>
-      <Text>{category}</Text>
-      <Text>{question}</Text>
-      <Text>{age}</Text>
-      <Text>{gender}</Text>
-      <Text>{rating}</Text>
-      <Text>Your recommended remedy is {pred}</Text>
+
+      
+    <Text style={styles.subTitle}>Your recommended remedy is </Text>
+    <Text style={styles.title}>{pred}</Text>
+
+    <Text style={styles.warning}>Remember to consult with a healthcare practitioner before you use any remedy.
+</Text>
 
      <View style={{ marginTop: 10, marginBottom: 10 }}>
-     <Button 
+      
+     <TouchableOpacity
+     style={styles.continueButton}
        onPress={() => buttonClick()}>
-        View {pred} </Button>
+        
+        <Text style={styles.buttonText}> View {pred}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+     style={styles.continueButton}>
+        
+        <Text style={styles.buttonText}> Try Again</Text>
+        </TouchableOpacity>
      </View>
     
-     <Button> Try Again </Button>
+     
 
     </View>
     </>
@@ -83,8 +102,36 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   title: {
-    fontSize: 20,
+    fontSize: 50,
     fontWeight: "bold",
     marginBottom: 8,
+    color: '#32cd32'
+  },
+  subTitle: {
+    fontWeight: "bold",
+    fontSize: 30,
+    textAlign: "center",
+    paddingBottom: 10
+  },
+  warning: {
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    paddingBottom: 10,
+    fontStyle: "italic"
+  },
+  continueButton:{
+    borderRadius: 10,
+    borderWidth: 1.5,
+    marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    borderColor: "#1e90ff"
+  },
+  buttonText: {
+    fontWeight: "bold",
+    textAlign: "center",
+    color: '#1e90ff',
   },
 });

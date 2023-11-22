@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity} from "react-native";
 import Button from "../components//ui/Button";
 import { db } from "../firebase";
 import { useNavigation } from "@react-navigation/native";
@@ -55,11 +55,19 @@ const QuestionTier2Screen = ({ route }) => {
 
   return (
     <View style={styles.rootContainer}>
-      <Text>Questions for the {prevQuestion} category </Text>
+      <Text style={styles.title}> {prevQuestion} </Text>
+      <Text style={styles.subTitle}>Please select any of the following questions below </Text>
       <FlatList
         data={questions}
         renderItem={({ item }) => (
-          <Button onPress={() => buttonClick(prevQuestion, item.name)}>{item.name}</Button>
+          <TouchableOpacity
+          style= {styles.button}
+          
+          onPress={() => buttonClick(prevQuestion, item.name)}>
+            <Text style={styles.textColor}>
+            {item.name}
+            </Text>
+            </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id.toString()}
       />
@@ -78,8 +86,32 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   title: {
-    fontSize: 20,
+    fontSize: 40,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 15,
+    color: "#000080"
   },
+  button: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: "#1e90ff",
+    marginTop: 10,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20
+  },
+  textColor: {
+    color: "#1e90ff",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontStyle: "italic"
+  },
+  subTitle: {
+    color: "#191970",
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingBottom: 10
+  }
 });
