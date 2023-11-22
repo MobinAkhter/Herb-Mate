@@ -123,7 +123,7 @@ function SearchResultScreen({ route }) {
           console.log("rem result: " + doc.id);
           remList.push({
             ...doc.data(),
-            key: doc.id,
+            id: doc.id,
           });
         });
         setInitialRemedies(remList);
@@ -219,7 +219,7 @@ function SearchResultScreen({ route }) {
           style={styles.listItem}
           onPress={() => {
             console.log("Navigating with remedy:", item);
-            navigation.navigate("Remedy Details", { rem: item.key });
+            navigation.navigate("Remedy Details", { rem: item });
           }}
         >
           <Image
@@ -292,61 +292,6 @@ function SearchResultScreen({ route }) {
           />
         </TouchableOpacity>
       </View>
-      {/* <View style={styles.header}>
-        <Text style={styles.title}>Remedies</Text>
-      </View>
-
-      <FlatList
-        data={remedies}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.listItem}
-            onPress={() => {
-              console.log("Navigating with remedy:", item);
-              navigation.navigate("Remedy Details", { rem: item.key });
-            }}
-          >
-            <Image
-              source={
-                item.image && item.image.length > 0
-                  ? { uri: item.image[0] }
-                  : require("../assets/leaf_icon.jpeg")
-              }
-              style={styles.herbImage}
-            />
-            <Text style={styles.herbName}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-      />
-
-      <View style={styles.header}>
-        <Text style={styles.title}>Conditions</Text>
-      </View>
-
-      <FlatList
-        data={conditions}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.listItem}
-            onPress={() => {
-              console.log("Navigating with remedy:", item);
-              navigation.navigate("Remedies", {
-                bp: item.bp,
-                con: item.name,
-              });
-              searchCondition(item.name)
-              console.log("Navigation to condition ", item.name)
-            }}
-          >
-            <View style={styles.bpIcon}>
-              <MIcon size={10} {...iconMapper[removeSpace(item.bp)]} />
-            </View>
-            <Text style={styles.herbName}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-      /> */}
       <TabView
         navigationState={{
           index,

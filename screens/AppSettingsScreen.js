@@ -20,15 +20,15 @@ const AppSettingsScreen = () => {
     try {
       // Get the user's document reference
       const userDocRef = db.collection("users").doc(user);
-  
+
       // Use the get() method to fetch the user's document
       const userDocSnapshot = await userDocRef.get();
-  
+
       if (userDocSnapshot.exists) {
         // Check if the document exists
-        
+
         const userData = userDocSnapshot.data();
-        
+
         if (userData && userData.bookmarks) {
           // Check if the 'bookmarks' property exists in the user's data
           // userData.bookmarks should be an array containing the bookmarked items
@@ -57,7 +57,7 @@ const AppSettingsScreen = () => {
     <View style={styles.rootContainer}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Welcome')}
+          onPress={() => navigation.navigate("Welcome")}
           style={styles.iconContainer}
         >
           {/* Add your arrow-left icon component here */}
@@ -70,15 +70,14 @@ const AppSettingsScreen = () => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('Remedy Details', {
+                  navigation.navigate("Remedy Details", {
                     rem: item,
                   });
                 }}
               >
                 <View style={listItemStyle.rootContainer}>
-                    <Text style={listItemStyle.Text}>{item}</Text>
+                  <Text style={listItemStyle.Text}>{item.name}</Text>
                 </View>
-                   
               </TouchableOpacity>
             )}
           />
@@ -96,16 +95,15 @@ const listItemStyle = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 10,
     borderBottomWidth: 1, // Add a border width for the black line
-    borderBottomColor: "grey"
+    borderBottomColor: "grey",
   },
 
-  Text:{
+  Text: {
     fontSize: 20,
     color: "green",
-    fontWeight: "bold"
-  }
-  
-})
+    fontWeight: "bold",
+  },
+});
 
 const styles = StyleSheet.create({
   rootContainer: {

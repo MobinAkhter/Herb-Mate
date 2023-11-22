@@ -5,8 +5,10 @@ import { StatusBar } from "expo-status-bar";
 import { UserContext } from "./contexts/userContext";
 import UserProvider from "./contexts/userContext";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
+import { PreparationStack } from "./navigation/AuthenticatedStack";
+import { BookmarkStack } from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
-import { LogBox, Text, View } from "react-native";
+import { LogBox, Text, View, TouchableOpacity } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -25,6 +27,7 @@ import NotesScreen from "./screens/NotesScreen";
 import ContactScreen from "./screens/ContactScreen";
 import AboutUsScreen from "./screens/AboutUsScreen";
 import PreparationScreen from "./screens/PreparationScreen";
+import { Ionicons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
 
@@ -108,19 +111,54 @@ function DrawerNavigator() {
           drawerIcon: ({ color, size }) => (
             <Icon name="home-outline" color={color} size={size} />
           ),
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.dispatch(DrawerActions.toggleDrawer());
+              }}
+            >
+              <Ionicons name="bookmarks-outline" size={28} color={"white"} />
+
+              {/* Same custom icon as in drawerIcon */}
+            </TouchableOpacity>
+          ),
         }}
       />
       <Drawer.Screen
         name="Profile"
         component={UserProfileScreen}
-        options={{
-          headerShown: false,
+        options={({ navigation }) => ({
+          headerTitle: "User Profile",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTitleAlign: "center",
+          headerTintColor: "white",
           drawerIcon: ({ color, size }) => (
             <Icon name="person-outline" color={color} size={size} />
           ),
-        }}
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              style={{ marginLeft: 15 }}
+            >
+              <Ionicons name="menu-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <Drawer.Screen
+        name="Bookmarks"
+        component={BookmarkStack}
+        options={{
+          headerShown: false,
+          // headerTitle: "Bookmarkss",
+          // headerStyle: { backgroundColor: "#35D96F" },
+          // headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="bookmarks-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      {/* <Drawer.Screen
         name="My Notes"
         component={NotesScreen}
         options={{
@@ -131,10 +169,10 @@ function DrawerNavigator() {
             <Icon name="document-text-outline" color={color} size={size} />
           ),
         }}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="Preparation"
-        component={PreparationScreen}
+        component={PreparationStack}
         options={{
           headerTitle: "Herb Preparation",
           headerStyle: { backgroundColor: "#35D96F" },
@@ -143,26 +181,36 @@ function DrawerNavigator() {
             <Icon name="eyedrop-outline" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="Donate"
         component={DonationScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: "Donate",
           headerStyle: { backgroundColor: "#35D96F" },
+          headerTitleAlign: "center",
           headerTintColor: "white",
           drawerIcon: ({ color, size }) => (
             <Icon name="heart-outline" color={color} size={size} />
           ),
-        }}
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              style={{ marginLeft: 15 }}
+            >
+              <Ionicons name="menu-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        })}
       />
 
       <Drawer.Screen
         name="Contact Us"
         component={ContactScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: "Contact Us",
           headerStyle: { backgroundColor: "#35D96F" },
+          headerTitleAlign: "center",
           headerTintColor: "white",
           drawerIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -171,14 +219,23 @@ function DrawerNavigator() {
               color={color}
             />
           ),
-        }}
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              style={{ marginLeft: 15 }}
+            >
+              <Ionicons name="menu-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <Drawer.Screen
         name="About Us"
         component={AboutUsScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: "About Us",
           headerStyle: { backgroundColor: "#35D96F" },
+          headerTitleAlign: "center",
           headerTintColor: "white",
           drawerIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -187,7 +244,15 @@ function DrawerNavigator() {
               color={color}
             />
           ),
-        }}
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              style={{ marginLeft: 15 }}
+            >
+              <Ionicons name="menu-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        })}
       />
     </Drawer.Navigator>
   );
