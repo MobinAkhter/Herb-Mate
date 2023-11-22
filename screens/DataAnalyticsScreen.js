@@ -62,9 +62,24 @@ const DataAnalyticsScreen = () => {
   
       const data = await response.json();
       console.log('Response:', data); // Log the entire response
-      setPrediction(data.predicted_category);
+      console.log("This is a " + data.predicted_category)
 
-      buttonClick(prediction)
+      if(data.predicted_category == "Skin Conditions")
+      {
+        navigation.navigate("QuestionTier2", {
+          prevQuestion: "Skin Condition",
+       });
+      }
+      else
+      {
+        navigation.navigate("QuestionTier2", {
+          prevQuestion: data.predicted_category,
+       });
+      }
+      
+      //setPrediction(data.predicted_category);
+
+     // buttonClick(prediction)
     } catch (error) {
       console.error('Error:', error.message);
     }
@@ -75,11 +90,12 @@ const DataAnalyticsScreen = () => {
     {
       title = "Skin Condition"
     }
-    console.log("This iss a " + prediction)
+    console.log("This iss a " + title)
    
     navigation.navigate("QuestionTier2", {
       prevQuestion: title,
-    });
+   });
+   //console.log()
   }
 
   function lolClick(){

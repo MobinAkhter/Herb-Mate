@@ -10,10 +10,10 @@ const QuestionTier2Screen = ({ route }) => {
 
   const [questions, setQuestions] = useState([]);
   const category = db.collection("Category");
-  const documentRef = category.doc(prevQuestion);
+  const documentRef = category.doc(prevQuestion.toString());
 
   useEffect(() => {
-    
+    console.log("This is a prevQuestion lol" + prevQuestion)
     if (!prevQuestion) {
       console.error("prevQuestion is empty or undefined");
       return;
@@ -27,8 +27,8 @@ const QuestionTier2Screen = ({ route }) => {
         if (doc.exists) {
           const data = doc.data();
           // Check if the 'questions' field exists in the data
-          if (data && data.questions) {
-            const questionData = data.questions.map((question, index) => ({
+          if (data && data.userQuestions) {
+            const questionData = data.userQuestions.map((question, index) => ({
               id: index,
               name: question,
             }));

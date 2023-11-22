@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, Switch, TextInput, Pressable } from "react-native";
 import Button from "../components//ui/Button";
 import { db } from "../firebase";
 import { useNavigation } from "@react-navigation/native";
+
 
 const QuestionTier3Screen = ({ route }) => {
   const { prevQuestion } = route.params;
@@ -11,54 +12,129 @@ const QuestionTier3Screen = ({ route }) => {
   const [questions, setQuestions] = useState([]);
   const category = db.collection("Tier2Questions");
   const documentRef = category.doc(prevQuestion);
+  const [sex, setSex] = useState("Male");
+  const [age, setAge] = useState("");
+  const [rating, setRating] = useState("")
+
+  const DATA = [
+    
+    {
+      id: 1,
+      title: "Low",
+    },
+    {
+      id: 2,
+      title: "Moderate",
+    },
+    {
+      id: 3,
+      title: "Concerning",
+    },
+    {
+      id: 4,
+      title: "Serious",
+    },
+    {
+      id: 5,
+      title: "Critical",
+    }
+  ];
+
+  //for selecting the buttons
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => {
+    if(isEnabled == true)
+    {
+      setSex("Male")
+    }
+    else
+    {
+      setSex("Female")
+    }
+    setIsEnabled(previousState => !previousState);
+  }
+  
+ 
+  function selectRating(rating)
+  {
+     setRating(rating)
+     console.log("This is your current rating: " + rating)
+     console.log("fff")
+  }
+  
 
   useEffect(() => {
-    console.log(prevQuestion);
-
-    // Get the data from the document
-    documentRef
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          // Check if the 'questions' field exists in the data
-          if (data && data.questions) {
-            const questionData = data.questions.map((question, index) => ({
-              id: index,
-              name: question,
-            }));
-            setQuestions(questionData);
-          } else {
-            console.error("No 'questions' field found in the document data.");
-          }
-        } else {
-          console.error("Document does not exist.");
-        }
-      })
-      .catch((error) => {
-        console.error('Error retrieving data from Firestore: ', error);
-      });
+    setRating(3)
+    
   }, []);
 
-  function buttonClick(category, tier2, tier3)
+  function buttonClick()
   {
+    let ageGroup = ""
+    if(age < 30)
+    {
+      ageGroup = "18 to 29"
+    }
+    else if (age >= 30 && age < 50)
+    {
+      ageGroup = "30 to 49"
+    }
+    else{
+      ageGroup = "50 and over"
+    }
+
     navigation.navigate("RecommendedRemedyScreen", {
-      category: category,
-      question1: tier2 ,
-      question2: tier3
+      category: selectedCategory,
+      question: prevQuestion,
+      age: ageGroup,
+      gender: "Both",
+      rating: rating
     });
   }
 
+  const Item = ({ title }) => (
+    <View>
+      <Button
+       style={styles.button}
+      onPress={() => selectRating(title.id)}
+      >
+      <Text style={styles.buttonText}> {title.title} </Text>    
+      </Button>
+    </View>
+  );
+
   return (
     <View style={styles.rootContainer}>
-      <Text>Questions for the {prevQuestion} category and from {selectedCategory} </Text>
-      <FlatList
-        data={questions}
-        renderItem={({ item }) => (
-          <Button onPress={() => buttonClick(selectedCategory,prevQuestion, item.name)}>{item.name}</Button>
-        )}
-        keyExtractor={(item) => item.id.toString()}
+      <Text>{selectedCategory}</Text>
+
+      <Text> Select Your Biological Sex: {sex}</Text>
+
+      <Switch
+        trackColor={{false: '#81b0ff', true: '#ffb6c1'}}
+        thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
+        ios_backgroundColor="#81b0ff"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
       />
+
+<TextInput
+        style={styles.input}
+        onChangeText={setAge}
+        value={age}
+        placeholder="Enter Your Age"
+        keyboardType="numeric"
+      />
+      
+      <Text>How severe is your condition</Text>
+      <FlatList
+         data={DATA}
+         renderItem={({ item }) => <Item title={item} />}
+         keyExtractor={(item) => item.id}
+      />
+
+      <Text>This is your current rating:{rating}</Text>
+
+      <Button onPress={buttonClick}>Continue To Next Page</Button>
     </View>
   );
 };
@@ -77,5 +153,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 8,
+  },
+
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
 });
