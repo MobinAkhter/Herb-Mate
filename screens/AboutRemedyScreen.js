@@ -548,7 +548,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
           alert("Thanks for sharing!");
         }
       } else if (result.action === Share.dismissedAction) {
-        alert("Share cancelled.");
+        // alert("Share cancelled.");
       }
     } catch (error) {
       alert(error.message);

@@ -113,9 +113,9 @@ function DrawerNavigator() {
           ),
           headerLeft: () => (
             <TouchableOpacity
-              onPress={() => {
-                navigation.dispatch(DrawerActions.toggleDrawer());
-              }}
+            // onPress={() => {
+            //   navigation.dispatch(DrawerActions.toggleDrawer());
+            // }}
             >
               <Ionicons name="bookmarks-outline" size={28} color={"white"} />
 
@@ -247,10 +247,6 @@ function Navigation() {
       }
     });
   }, []);
-
-  if (isFirstLaunch === null) {
-    return null;
-  }
 
   if (isFirstLaunch === null) {
     return null;

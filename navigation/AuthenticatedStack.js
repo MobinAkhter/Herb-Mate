@@ -260,30 +260,22 @@ function NotesStack() {
 function AuthenticatedStack() {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: "#35D96F", // REMOVE THIS TO HAVE IT DEFAULT BLUE AGAIN
-        inactiveTintColor: "#A9A9A9",
-        keyboardHidesTabBar: Platform.OS === "android" ? true : false,
-
-        labelStyle: {
-          fontSize: 11,
-        },
-      }}
-      screenOptions={({ navigation }) => ({
+      screenOptions={{
         headerShown: false,
-        // headerLeft: () => (
-        //   <TouchableOpacity
-        //     style={{ marginLeft: 10 }}
-        //     onPress={() => navigation.goBack()} // This will navigate to the previous screen
-        //   >
-        //     <Ionicons name="arrow-back" size={28} color="white" />
-        //   </TouchableOpacity>
-        // ),
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
         headerTitleAlign: "center",
         contentStyle: { backgroundColor: Colors.white },
-      })}
+        tabBarHideOnKeyboard: Platform.OS === "android" ? true : false,
+        tabBarActiveTintColor: "#35D96F",
+        tabBarInactiveTintColor: "#A9A9A9",
+        tabBarLabelStyle: {
+          fontSize: 11,
+        },
+        tabBarStyle: {
+          display: "flex",
+        },
+      }}
     >
       <Tab.Screen
         name="Home"
