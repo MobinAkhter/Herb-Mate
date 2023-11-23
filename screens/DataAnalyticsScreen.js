@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Pressable } from "react-native";
+import { StyleSheet, View, Text, FlatList, Pressable, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import BigButton from "../components/ui/BigButton";
 
 const DataAnalyticsScreen = () => {
   const navigation = useNavigation();
@@ -40,10 +41,61 @@ const DataAnalyticsScreen = () => {
     },
   ];
 
+  const [userInput, setUserInput] = useState('');
+  const [prediction, setPrediction] = useState('');
+
+  const handlePredict = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/category', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_input: userInput,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      console.log('Response:', data); // Log the entire response
+      console.log("This is a " + data.predicted_category)
+
+      if(data.predicted_category == "Skin Conditions")
+      {
+        navigation.navigate("QuestionTier2", {
+          prevQuestion: "Skin Condition",
+       });
+      }
+      else
+      {
+        navigation.navigate("QuestionTier2", {
+          prevQuestion: data.predicted_category,
+       });
+      }
+      
+      //setPrediction(data.predicted_category);
+
+     // buttonClick(prediction)
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+
   function buttonClick(title) {
+    if(title == "Skin Conditions")
+    {
+      title = "Skin Condition"
+    }
+    console.log("This iss a " + title)
+   
     navigation.navigate("QuestionTier2", {
       prevQuestion: title,
-    });
+   });
+   //console.log()
   }
 
   function lolClick(){
@@ -63,21 +115,37 @@ const DataAnalyticsScreen = () => {
 
   return (
     <>
+    
       <View style={styles.rootContainer}>
+
+        <Text>About This System</Text>
+        <Text>The recommendation system is used to determine the best remedy based on your current condition. Please remember to always talk to your health practitioner before you use any remedy</Text>
+
+      <TextInput
+      style={styles.input}
+          placeholder="What are you currently dealing with"
+          placeholderTextColor={"black"}
+          value={userInput}
+          onChangeText={(text) => setUserInput(text)}
+      />
+
+     
+
+      <Pressable
+      style={styles.button}
+      onPress={handlePredict}>
+        <Text style={styles.buttonText}>Continue</Text>
+      </Pressable>
+
+
         <Pressable
         onPress={() => lolClick()}
         >
-          <Text>CLICK HHHH</Text>
+          <Text>Show More</Text>
         </Pressable>
-      <Text style={styles.title}> Select a category </Text>
-      <FlatList 
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
-      />
-      <Pressable>
-        <Text> Not what you're looking for? </Text>
-      </Pressable>
+      
+      
+      
       </View>
     </>
   );
@@ -93,24 +161,33 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
+  
   button:{
-    borderRadius: 6,
-    paddingVertical: 20,
-    paddingHorizontal: 29,
-    marginTop: 10,
-    marginBottom: 10,
-    shadowColor: "black",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    backgroundColor: "#4397f7"
+    backgroundColor: "white",
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: "#1e90ff",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    width:120,
+    marginBottom: 10
   },
   buttonText:{
-    color: "white"
+    color: "#1e90ff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "#000080"
   }
 });
