@@ -76,6 +76,7 @@ const AppSettingsScreen = () => {
               >
                 <View style={listItemStyle.rootContainer}>
                   <Text style={listItemStyle.Text}>{item}</Text>
+                  {/* Shane had item.name, just incase something get's messed up */}
                 </View>
               </TouchableOpacity>
             )}

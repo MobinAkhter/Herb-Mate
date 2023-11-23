@@ -10,9 +10,9 @@ import {
   Modal,
   Button as RNButton,
   TouchableOpacity,
-  Pressable
+  Pressable,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import Button from "../components/ui/Button";
 import { useTheme } from "../contexts/ThemeContext";
 import firebase from "firebase/app";
@@ -41,8 +41,28 @@ function UserProfileScreen({ navigation }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [emailChangeVisible, setEmailChangeVisible] = useState(false)
+  const [emailChangeVisible, setEmailChangeVisible] = useState(false);
   const { theme, toggleTheme } = useTheme();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "User Profile",
+      headerRight: () => (
+        <TouchableOpacity onPress={handleLogout}>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 18,
+              padding: 9,
+              textAlign: "center",
+            }}
+          >
+            Logout
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   useEffect(() => {
     const firestore = firebase.firestore();
@@ -170,29 +190,6 @@ function UserProfileScreen({ navigation }) {
 
   return (
     <>
-      <View style={styles.header}>
-        <Icon
-          style={styles.backIcon}
-          name="arrow-left"
-          size={24}
-          color="white"
-          onPress={() => navigation.goBack()}
-        />
-        <Text style={styles.title}>User Profile</Text>
-        <TouchableOpacity onPress={handleLogout}>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 18,
-              padding: 9,
-              textAlign: "center",
-            }}
-          >
-            Logout
-          </Text>
-        </TouchableOpacity>
-        {/* <RNButton color="white" title={"Logout"} onPress={handleLogout} /> */}
-      </View>
       {userData && (
         <>
           <View style={[styles.textContainer]}>
@@ -222,86 +219,100 @@ function UserProfileScreen({ navigation }) {
           </Pressable>
 
           <View>
-  < Pressable onPress={() => setModalVisible(true)}>
-    <Text> Change Password </Text>
-  </ Pressable>
-  <Pressable onPress={() => setEmailChangeVisible(true)}>
-    <Text>Change Email </Text>
-  </Pressable>
+            <Pressable onPress={() => setModalVisible(true)}>
+              <Text> Change Password </Text>
+            </Pressable>
+            <Pressable onPress={() => setEmailChangeVisible(true)}>
+              <Text>Change Email </Text>
+            </Pressable>
 
-  <Modal visible={modalVisible} animationType="slide">
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <TextInput
-        placeholder="Enter Old Password"
-        secureTextEntry
-        value={oldPassword}
-        onChangeText={setOldPassword}
-        placeholderTextColor={"black"}
-        style={textInputstyles.textInput}
-      />
+            <Modal visible={modalVisible} animationType="slide">
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextInput
+                  placeholder="Enter Old Password"
+                  secureTextEntry
+                  value={oldPassword}
+                  onChangeText={setOldPassword}
+                  placeholderTextColor={"black"}
+                  style={textInputstyles.textInput}
+                />
 
-      <TextInput
-        placeholder="Enter New Password"
-        secureTextEntry
-        value={newPassword}
-        onChangeText={setNewPassword}
-        placeholderTextColor={"black"}
-        style={textInputstyles.textInput}
-      />
+                <TextInput
+                  placeholder="Enter New Password"
+                  secureTextEntry
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                  placeholderTextColor={"black"}
+                  style={textInputstyles.textInput}
+                />
 
-      <TextInput
-        placeholder="Re-Enter New Password"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        placeholderTextColor={"black"}
-        style={textInputstyles.textInput}
-      />
+                <TextInput
+                  placeholder="Re-Enter New Password"
+                  secureTextEntry
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  placeholderTextColor={"black"}
+                  style={textInputstyles.textInput}
+                />
 
-      <View style={{ marginTop: 10, marginBottom: 10 }}>
-          <Button title="Submit" onPress={handleChangePassword}>
-            Submit
-          </Button>
-      </View>
-      
-      <Button title="Cancel" onPress={() => setModalVisible(false)}>
-        Cancel
-      </Button>
-    </View>
-  </Modal>
+                <View style={{ marginTop: 10, marginBottom: 10 }}>
+                  <Button title="Submit" onPress={handleChangePassword}>
+                    Submit
+                  </Button>
+                </View>
 
-  <Modal visible={emailChangeVisible} animationType="slide">
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <TextInput
-        placeholder="Enter New Email"
-        secureTextEntry
-        value={oldPassword}
-        onChangeText={setOldPassword}
-        placeholderTextColor={"black"}
-        style={textInputstyles.textInput}
-      />
+                <Button title="Cancel" onPress={() => setModalVisible(false)}>
+                  Cancel
+                </Button>
+              </View>
+            </Modal>
 
-      <TextInput
-        placeholder="Enter Password"
-        secureTextEntry
-        value={newPassword}
-        onChangeText={setNewPassword}
-        placeholderTextColor={"black"}
-        style={textInputstyles.textInput}
-      />
-      <View style={{ marginTop: 10, marginBottom: 10 }}>
-          <Button title="Submit" onPress={handleChangePassword}>
-            Submit
-          </Button>
-      </View>
-      
-      <Button title="Cancel" onPress={() => setEmailChangeVisible(false)}>
-        Cancel
-      </Button>
-    </View>
-  </Modal>
-</View>
+            <Modal visible={emailChangeVisible} animationType="slide">
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextInput
+                  placeholder="Enter New Email"
+                  secureTextEntry
+                  value={oldPassword}
+                  onChangeText={setOldPassword}
+                  placeholderTextColor={"black"}
+                  style={textInputstyles.textInput}
+                />
 
+                <TextInput
+                  placeholder="Enter Password"
+                  secureTextEntry
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                  placeholderTextColor={"black"}
+                  style={textInputstyles.textInput}
+                />
+                <View style={{ marginTop: 10, marginBottom: 10 }}>
+                  <Button title="Submit" onPress={handleChangePassword}>
+                    Submit
+                  </Button>
+                </View>
+
+                <Button
+                  title="Cancel"
+                  onPress={() => setEmailChangeVisible(false)}
+                >
+                  Cancel
+                </Button>
+              </View>
+            </Modal>
+          </View>
         </>
       )}
     </>
@@ -345,14 +356,12 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const textInputstyles = StyleSheet.create({
   textInput: {
-    borderColor: 'black',      // Add a black border
-    borderWidth: 1,           // Specify the border width
-    padding: 10,              // Add some padding for spacing
-    marginBottom: 10,         // Add margin to separate text inputs
-    width: "90%",            // Make sure the width is 100%
+    borderColor: "black", // Add a black border
+    borderWidth: 1, // Specify the border width
+    padding: 10, // Add some padding for spacing
+    marginBottom: 10, // Add margin to separate text inputs
+    width: "90%", // Make sure the width is 100%
   },
-
 });
