@@ -8,14 +8,33 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
+  Animated,
 } from "react-native";
 import axios from "axios";
+
+const TypingIndicator = () => {
+  const [dots, setDots] = useState("");
+  useEffect(() => {
+    let mounted = true;
+    const intervalId = setInterval(() => {
+      if (mounted) {
+        setDots((prevDots) => (prevDots.length < 3 ? prevDots + "." : ""));
+      }
+    }, 500);
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+  return <Text style={styles.typingIndicatorText}>{dots}</Text>;
+};
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
   const flatListRef = useRef(null);
+  const [sendButtonPressed, setSendButtonPressed] = useState(false);
 
   useEffect(() => {
     const welcomeMessage = {
@@ -23,47 +42,36 @@ const ChatScreen = () => {
       text: "Hello! I'm HerbalLifeBot. How can I assist you today? I can provide herbal remedies based on various body parts and conditions.",
       isUser: false,
     };
-
     setMessages([welcomeMessage]);
   }, []);
 
   const sendMessage = async () => {
-    console.log("sendMessage function triggered");
     if (inputText.trim() === "") return;
-
     const newMessage = {
       id: messages.length + 1,
       text: inputText,
       isUser: true,
     };
-
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setInputText("");
     scrollToBottom();
-
     setIsBotTyping(true);
-
     try {
       const response = await axios.post(
         "https://us-central1-fir-auth-b5f8a.cloudfunctions.net/dialogflowGateway",
-        {
-          text: inputText,
-        }
+        { text: inputText }
       );
-
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second
-
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const botResponse = {
         id: messages.length + 2,
         text: response.data.message,
         isUser: false,
       };
-
       setMessages((prevMessages) => [...prevMessages, botResponse]);
       setIsBotTyping(false);
     } catch (error) {
-      setIsBotTyping(false);
       console.error("Error getting response from Dialogflow:", error);
+      setIsBotTyping(false);
     }
   };
 
@@ -74,14 +82,17 @@ const ChatScreen = () => {
   };
 
   const renderItem = ({ item }) => (
-    <View
-      style={[
-        styles.messageContainer,
-        item.isUser ? styles.userMessage : styles.botMessage,
-      ]}
-      selectable={true}
-    >
-      <Text style={styles.messageText}>{item.text}</Text>
+    <View style={item.isUser ? styles.userMessageRow : styles.botMessageRow}>
+      {!item.isUser && <View style={styles.botMessageTail} />}
+      <View
+        style={[
+          styles.messageBubble,
+          item.isUser ? styles.userMessageBubble : styles.botMessageBubble,
+        ]}
+      >
+        <Text style={styles.messageText}>{item.text}</Text>
+      </View>
+      {item.isUser && <View style={styles.userMessageTail} />}
     </View>
   );
 
@@ -100,22 +111,12 @@ const ChatScreen = () => {
           contentContainerStyle={styles.messagesContainer}
           onContentSizeChange={scrollToBottom}
           onLayout={scrollToBottom}
-          ListFooterComponent={() => {
-            if (isBotTyping) {
-              return (
-                <View style={[styles.messageContainer, styles.botMessage]}>
-                  <Text style={styles.messageText}>...</Text>
-                </View>
-              );
-            } else {
-              return null;
-            }
-          }}
+          ListFooterComponent={() => isBotTyping && <TypingIndicator />}
         />
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Chat with the chatbot"
+            placeholder="Type your question here..."
             value={inputText}
             onSubmitEditing={sendMessage}
             onChangeText={setInputText}
@@ -123,7 +124,15 @@ const ChatScreen = () => {
             numberOfLines={4}
             textAlignVertical="top"
           />
-          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+          <TouchableOpacity
+            style={[
+              styles.sendButton,
+              { opacity: sendButtonPressed ? 0.7 : 1 },
+            ]}
+            onPressIn={() => setSendButtonPressed(true)}
+            onPressOut={() => setSendButtonPressed(false)}
+            onPress={sendMessage}
+          >
             <Text style={styles.sendButtonText}>Send</Text>
           </TouchableOpacity>
         </View>
@@ -134,48 +143,91 @@ const ChatScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#F5F5F5",
-    height: "100%",
   },
   messagesContainer: {
-    padding: 16,
+    padding: 10,
   },
-  messageContainer: {
-    maxWidth: "70%",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 8,
+  userMessageRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    marginVertical: 4,
   },
-  userMessage: {
-    alignSelf: "flex-end",
+  botMessageRow: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+    marginVertical: 4,
+  },
+  messageBubble: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 1,
+    minWidth: "10%",
+    maxWidth: "80%",
+    margin: 5,
+  },
+  userMessageBubble: {
     backgroundColor: "#DCF8C6",
+    borderBottomRightRadius: 0,
+    marginRight: 5,
   },
-  botMessage: {
-    alignSelf: "flex-start",
+  botMessageBubble: {
     backgroundColor: "white",
+    borderBottomLeftRadius: 0,
+    marginLeft: 5,
+  },
+  userMessageTail: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderRightWidth: 20,
+    borderTopWidth: 20,
+    borderRightColor: "transparent",
+    borderTopColor: "transparent",
+    borderBottomLeftRadius: 20,
+    position: "absolute",
+    right: -10,
+    bottom: 0,
+  },
+  botMessageTail: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 20,
+    borderTopWidth: 20,
+    borderLeftColor: "transparent",
+    borderTopColor: "transparent",
+    borderBottomRightRadius: 20,
+    position: "absolute",
+    left: -10,
+    bottom: 0,
   },
   messageText: {
-    fontSize: 16,
     color: "#333333",
+    fontSize: 16,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
     borderTopWidth: 1,
     borderColor: "#DDDDDD",
     backgroundColor: "white",
+    padding: 10,
   },
   input: {
+    marginLeft: 4,
     flex: 1,
     minHeight: 40,
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: "#CCCCCC",
     borderRadius: 4,
-    marginRight: 8,
+    marginRight: 16,
   },
   sendButton: {
     backgroundColor: "#35D96F",
@@ -186,6 +238,10 @@ const styles = StyleSheet.create({
   sendButtonText: {
     color: "white",
     fontSize: 16,
+  },
+  typingIndicatorText: {
+    fontSize: 24, // iNCrease this if you want to increase the dots size in chatbot response animation
+    color: "#333333",
   },
 });
 
