@@ -252,23 +252,21 @@ function Navigation() {
     return null;
   }
 
-  if (isFirstLaunch === true) {
-    console.log("Showing Onboarding Screen");
-    return <OnboardingScreen />;
-  } else {
-    console.log("Skipping Onboarding Screen");
-    return (
-      <NavigationContainer>
-        {isFirstLaunch ? (
-          <OnboardingScreen />
-        ) : user ? (
-          <DrawerNavigator />
-        ) : (
-          <AuthStack />
-        )}
-      </NavigationContainer>
-    );
+  if (isFirstLaunch === null) {
+    return null;
   }
+
+  return (
+    <NavigationContainer>
+      {isFirstLaunch ? (
+        <OnboardingScreen />
+      ) : user ? (
+        <DrawerNavigator />
+      ) : (
+        <AuthStack />
+      )}
+    </NavigationContainer>
+  );
 }
 
 export default function App() {
