@@ -21,7 +21,7 @@ import { auth } from "./firebase";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import DonationScreen from "./screens/DonationScreen";
-import { ThemeProvider } from "./contexts/ThemeContext";
+// import { ThemeProvider } from "./contexts/ThemeContext";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import NotesScreen from "./screens/NotesScreen";
 import ContactScreen from "./screens/ContactScreen";
@@ -150,38 +150,11 @@ function DrawerNavigator() {
         component={BookmarkStack}
         options={{
           headerShown: false,
-          // headerTitle: "Bookmarkss",
-          // headerStyle: { backgroundColor: "#35D96F" },
-          // headerTintColor: "white",
           drawerIcon: ({ color, size }) => (
             <Ionicons name="bookmarks-outline" size={size} color={color} />
           ),
         }}
       />
-      {/* <Drawer.Screen
-        name="My Notes"
-        component={NotesScreen}
-        options={{
-          headerTitle: "Notes",
-          headerStyle: { backgroundColor: "#35D96F" },
-          headerTintColor: "white",
-          drawerIcon: ({ color, size }) => (
-            <Icon name="document-text-outline" color={color} size={size} />
-          ),
-        }}
-      /> */}
-      {/* <Drawer.Screen
-        name="Preparation"
-        component={PreparationStack}
-        options={{
-          headerTitle: "Herb Preparation",
-          headerStyle: { backgroundColor: "#35D96F" },
-          headerTintColor: "white",
-          drawerIcon: ({ color, size }) => (
-            <Icon name="eyedrop-outline" color={color} size={size} />
-          ),
-        }}
-      /> */}
       <Drawer.Screen
         name="Donate"
         component={DonationScreen}
@@ -301,10 +274,10 @@ function Navigation() {
 export default function App() {
   return (
     <UserProvider>
-      <ThemeProvider>
-        <StatusBar style="light" />
-        <Navigation />
-      </ThemeProvider>
+      {/* <ThemeProvider> */}
+      <StatusBar style="light" />
+      <Navigation />
+      {/* </ThemeProvider> */}
     </UserProvider>
   );
 }

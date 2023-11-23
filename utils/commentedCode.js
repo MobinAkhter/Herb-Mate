@@ -236,3 +236,33 @@
         )}
       /> */
 }
+
+// App.js Stuff taken out from Drawer Navigation
+{
+  /* <Drawer.Screen
+        name="My Notes"
+        component={NotesScreen}
+        options={{
+          headerTitle: "Notes",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Icon name="document-text-outline" color={color} size={size} />
+          ),
+        }}
+      /> */
+}
+{
+  /* <Drawer.Screen
+        name="Preparation"
+        component={PreparationStack}
+        options={{
+          headerTitle: "Herb Preparation",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <Icon name="eyedrop-outline" color={color} size={size} />
+          ),
+        }}
+      /> */
+}

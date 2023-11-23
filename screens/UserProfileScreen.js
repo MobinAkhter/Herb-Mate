@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { useState, useEffect, useLayoutEffect } from "react";
 import Button from "../components/ui/Button";
-import { useTheme } from "../contexts/ThemeContext";
+// import { useTheme } from "../contexts/ThemeContext";
 import firebase from "firebase/app";
 import { auth } from "../firebase";
 
@@ -42,7 +42,7 @@ function UserProfileScreen({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [emailChangeVisible, setEmailChangeVisible] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -181,12 +181,12 @@ function UserProfileScreen({ navigation }) {
     ]);
   };
 
-  const getThemeStyles = (theme) => ({
-    background: theme === "dark" ? "black" : "white",
-    color: theme === "dark" ? "white" : "black",
-  });
+  // const getThemeStyles = (theme) => ({
+  //   background: theme === "dark" ? "black" : "white",
+  //   color: theme === "dark" ? "white" : "black",
+  // });
 
-  const themeStyles = getThemeStyles(theme);
+  // const themeStyles = getThemeStyles(theme);
 
   return (
     <>
