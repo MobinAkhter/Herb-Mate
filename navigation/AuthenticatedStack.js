@@ -173,6 +173,9 @@ function RecommendationStack() {
         name="RecommendedRemediesScreen"
         component={RecommendedRemediesScreen}
       />
+      <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
+      <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
+      <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
   );
 }
