@@ -59,7 +59,7 @@ const QuestionTier3Screen = ({ route }) => {
   {
      setRating(rating)
      console.log("This is your current rating: " + rating)
-     console.log("fff")
+    
   }
   
 
@@ -71,6 +71,17 @@ const QuestionTier3Screen = ({ route }) => {
   function buttonClick()
   {
     let ageGroup = ""
+    console.log("This is +" + age)
+    if(age == null || age == "")
+    {
+      Alert.alert('Error',
+      'Please enter you age', [
+       
+       {text: 'OK', onPress: () => console.log('OK Pressed')},
+     ]);
+    }
+    else
+    {
     if(age < 30)
     {
       ageGroup = "18 to 29"
@@ -83,13 +94,22 @@ const QuestionTier3Screen = ({ route }) => {
       ageGroup = "50 and over"
     }
 
-    navigation.navigate("RecommendedRemedyScreen", {
+    /*navigation.navigate("RecommendedRemedyScreen", {
       category: selectedCategory,
       question: prevQuestion,
       age: ageGroup,
       gender: "Both",
       rating: rating
+    }); */
+    navigation.navigate("RecommendedRemedyReviewScreen", {
+      category: selectedCategory,
+      condition: prevQuestion,
+      age: age,
+      gender: "Both",
+      rating: rating,
+      sex: sex
     });
+  }
   }
 
   //alert

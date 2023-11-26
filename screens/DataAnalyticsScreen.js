@@ -117,13 +117,15 @@ const DataAnalyticsScreen = () => {
     <>
     
       <View style={styles.rootContainer}>
+        <View style={styles.instructions}>
 
-        <Text>About This System</Text>
-        <Text>The recommendation system is used to determine the best remedy based on your current condition. Please remember to always talk to your health practitioner before you use any remedy</Text>
+        <Text style={styles.title}>About This System</Text>
+        <Text style={styles.subTitle}>The recommendation system is used to determine the best remedy based on your current condition. Please remember to always talk to your health practitioner before you use any remedy</Text>
 
+        </View>
       <TextInput
       style={styles.input}
-          placeholder="What are you currently dealing with"
+          placeholder="What are you currently dealing with?"
           placeholderTextColor={"black"}
           value={userInput}
           onChangeText={(text) => setUserInput(text)}
@@ -185,9 +187,20 @@ const styles = StyleSheet.create({
     padding: 10
   },
   title: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 15,
-    color: "#000080"
+    textDecorationLine: 'underline'
+  },
+  subTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginBottom: 15,
+    paddingLeft: 2
+  },
+
+  instructions:{
+    justifyContent: "flex-start",
+  
   }
 });

@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const QuestionTier2Screen = ({ route }) => {
   const { prevQuestion } = route.params;
+  const {condition} = route.params;
   const navigation = useNavigation();
 
   const [questions, setQuestions] = useState([]);
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   title: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 15,
     color: "#000080"
