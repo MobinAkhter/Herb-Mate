@@ -69,11 +69,8 @@ function ViewAllRecommendationsScreen(){
 
       function lol()
       {
-        Alert.alert('Item',
-        'CLicked button', [
-         
-         {text: 'OK', onPress: () => console.log('OK Pressed')},
-       ]);
+        navigation.navigate("DataAnalyticsScreen")
+      
       }
 
       return(

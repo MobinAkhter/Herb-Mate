@@ -59,6 +59,7 @@ function Home() {
       <Stack.Screen name="RemediesBar" component={RemediesBarGraphScreen} />
       <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
       <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
+      <Stack.Screen name="DataAnalyticsScreen" component={DataAnalyticsScreen} />
       <Stack.Screen
         name="RecommendedRemedyScreen"
         component={RecommendedRemedyScreen}
@@ -140,7 +141,7 @@ function AuthenticatedStack() {
       />
       <Tab.Screen
         name="Recommendation System"
-        component={DataAnalyticsScreen}
+        component={ViewAllRecommendationsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="md-analytics" size={size} color={color} />
