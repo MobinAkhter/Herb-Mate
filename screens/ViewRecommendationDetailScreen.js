@@ -49,15 +49,15 @@ function ViewRecommendationDetailScreen({route}){
 
       return(
         <>
-            <View>
+            <View style={styles.rootContainer}>
             
-            <Text>Your Age: {recommendation.Age}</Text>
-            <Text>Category: {recommendation.Category}</Text>
-            <Text>Question: {recommendation.Question}</Text>
-            <Text>Your Condition: {recommendation.UserCondition}</Text>
-            <Text>Your Biological Sex: {recommendation.Sex}</Text>
-            <Text>How severe is your current condition?: {recommendation.Severity}</Text>
-            <Text>Your recommended Remedy: {recommendation.Remedy}</Text>
+            <Text style={[styles.subTitle, { color: 'blue' }]}>Your Age: {recommendation.Age}</Text>
+            <Text style={[styles.subTitle, { color: 'orange' }]}>Category: {recommendation.Category}</Text>
+            <Text style={styles.subTitle}>Question: {recommendation.Question}</Text>
+            <Text style={[styles.subTitle, { color: 'grey' }]}>Your Condition: {recommendation.UserCondition}</Text>
+            <Text style={[styles.subTitle, { color: 'purple' }]}>Your Biological Sex: {recommendation.Sex}</Text>
+            <Text style={[styles.subTitle, { color: 'red' }]}>How severe is your current condition?: {recommendation.Severity}</Text>
+            <Text style={[styles.subTitle, { color: 'green' }]}>Your recommended Remedy: {recommendation.Remedy}</Text>
 
             </View> 
         </>
@@ -66,3 +66,45 @@ function ViewRecommendationDetailScreen({route}){
 }
 
 export default ViewRecommendationDetailScreen;
+
+const styles = StyleSheet.create({
+    rootContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 32,
+    },
+    title: {
+      fontSize: 50,
+      fontWeight: "bold",
+      marginBottom: 8,
+      color: '#32cd32'
+    },
+    subTitle: {
+      fontWeight: "bold",
+      fontSize: 20,
+      textAlign: "center",
+      paddingBottom: 10
+    },
+    warning: {
+      fontWeight: "bold",
+      fontSize: 20,
+      textAlign: "center",
+      paddingBottom: 10,
+      fontStyle: "italic"
+    },
+    continueButton:{
+      borderRadius: 10,
+      borderWidth: 1.5,
+      marginTop: 10,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 10,
+      borderColor: "#1e90ff"
+    },
+    buttonText: {
+      fontWeight: "bold",
+      textAlign: "center",
+      color: '#1e90ff',
+    },
+  });
