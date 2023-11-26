@@ -7,6 +7,8 @@ import { db, auth } from "../firebase";
 function ViewAllRecommendationsScreen(){
     const [recommendations, setRecommendations] = useState([])
     const user = auth.currentUser.uid;
+    const navigation = useNavigation();
+
 
     const getRecommendations =  async () =>{
         const userDocRef = db.collection("users").doc(user);
@@ -60,11 +62,9 @@ function ViewAllRecommendationsScreen(){
       //when an item gets clicked
       function itemSelected(item)
       {
-        Alert.alert('Item',
-        'Your condition was ' + item.userCondition + " and the id is " + item.id, [
-         
-         {text: 'OK', onPress: () => console.log('OK Pressed')},
-       ]);
+        navigation.navigate("ViewRecommendationDetailScreen", {
+            recommendId: item.id
+          });
       }
 
       function lol()

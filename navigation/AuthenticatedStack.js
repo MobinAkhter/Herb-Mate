@@ -23,6 +23,7 @@ import DonationScreen from "../screens/DonationScreen";
 import RecommendedRemediesScreen from "../screens/RecommendedRemediesScreen";
 import RecommendedRemedyReviewScreen from "../screens/RecommendedRemedyReviewScreen";
 import ViewAllRecommendationsScreen from "../screens/ViewAllRecommendationsScreen";
+import ViewRecommendationDetailScreen from "../screens/ViewRecommendationDetailScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -75,6 +76,11 @@ function Home() {
        <Stack.Screen
         name="ViewAllRecommendationsScreen"
         component={ViewAllRecommendationsScreen}
+      />
+
+      <Stack.Screen
+        name="ViewRecommendationDetailScreen"
+        component={ViewRecommendationDetailScreen}
       />
     </Stack.Navigator>
   );
