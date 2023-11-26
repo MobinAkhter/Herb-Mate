@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native
 import Button from "../components/ui/Button";
 import { useNavigation } from "@react-navigation/native";
 import { cond } from "react-native-reanimated";
+import { db, auth } from "../firebase";
 
 function RecommendedRemedyReviewScreen({ route }) {
 
@@ -12,6 +13,7 @@ function RecommendedRemedyReviewScreen({ route }) {
   const { rating} = route.params;
   const { gender } = route.params;
   const {sex} = route.params;
+  const {userQuestion} = route.params
   const [severity, setSeverity] = useState("")
   const navigation = useNavigation();
 
@@ -60,7 +62,11 @@ function RecommendedRemedyReviewScreen({ route }) {
       question: condition,
       age: ageGroup,
       gender: "Both",
-      rating: rating
+      rating: rating,
+      severity: severity,
+      userAge: age,
+      sex: sex,
+      userQuestion: userQuestion
     })
   
   }
@@ -73,13 +79,13 @@ return(
         
         <Text> Category: {category} </Text>
 
-        <Text> Condition: {condition} </Text>
+        <Text> Condition: {userQuestion} </Text>
 
         <Text> Sex: {sex} </Text>
 
         <Text> Again: {age} </Text>
 
-        <Text> Rating: {severity} </Text>
+        <Text> Level of Severness: {severity} </Text>
 
         <TouchableOpacity style={styles.continueButton} onPress={buttonClick}>
         <Text style={styles.buttonText}> CONTINUE </Text>

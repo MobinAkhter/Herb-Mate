@@ -74,6 +74,7 @@ const DataAnalyticsScreen = () => {
       {
         navigation.navigate("QuestionTier2", {
           prevQuestion: data.predicted_category,
+          condition: userInput
        });
       }
       
@@ -91,9 +92,11 @@ const DataAnalyticsScreen = () => {
       title = "Skin Condition"
     }
     console.log("This iss a " + title)
+    console.log(userInput)
    
     navigation.navigate("QuestionTier2", {
       prevQuestion: title,
+      
    });
    //console.log()
   }

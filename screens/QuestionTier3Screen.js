@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 const QuestionTier3Screen = ({ route }) => {
   const { prevQuestion } = route.params;
   const {selectedCategory} = route.params;
+  const {condition} = route.params;
   const navigation = useNavigation();
   const [questions, setQuestions] = useState([]);
   const category = db.collection("Tier2Questions");
@@ -107,7 +108,8 @@ const QuestionTier3Screen = ({ route }) => {
       age: age,
       gender: "Both",
       rating: rating,
-      sex: sex
+      sex: sex,
+      userQuestion: condition
     });
   }
   }
@@ -155,6 +157,7 @@ const QuestionTier3Screen = ({ route }) => {
       />
 
 <Text onPress={createTwoButtonAlert}>Are you transgender or non-binary?</Text>
+
 
 <TextInput
         style={styles.input}

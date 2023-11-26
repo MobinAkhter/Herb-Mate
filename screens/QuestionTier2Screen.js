@@ -50,12 +50,14 @@ const QuestionTier2Screen = ({ route }) => {
   {
     navigation.navigate("QuestionTier3", {
       selectedCategory: category,
-      prevQuestion: tier2 
+      prevQuestion: tier2 ,
+      condition: condition
     });
   }
 
   return (
     <View style={styles.rootContainer}>
+     
       <Text style={styles.title}> {prevQuestion} </Text>
       <Text style={styles.subTitle}>Please select any of the following questions below </Text>
       <FlatList
