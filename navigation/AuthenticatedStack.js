@@ -232,13 +232,13 @@ export function PreparationStack() {
       <Stack.Screen
         name="Preparation Details"
         component={PreparationDetails}
-        options={({ navigation }) => ({
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-              <Ionicons name="menu-outline" size={28} />
-            </TouchableOpacity>
-          ),
-        })}
+        // options={({ navigation }) => ({
+        //   headerLeft: () => (
+        //     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+        //       <Ionicons name="menu-outline" size={28} />
+        //     </TouchableOpacity>
+        //   ),
+        // })}
       />
     </Stack.Navigator>
   );
