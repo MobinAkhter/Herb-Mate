@@ -20,6 +20,7 @@ function RecommendedRemediesScreen() {
   const user = auth.currentUser.uid;
   const userDocRef = db.collection("users").doc(user);
   const navigation = useNavigation();
+  const gap = 5;
 
   
   const [remedies, setRemedies] = useState([]);
@@ -126,12 +127,14 @@ function RecommendedRemediesScreen() {
 
   return (
     <>
-      <View>
+      <View style={styles.rootContainer}>
       
         <View>
-              <Text>Because you searched for {lol[0]}</Text>
+              <Text style={styles.subTitle}>Because you searched for {lol[0]}:</Text>
               
               <FlatList
+              
+               horizontal
                 data={conditionList1}
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -141,21 +144,25 @@ function RecommendedRemediesScreen() {
                         });
                       }}
                     >
-                        <View>
-                          <Text>{item}</Text>
+                        <View style={styles.button}>
+                          <Text style={styles.title}>{item}</Text>
                           
                         </View>
                    
                     </TouchableOpacity>
+                )}
+                ItemSeparatorComponent={() => (
+                  <View style={{ width: 10 }} /> // Adjust the width based on your desired spacing
                 )}
               />
         </View>
         
         
         <View>
-              <Text>Because you searched for {lol[1]}</Text>
+              <Text style={styles.subTitle}>Because you searched for {lol[1]}:</Text>
               
               <FlatList
+                horizontal
                 data={conditionList2}
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -165,12 +172,15 @@ function RecommendedRemediesScreen() {
                         });
                       }}
                     >
-                        <View>
-                          <Text>{item}</Text>
+                        <View style={styles.button}>
+                          <Text style={styles.title}>{item}</Text>
                           
                         </View>
                    
                     </TouchableOpacity>
+                )}
+                ItemSeparatorComponent={() => (
+                  <View style={{ width: 10 }} /> // Adjust the width based on your desired spacing
                 )}
               />
 
@@ -179,9 +189,10 @@ function RecommendedRemediesScreen() {
 
         
         <View>
-              <Text>Because you searched for {lol[2]}</Text>
+              <Text style={styles.subTitle}>Because you searched for {lol[2]}:</Text>
               
               <FlatList
+               horizontal
                 data={conditionList3}
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -191,12 +202,15 @@ function RecommendedRemediesScreen() {
                         });
                       }}
                     >
-                        <View>
-                          <Text>{item}</Text>
+                        <View style={styles.button}>
+                          <Text style={styles.title}>{item}</Text>
                         </View>
                    
                     </TouchableOpacity>
                 )}
+                ItemSeparatorComponent={() => (
+                  <View style={{ width: 10 }} /> // Adjust the width based on your desired spacing
+                )} 
               />
 
         </View>
@@ -207,3 +221,51 @@ function RecommendedRemediesScreen() {
 }
 
 export default RecommendedRemediesScreen;
+
+
+const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    paddingTop: 30,
+    marginLeft: 10
+  },
+  
+  button:{
+    backgroundColor: "white",
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: "#32cd32",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 25,
+    width:150,
+    marginBottom: 10,
+    
+  },
+  buttonText:{
+    color: "#1e90ff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10
+  },
+  title: { 
+    fontSize: 15, 
+    fontWeight: "bold",
+  },
+  subTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
+    paddingLeft: 2
+  },
+
+  because:{
+    justifyContent: "flex-start",
+  
+  }
+});
