@@ -23,8 +23,19 @@ const DonationScreen = () => {
       ]
     );
   };
+
   return (
     <View style={styles.container}>
+      {/* Donation Explanation Text */}
+      <Text style={styles.header}>Support Our Mission</Text>
+      <Text style={styles.explanationText}>
+        Your support allows us to continue sharing the profound benefits of
+        herbs, advancing our app, and keeping it free of ads. Every cup of
+        coffee you buy us fuels our passion and ability to bring ancient herbal
+        wisdom to the palm of your hand.
+      </Text>
+
+      {/* Donation Button */}
       <TouchableOpacity
         style={styles.button}
         onPress={() =>
@@ -46,7 +57,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 20,
     backgroundColor: "#E5E5E5",
+  },
+  header: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#34A853",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  explanationText: {
+    fontSize: 16,
+    marginBottom: 20,
+    lineHeight: 22,
+    color: "#333",
+    textAlign: "center",
   },
   button: {
     flexDirection: "row",

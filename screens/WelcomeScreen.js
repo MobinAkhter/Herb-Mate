@@ -7,11 +7,11 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
-import BigButton from "../components/ui/BigButton";
 import { db } from "../firebase";
 import { Entypo } from "@expo/vector-icons";
 import { removeSpace, iconMapper } from "../utils";
@@ -21,7 +21,7 @@ const WelcomeScreen = ({}) => {
   const navigation = useNavigation();
   const [bodyParts, setBodyParts] = useState([]);
   const [searchInput, setSearchInput] = useState();
-  const [showAll, setShowAll] = useState(false);
+  // const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const fetchBodyParts = async () => {
@@ -74,6 +74,40 @@ const WelcomeScreen = ({}) => {
     });
   }, [navigation]);
 
+  const renderBodyPartCard = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Condition", { bp: item.name })}
+      style={styles.card}
+    >
+      <View style={styles.cardContent}>
+        <MIcon {...iconMapper[removeSpace(item.name)]} size={30} />
+        <Text style={styles.cardText}>{item.name}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+  // const renderFooter = () => {
+  //   if (!showAll && bodyParts.length > 4) {
+  //     return (
+  //       <TouchableOpacity
+  //         onPress={() => setShowAll(true)}
+  //         style={styles.disclosureButton}
+  //       >
+  //         <Text style={styles.disclosureButtonText}>See More</Text>
+  //       </TouchableOpacity>
+  //     );
+  //   } else if (showAll) {
+  //     return (
+  //       <TouchableOpacity
+  //         onPress={() => setShowAll(false)}
+  //         style={styles.disclosureButton}
+  //       >
+  //         <Text style={styles.disclosureButtonText}>See Less</Text>
+  //       </TouchableOpacity>
+  //     );
+  //   }
+  //   return null;
+  // };
+
   return (
     <View style={styles.rootContainer}>
       <SafeAreaView>
@@ -82,7 +116,7 @@ const WelcomeScreen = ({}) => {
           <View style={styles.searchWrapper}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search for remedy"
+              placeholder="Search for remedy/conditions..."
               keyboardType="default"
               onChangeText={(input) => setSearchInput(input)}
               value={searchInput}
@@ -107,45 +141,15 @@ const WelcomeScreen = ({}) => {
         </View>
         <View style={styles.bodyPartsContainer}>
           <FlatList
-            data={showAll ? bodyParts : bodyParts.slice(0, 4)}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <View style={styles.container}>
-                <BigButton
-                  style={styles.button}
-                  onPress={() => {
-                    navigation.navigate("Condition", {
-                      bp: item.name,
-                    });
-                  }}
-                >
-                  {/* Determines icon to show based on bodypart */}
-                  <View style={styles.bodyParts}>
-                    <MIcon {...iconMapper[removeSpace(item.name)]} />
-                  </View>
-                  <Text>{item.name}</Text>
-                </BigButton>
-              </View>
-            )}
+            data={bodyParts}
+            renderItem={renderBodyPartCard}
+            keyExtractor={(item) => item.key}
+            numColumns={2}
+            columnWrapperStyle={styles.row}
+            // ListFooterComponent={renderFooter}
           />
         </View>
-        {!showAll && bodyParts.length > 4 && (
-          <TouchableOpacity
-            onPress={() => setShowAll(true)}
-            style={styles.disclosureButton}
-          >
-            <Text style={styles.disclosureButtonText}>See More</Text>
-          </TouchableOpacity>
-        )}
-
-        {showAll && (
-          <TouchableOpacity
-            onPress={() => setShowAll(false)}
-            style={styles.disclosureButton}
-          >
-            <Text style={styles.disclosureButtonText}>See Less</Text>
-          </TouchableOpacity>
-        )}
       </SafeAreaView>
     </View>
   );
@@ -155,10 +159,9 @@ export default WelcomeScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 32,
+    paddingTop: 18,
   },
   searchContainer: {
     justifyContent: "center",
@@ -169,17 +172,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bodyPartsContainer: {
+    marginTop: 5,
     flex: 1,
-    marginTop: 10,
   },
   searchWrapper: {
-    flex: 1,
     backgroundColor: "white",
     marginRight: 12,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
     height: "100%",
+    width: "65%",
   },
   searchInput: {
     width: "100%",
@@ -207,5 +210,32 @@ const styles = StyleSheet.create({
   disclosureButtonText: {
     color: "white",
     fontSize: 16,
+  },
+  card: {
+    margin: 10,
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowColor: "#000",
+    shadowOffset: { height: 2, width: 0 },
+    elevation: 3,
+    borderColor: "#35D96F",
+    borderWidth: 3,
+    width: Dimensions.get("window").width / 2 - 50,
+  },
+  cardContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+  },
+  cardText: {
+    marginTop: 8,
+    fontSize: 16,
+    fontWeight: "400",
+  },
+  row: {
+    justifyContent: "space-between",
   },
 });

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Modal,
-  Button,
   TextInput,
   StyleSheet,
   View,
@@ -12,9 +11,13 @@ import {
   ActivityIndicator,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
+  Share,
+  Slider,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
 import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
@@ -22,59 +25,35 @@ import BookMarkButton from "../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
-import RemedyViewModel from '../ViewModels/RemedyViewModel';
-// import ImageViewer from "react-native-image-zoom-viewer";
-
+import * as Speech from "expo-speech"; // This is better cause the other lib wanted me to link it or something. Extra steps for expo managed workflow.
+import Icon from "react-native-vector-icons/FontAwesome";
+import firebase from "firebase";
 import "firebase/firestore";
 
-function AboutRemedyScreen({ route }) {
+function HerbScreen() {
   const navigation = useNavigation();
-
-  const { rem, bp } = route.params;
+  const route = useRoute();
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: "herbInfo", title: "About Remedy" },
+    { key: "herbDetails", title: "Herb Details" },
+  ]);
   const [remedy, setRemedy] = useState({});
   const [bookMarkText, setBookMarkText] = useState();
   const [isLoading, setIsLoading] = useState(true);
-
-  // Creating the collapsable state for description and precautions and properties
-  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
-  const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
-  const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
-
-  // access firestore
+  const { rem } = route.params || {};
   const remediesFirebase = db.collection("Remedies");
-  const user = auth.currentUser.uid;
-  const userRef = db.collection("users").doc(user);
-
-  // adding the states required for notes functionality
   const [remediesList, setRemediesList] = useState([]);
-  const [selectedRemedy, setSelectedRemedy] = useState(rem);
+
   const col = db.collection("BodyParts");
-  const [modalVisible, setModalVisible] = useState(false);
-  const [conditionsList, setConditionsList] = useState([]);
-  const [selectedCondition, setSelectedCondition] = useState();
-  const [notes, setNotes] = useState("");
-
-  
+  // const [conditionsList, setConditionsList] = useState([]);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <SimpleLineIcons name="note" size={24} color="black" />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
-
-  // define the key for AsyncStorage
-  //const remedyKey = typeof rem === 'string' ? 'remedy-' + rem : null;
-
-  useEffect(() => {
-    
-    // AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
+    // loadConditions();
+    AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
     setIsLoading(true);
     // define the key for AsyncStorage
-    const remedyKey = "remedy-" + rem;
+    const remedyKey = "remedy-" + rem.id;
 
     // check if the remedy is in the cache and if the data is still fresh
     AsyncStorage.getItem(remedyKey).then((cachedData) => {
@@ -92,7 +71,7 @@ function AboutRemedyScreen({ route }) {
 
       // fetch the remedy from Firestore and save it in the cache
       remediesFirebase
-        .doc(rem)
+        .doc(rem.id)
         .get()
         .then((doc) => {
           const data = doc.data();
@@ -112,29 +91,516 @@ function AboutRemedyScreen({ route }) {
           console.error("Error fetching remedy from Firestore:", error);
           setIsLoading(false);
         });
+    });
+    remediesFirebase
+      .get()
+      .then((querySnapshot) => {
+        const remedies = querySnapshot.docs.map((doc) => ({
+          label: doc.data().name,
+          value: doc.id,
+        }));
+        if (!remedies.some((item) => item.value === rem)) {
+          const currentRemedy = {
+            label: remedy.name,
+            value: rem,
+          };
+          remedies.unshift(currentRemedy);
+        }
+        setRemediesList(remedies);
+        console.log("This is the remedies list", remediesList);
+      })
+      .catch((error) => {
+        console.error("Error fetching remedies list:", error);
+      });
+  }, [rem]);
 
-        
+  const AboutRemedyTab = () => {
+    return (
+      <AboutRemedyScreen
+        remedy={remedy}
+        remediesList={remediesList}
+        route={route}
+        navigation={navigation}
+      />
+    );
+  };
+  const HerbDetailsTab = () => {
+    return <HerbDetails interactions={remedy.interactions} />;
+  };
+  const renderScene = SceneMap({
+    herbInfo: AboutRemedyTab,
+    herbDetails: HerbDetailsTab,
+  });
+
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: "green" }}
+      style={{ backgroundColor: "white" }}
+      labelStyle={{ color: "black" }}
+    />
+  );
+
+  const initialLayout = { width: Dimensions.get("window").width };
+
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+  return (
+    <TabView
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={initialLayout}
+      renderTabBar={renderTabBar}
+    />
+  );
+}
+
+const HerbDetails = ({ interactions }) => {
+  const [isPressed, setIsPressed] = useState(false);
+  const scrollViewRef = useRef();
+  const [voices, setVoices] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const preferredVoices = [
+    { name: "Rishi", identifier: "com.apple.voice.compact.en-IN.Rishi" },
+    { name: "Samantha", identifier: "com.apple.voice.compact.en-US.Samantha" },
+    { name: "Daniel", identifier: "com.apple.voice.compact.en-GB.Daniel" },
+    { name: "Karen", identifier: "com.apple.voice.compact.en-AU.Karen" },
+    { name: "Moira", identifier: "com.apple.voice.compact.en-IE.Moira" },
+  ];
+  const [selectedVoice, setSelectedVoice] = useState(
+    preferredVoices[2].identifier
+  );
+  const [speechRate, setSpeechRate] = useState(1.0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [spokenText, setSpokenText] = useState("");
+
+  const buttonStyle = {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    backgroundColor: isPressed ? "#dedede" : "white",
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+  };
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  const { overview, ...otherInteractions } = interactions || {};
+  const hasDetails =
+    overview ||
+    (otherInteractions && Object.keys(otherInteractions).length > 0);
+
+  const speak = (text, rate = 1.0) => {
+    if (isSpeaking) {
+      Speech.stop();
+      setIsPaused(true);
+    } else {
+      Speech.speak(text, {
+        rate,
+        voice: selectedVoice,
+        onStart: onSpeechStart,
+        onDone: onSpeechDone,
+      });
+      setIsSpeaking(true);
+      setIsPaused(false);
+      setSpokenText(text);
+    }
+  };
+  const stopSpeech = () => {
+    Speech.stop();
+    setIsSpeaking(false);
+    setIsPaused(false);
+  };
+
+  const resumeSpeech = () => {
+    if (isPaused) {
+      Speech.speak(spokenText, {
+        rate: speechRate,
+        voice: selectedVoice,
+        onStart: onSpeechStart,
+        onDone: onSpeechDone,
+      });
+      setIsSpeaking(true);
+      setIsPaused(false);
+    }
+  };
+
+  const onSpeechStart = () => {
+    setIsSpeaking(true);
+  };
+
+  const onSpeechDone = () => {
+    setIsSpeaking(false);
+    setIsPaused(false);
+    setSpokenText("");
+  };
+  const handleVoiceChange = (newVoiceIdentifier) => {
+    Speech.stop();
+    setSelectedVoice(newVoiceIdentifier);
+  };
+  useEffect(() => {
+    let isMounted = true;
+    Speech.getAvailableVoicesAsync().then((availableVoices) => {
+      if (isMounted) {
+        // Filter only the 5 preferred voices. Daniel will be the initial voice, cause that guy sounds best imo.
+        const filteredVoices = availableVoices.filter((voice) =>
+          preferredVoices.some(
+            (pVoice) => pVoice.identifier === voice.identifier
+          )
+        );
+        setVoices(filteredVoices);
+      }
     });
 
-
-
-  
+    return () => {
+      isMounted = false;
+      Speech.stop();
+    };
   }, []);
-  
+  // const handleSpeak = () => {
+  //   if (isSpeaking) {
+  //     Speech.stop();
+  //   } else {
+  //     Speech.speak(spokenText || text, {
+  //       onDone: () => {
+  //         setSpokenText("");
+  //         setIsSpeaking(false);
+  //       },
+  //       onStopped: () => {
+  //         setSpokenText(text);
+  //       },
+  //     });
+  //     setIsSpeaking(true);
+  //   }
+  // };
 
+  // const handleStop = () => {
+  //   Speech.stop();
+  //   setIsSpeaking(false);
+  // };
+  return hasDetails ? (
+    <>
+      <ScrollView
+        style={{ flex: 1, margin: 24 }}
+        showsVerticalScrollIndicator={false}
+        ref={scrollViewRef}
+      >
+        {overview && (
+          <View style={{ marginBottom: 20 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.herbDetailHeader}>Interactions:</Text>
+              <TouchableOpacity
+                style={{ marginLeft: 100 }}
+                onPress={
+                  isSpeaking
+                    ? stopSpeech
+                    : () => speak(composeTextToSpeak(interactions), speechRate)
+                }
+              >
+                <Icon
+                  name={isSpeaking ? "stop" : "play"}
+                  size={30}
+                  color="#000"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={resumeSpeech} disabled={!isPaused}>
+                {/* <Icon name="play" size={30} color="#000" /> */}
+              </TouchableOpacity>
+              {/* <Slider
+                style={{
+                  width: 150,
+                  height: 40,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                minimumValue={0.5}
+                maximumValue={2.0}
+                value={speechRate}
+                onValueChange={(value) => setSpeechRate(value)}
+              /> */}
+              <RNPickerSelect
+                onValueChange={(value) => handleVoiceChange(value)}
+                items={voices.map((voice) => ({
+                  label: voice.name,
+                  value: voice.identifier,
+                }))}
+                style={{
+                  inputIOS: {
+                    fontSize: 16,
+                    paddingVertical: 12,
+                    paddingHorizontal: 10,
+                    borderWidth: 1,
+                    borderColor: "gray",
+                    borderRadius: 4,
+                    color: "black",
+                    paddingRight: 30, // to ensure the text is never behind the icon
+                  },
+                  inputAndroid: {
+                    fontSize: 16,
+                    paddingHorizontal: 10,
+                    paddingVertical: 8,
+                    borderWidth: 0.5,
+                    borderColor: "purple",
+                    borderRadius: 8,
+                    color: "black",
+                    paddingRight: 30, // to ensure the text is never behind the icon
+                  },
+                }}
+                value={selectedVoice}
+                placeholder={{ label: "Select a voice...", value: null }}
+              />
+            </View>
+            <Text style={styles.interactionHeader}>
+              {capitalizeFirstLetter("overview")}:
+            </Text>
+            <Text style={styles.interactionContent}>
+              {typeof overview === "string" ? overview : overview.text}
+            </Text>
+            {/* Render evidence if it exists */}
+            {overview.evidence && (
+              <Text style={styles.evidenceText}>
+                Clinical Evidence: {overview.evidence}
+              </Text>
+            )}
+          </View>
+        )}
+
+        {Object.entries(otherInteractions).map(([key, value]) => {
+          const content = typeof value === "string" ? value : value.text;
+          const evidence = typeof value === "object" ? value.evidence : null;
+
+          return (
+            <View key={key} style={{ marginBottom: 20 }}>
+              <Text style={styles.interactionHeader}>
+                {capitalizeFirstLetter(key)}:
+              </Text>
+              <Text style={styles.interactionContent}>{content}</Text>
+              {evidence && (
+                <Text style={styles.evidenceText}>
+                  Clinical Evidence: {evidence}
+                </Text>
+              )}
+            </View>
+          );
+        })}
+      </ScrollView>
+      <TouchableOpacity
+        onPressIn={() => setIsPressed(true)}
+        onPressOut={() => setIsPressed(false)}
+        onPress={() => scrollViewRef.current.scrollTo({ y: 0, animated: true })}
+        style={buttonStyle}
+        activeOpacity={1}
+      >
+        <FontAwesome
+          name="arrow-up"
+          size={24}
+          color={isPressed ? "white" : "gray"}
+        />
+      </TouchableOpacity>
+    </>
+  ) : (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Image
+        source={require("../assets/nuh.png")}
+        style={styles.interactionContent}
+        resizeMode="cover"
+      />
+    </View>
+  );
+};
+
+// TODO: Provide user with option to resume from the same place they stopped. Let them increase audio speed.
+// TODO: Instad of the same play button becoming pause button, have different buttons.
+function composeTextToSpeak(interactions) {
+  let textToSpeak = "Interactions: ";
+
+  // Add the overview text, if it exists.
+  if (interactions.overview) {
+    textToSpeak += `\nOverview: ${interactions.overview}`;
+  }
+
+  // Loop through each interaction.
+  for (const [key, value] of Object.entries(interactions)) {
+    if (key !== "overview") {
+      // Check if the value is a string and not empty.
+      if (typeof value === "string" && value.trim() !== "") {
+        textToSpeak += `\n${capitalizeFirstLetter(key)}: ${value}`;
+      }
+      // If it's an object with text and evidence properties.
+      else if (typeof value === "object") {
+        if (value.text && value.text.trim() !== "") {
+          textToSpeak += `\n${capitalizeFirstLetter(key)}: ${value.text}`;
+        }
+        if (value.evidence && value.evidence.trim() !== "") {
+          textToSpeak += `\nClinical Evidence for ${capitalizeFirstLetter(
+            key
+          )}: ${value.evidence}`;
+        }
+      }
+    }
+  }
+
+  return textToSpeak;
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function AboutRemedyScreen({ remedy, navigation, remediesList }) {
+  // console.log("THIS IS REMEDY", remedy);
+  const route = useRoute();
+
+  const { rem } = route.params || {};
+  // console.log("THIS IS REM", rem);
+
+  const [selectedRemedy, setSelectedRemedy] = useState(rem);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
+  const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
+  const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
+  const [isDosageCollapsed, setDosageCollapsed] = useState(true);
+  const scrollViewRef = useRef();
+
+  const [isPressed, setIsPressed] = useState(false);
+  // const [remediesList, setRemediesList] = useState([]);
+
+  const [selectedCondition, setSelectedCondition] = useState();
+  const [notes, setNotes] = useState("");
+
+  const [bookMarkText, setBookMarkText] = useState("Bookmark");
+  const user = auth.currentUser.uid;
+
+  const userRef = db.collection("users").doc(user);
+
+  // Putting it here right now, could be better to re use this in multiple places of the app.
+  // Make it a ui component later.
+
+  //TODO: Put this in components and reuse it
+
+  const buttonStyle = {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    backgroundColor: isPressed ? "#dedede" : "white",
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+  };
+
+  const shareHerbDetails = async () => {
+    let message = `Check out this herb: ${remedy.name}.\n\n`;
+
+    if (remedy.description) {
+      message += `Description: ${remedy.description}\n`;
+    }
+
+    if (remedy.properties) {
+      message += `Properties: ${remedy.properties}\n`;
+    }
+
+    if (remedy.precautions) {
+      message += `Precautions: ${remedy.precautions}\n`;
+    }
+
+    console.log("Sharing Message: ", message);
+
+    //TODO: If we want to share dosage, logic should be updated since dosage is an array.
+    // Did not implement this, cause why give the message recipient all this info. Download the app 🤷🏻‍♂️
+    // if (remedy.dosage) {
+    //   message += `Dosage: ${remedy.dosage}\n`;
+    // }
+
+    try {
+      const result = await Share.share({
+        message: message,
+        title: "Learn about ${remedy.name}",
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log("Shared with activity type: ", result.activityType);
+        } else {
+          alert("Thanks for sharing!");
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // alert("Share cancelled.");
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  useEffect(() => {
+    if (rem) {
+      setSelectedRemedy(rem);
+    }
+  }, [rem]);
+  const openModalWithSelectedRemedy = () => {
+    console.log("THIS IS REM BRUV", rem);
+    setSelectedRemedy(rem);
+    setModalVisible(true);
+  };
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={{ marginRight: 16 }}
+            onPress={() => shareHerbDetails(selectedRemedy)}
+          >
+            <SimpleLineIcons name="share" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={openModalWithSelectedRemedy}>
+            <SimpleLineIcons name="note" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation, selectedRemedy]);
 
   //saves notes function
+  //TODO: This does not work on Herb Details tab. FIX ME
   const saveNotes = () => {
     console.log("Save notes got executed");
     if (selectedRemedy && (selectedCondition || notes)) {
       const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
+      // const timestamp = new Date();
+      // const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       userNotesRef
-        .set({
-          herb: selectedRemedy,
-          condition: selectedCondition || "Not specified",
-          notes: notes,
-          // createdAt: new Date().toISOString,
-        })
+        .set(
+          {
+            herb: selectedRemedy,
+            // condition: selectedCondition || "Not specified",
+            notes: notes,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            // createdAt: new Date().toISOString,
+          },
+          { merge: true }
+        )
         .then(() => {
           Alert.alert("Notes saved successfully!");
           setModalVisible(false);
@@ -146,91 +612,89 @@ function AboutRemedyScreen({ route }) {
   };
 
   useEffect(() => {
-    checkBookMark()
-  },[])
+    checkBookMark();
+  }, []);
 
- function checkBookMark()
- {
-  const userDoc = userRef;
-  userDoc.get()
-    .then((doc) => {
+  function checkBookMark() {
+    const userDoc = userRef;
+    userDoc.get().then((doc) => {
       if (doc.exists) {
         // Get the user's current bookmarks array (if it exists)
         const currentBookmarks = doc.data().bookmarks || [];
 
         // Check if the current remedy is already bookmarked
-        const isRemedyBookmarked = currentBookmarks.some(item => item.name === remedy);
+        const isRemedyBookmarked = currentBookmarks.some(
+          (item) => item.name === remedy
+        );
 
         if (isRemedyBookmarked) {
-          console.log("its in")
-          setBookMarkText("UNBOOKMARK")
-        }
-        else{
-          setBookMarkText('BOOKMARK')
-        }
-      }
-    }
-    )
- }
- 
-  //bookmark remedy function
-  function bookMarkRemedy() {
-    // Reference to the user's document
-  const userDoc = userRef;
-
-  // Update the user's document to add or remove the bookmarked remedy from the array
-  userDoc.get()
-    .then((doc) => {
-      if (doc.exists) {
-        // Get the user's current bookmarks array (if it exists)
-        const currentBookmarks = doc.data().bookmarks || [];
-
-        // Check if the current remedy is already bookmarked
-        const remedyIndex = currentBookmarks.indexOf(rem);
-
-        if (remedyIndex === -1) {
-          // If the remedy is not bookmarked, add it to the bookmarks array
-          currentBookmarks.push(rem);
-          // Update the user's document to store the updated bookmarks array
-          userDoc.update({ bookmarks: currentBookmarks })
-            .then(() => {
-              Alert.alert(`${remedy.name} has been bookmarked!`);
-              setBookMarkText("UNBOOKMARK");
-            })
-            .catch((error) => {
-              console.error("Error adding bookmark:", error);
-            });
+          console.log("its in");
+          setBookMarkText("UNBOOKMARK");
         } else {
-          // If the remedy is already bookmarked, remove it from the bookmarks array
-          currentBookmarks.splice(remedyIndex, 1);
-          // Update the user's document to store the updated bookmarks array
-          userDoc.update({ bookmarks: currentBookmarks })
-            .then(() => {
-              Alert.alert(`${remedy.name} has been removed from your bookmarks!`);
-              setBookMarkText("BOOKMARK");
-            })
-            .catch((error) => {
-              console.error("Error removing bookmark:", error);
-            });
+          setBookMarkText("BOOKMARK");
         }
-      } else {
-        console.error("User document does not exist.");
       }
-    })
-    .catch((error) => {
-      console.error("Error checking user document:", error);
     });
   }
 
-  if (isLoading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+  //bookmark remedy function
+  function bookMarkRemedy() {
+    // Reference to the user's document
+    const userDoc = userRef;
+
+    // Update the user's document to add or remove the bookmarked remedy from the array
+    userDoc
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          // Get the user's current bookmarks array (if it exists)
+          const currentBookmarks = doc.data().bookmarks || [];
+
+          // Check if the current remedy is already bookmarked
+          const remedyIndex = currentBookmarks.indexOf(rem);
+
+          if (remedyIndex === -1) {
+            // If the remedy is not bookmarked, add it to the bookmarks array
+            currentBookmarks.push(rem);
+            // Update the user's document to store the updated bookmarks array
+            userDoc
+              .update({ bookmarks: currentBookmarks })
+              .then(() => {
+                Alert.alert(`${remedy.name} has been bookmarked!`);
+                setBookMarkText("UNBOOKMARK");
+              })
+              .catch((error) => {
+                console.error("Error adding bookmark:", error);
+              });
+          } else {
+            // If the remedy is already bookmarked, remove it from the bookmarks array
+            currentBookmarks.splice(remedyIndex, 1);
+            // Update the user's document to store the updated bookmarks array
+            userDoc
+              .update({ bookmarks: currentBookmarks })
+              .then(() => {
+                Alert.alert(
+                  `${remedy.name} has been removed from your bookmarks!`
+                );
+                setBookMarkText("BOOKMARK");
+              })
+              .catch((error) => {
+                console.error("Error removing bookmark:", error);
+              });
+          }
+        } else {
+          console.error("User document does not exist.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking user document:", error);
+      });
   }
 
-  // console.log(remedy.image);
   return (
     <View style={styles.rootContainer}>
       <Modal
-        animationType="slide"
+        animationType="fade"
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
@@ -256,27 +720,6 @@ function AboutRemedyScreen({ route }) {
               }}
             />
 
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedCondition(value)}
-              items={conditionsList}
-              placeholder={{
-                label: "Select a condition (optional)",
-                value: null,
-              }}
-              value={selectedCondition}
-              style={{
-                inputIOS: {
-                  marginTop: 10,
-                  marginBottom: 10,
-                  borderRadius: 8,
-                  padding: 8,
-                  height: 30,
-                  fontSize: 18,
-                  borderWidth: 1,
-                  borderColor: "gray",
-                },
-              }}
-            />
             <TextInput
               placeholder="Write your notes here"
               multiline
@@ -284,6 +727,7 @@ function AboutRemedyScreen({ route }) {
               onChangeText={setNotes}
               value={notes}
               style={styles.input}
+              accessibilityLabel="Notes input field"
             />
           </View>
           <TouchableOpacity onPress={saveNotes} style={styles.saveButton}>
@@ -298,7 +742,7 @@ function AboutRemedyScreen({ route }) {
           </TouchableOpacity>
         </SafeAreaView>
       </Modal>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} ref={scrollViewRef}>
         <View style={styles.container}>
           <Text style={styles.title}>{remedy.name}</Text>
 
@@ -321,76 +765,148 @@ function AboutRemedyScreen({ route }) {
           </Swiper>
 
           {/* <ImageViewer
-            style={{ flex: 1 }}
-            imageUrls={remedy.image.map((uri) => ({ url: uri }))}
-            renderIndicator={() => null}
-          /> */}
+              style={{ flex: 1 }}
+              imageUrls={remedy.image.map((uri) => ({ url: uri }))}
+              renderIndicator={() => null}
+            /> */}
 
           <View style={styles.info}>
-            <View style={styles.titleRow}>
-              <Text style={styles.head}>Description</Text>
-              <AntDesign
-                name={isDescriptionCollapsed ? "down" : "up"}
-                size={24}
-                onPress={() => setDescriptionCollapsed(!isDescriptionCollapsed)}
-                style={{
-                  paddingHorizontal: 5,
-                }}
-              />
-            </View>
-
-            <Collapsible collapsed={isDescriptionCollapsed}>
-              <Text style={styles.desc}>{remedy.description}</Text>
-            </Collapsible>
-            <View style={styles.titleRow}>
-              <Text style={styles.head}>Precautions</Text>
-              <AntDesign
-                name={isPrecautionsCollapsed ? "down" : "up"}
-                size={24}
-                onPress={() => setPrecautionsCollapsed(!isPrecautionsCollapsed)}
-                style={{
-                  paddingHorizontal: 5,
-                }}
-              />
-            </View>
-
-            <Collapsible collapsed={isPrecautionsCollapsed}>
-              <Text style={styles.desc}>{remedy.precautions}</Text>
-            </Collapsible>
+            {remedy.description && remedy.description.trim().length > 0 && (
+              <>
+                <View style={[styles.titleRow, { marginTop: 10 }]}>
+                  <Text style={styles.head}>Description</Text>
+                  <AntDesign
+                    name={isDescriptionCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() =>
+                      setDescriptionCollapsed(!isDescriptionCollapsed)
+                    }
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isDescriptionCollapsed}>
+                  <Text style={styles.desc}>{remedy.description}</Text>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
 
             {/* Adding properties section for herbs */}
-            <View style={styles.titleRow}>
-              <Text style={styles.head}>Properties</Text>
-              <AntDesign
-                name={isPropertiesCollapsed ? "down" : "up"}
-                size={24}
-                onPress={() => setPropertiesCollapsed(!isPropertiesCollapsed)}
-                style={{
-                  paddingHorizontal: 5,
-                }}
-              />
-            </View>
-
-            <Collapsible collapsed={isPropertiesCollapsed}>
-              <Text style={styles.desc}>{remedy.properties}</Text>
-            </Collapsible>
+            {remedy.properties && remedy.properties.trim().length > 0 && (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.head}>Properties</Text>
+                  <AntDesign
+                    name={isPropertiesCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() =>
+                      setPropertiesCollapsed(!isPropertiesCollapsed)
+                    }
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isPropertiesCollapsed}>
+                  <Text style={styles.desc}>{remedy.properties}</Text>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
+            {remedy.precautions && remedy.precautions.trim().length > 0 && (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.head}>Precautions</Text>
+                  <AntDesign
+                    name={isPrecautionsCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() =>
+                      setPrecautionsCollapsed(!isPrecautionsCollapsed)
+                    }
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isPrecautionsCollapsed}>
+                  <Text style={styles.desc}>{remedy.precautions}</Text>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
+            {/* Adding dosage section for herbs */}
+            {remedy.dosage && remedy.dosage.length > 0 && (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.head}>Dosage Forms</Text>
+                  <AntDesign
+                    name={isDosageCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() => setDosageCollapsed(!isDosageCollapsed)}
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isDosageCollapsed}>
+                  {remedy.dosage &&
+                    Object.entries(remedy.dosage[0]).map(
+                      ([field, value], index) => (
+                        <View key={index} style={styles.dosageRow}>
+                          <Text style={styles.dosageField}>{field}: </Text>
+                          <Text style={styles.desc}>{value}</Text>
+                        </View>
+                      )
+                    )}
+                  <TouchableOpacity
+                    style={styles.prepBlock}
+                    onPress={() => {
+                      navigation.navigate("Preparation Screen");
+                    }}
+                  >
+                    <Text>
+                      For information on how to prepare herbs, visit{" "}
+                      <Text style={styles.prepLink}>preparations</Text>
+                    </Text>
+                  </TouchableOpacity>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
           </View>
+
           <View style={{ alignItems: "center" }}>
             <BookMarkButton onPress={bookMarkRemedy}>
+              {/* Tried adding an icon, did not look good, need margin, but the way code is written, its not as easy as I thought it would be. */}
+              {/* <FontAwesome5 name="bookmark" style={styles.bookmarkIcon} /> */}
               {bookMarkText}
             </BookMarkButton>
           </View>
         </View>
       </ScrollView>
+      <TouchableOpacity
+        onPressIn={() => setIsPressed(true)}
+        onPressOut={() => setIsPressed(false)}
+        onPress={() => scrollViewRef.current.scrollTo({ y: 0, animated: true })}
+        style={buttonStyle}
+        activeOpacity={1}
+      >
+        <FontAwesome
+          name="arrow-up"
+          size={24}
+          color={isPressed ? "white" : "gray"}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
-
-export default AboutRemedyScreen;
+export default HerbScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    padding: 32,
+    padding: 24,
   },
   titleRow: {
     flexDirection: "row",
@@ -399,11 +915,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: "bold",
     marginBottom: 24,
   },
   wrapper: {
     height: 200,
+    marginBottom: 16,
   },
   buttonWrapper: {
     // backgroundColor: "rgba(255, 255, 255, 0.5)",
@@ -412,8 +929,15 @@ const styles = StyleSheet.create({
   swipeButton: {
     color: "white",
     fontSize: 70,
+    fontWeight: "600",
 
     // fontWeight: "bold",
+  },
+
+  bookmarkIcon: {
+    fontSize: 24,
+    color: "white",
+    marginRight: 4,
   },
 
   image: {
@@ -427,12 +951,14 @@ const styles = StyleSheet.create({
   desc: {
     fontSize: 16,
     lineHeight: 24,
+    textAlign: "left",
   },
   head: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "600",
     marginTop: 16,
     marginBottom: 16,
+    alignSelf: "flex-start",
   },
   modal: {
     margin: 20,
@@ -474,5 +1000,48 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 18,
+  },
+  dosageRow: {
+    // flexDirection: "row",
+    paddingVertical: 5,
+  },
+  dosageField: {
+    fontWeight: "bold",
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  dosageValue: {
+    marginLeft: 10,
+  },
+  divider: {
+    borderBottomColor: "gainsboro",
+    borderBottomWidth: 1,
+    marginVertical: 9,
+  },
+  herbDetailHeader: {
+    fontWeight: "bold",
+    fontSize: 22,
+    marginVertical: 10,
+  },
+  interactionHeader: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  interactionContent: {
+    fontSize: 14,
+    width: "100%",
+    flex: 1,
+  },
+  evidenceText: {
+    fontStyle: "italic",
+    fontSize: 14,
+    marginTop: 10,
+  },
+  prepBlock: {
+    marginTop: 15,
+  },
+  prepLink: {
+    textDecorationLine: "underline",
+    color: "blue",
   },
 });

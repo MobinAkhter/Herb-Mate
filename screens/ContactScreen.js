@@ -31,10 +31,33 @@ const ContactScreen = () => {
       return;
     }
 
-    Alert.alert(
-      "Success",
-      "Your message has been sent! We will get back to you soon."
-    );
+    fetch("http://localhost:5000/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        subject: subject,
+        message: message,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message) {
+          Alert.alert("Success", data.message);
+        } else {
+          throw new Error("Error sending email");
+        }
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Error",
+          "There was an error sending your message. Please try again later."
+        );
+        console.error("There was an error sending the email:", error);
+      });
   };
 
   return (
@@ -49,6 +72,7 @@ const ContactScreen = () => {
         style={styles.input}
         placeholder="Email"
         keyboardType="email-address"
+        autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
       />

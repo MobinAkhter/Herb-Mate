@@ -61,11 +61,11 @@ const SortedRemedies = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.listItem}
-            onPress={() => navigateToDetails(item.id)}
+            onPress={() => navigateToDetails(item)}
           >
             <Image
               source={
-                item.image && item.image.length > 0
+                item.image && item.image[0]
                   ? { uri: item.image[0] }
                   : require("../assets/leaf_icon.jpeg")
               }

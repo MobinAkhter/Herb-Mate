@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import BigButton from "../components/ui/BigButton";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db , auth} from "../firebase";
+import { db, auth } from "../firebase";
 
 function ConditionScreen({ route }) {
   const { bp } = route.params;
@@ -20,6 +26,7 @@ function ConditionScreen({ route }) {
 
   // Loads the conditions from cache or database
   const loadConditions = async () => {
+    // AsyncStorage.clear();
     try {
       const cacheKey = `conditions_${bp}`;
       const cachedConditions = await AsyncStorage.getItem(cacheKey);
@@ -49,16 +56,34 @@ function ConditionScreen({ route }) {
 
   useEffect(() => {
     loadConditions();
-
   }, []);
+
+  const getCardStyle = (numItems) => ({
+    width:
+      numItems <= 2
+        ? Dimensions.get("window").width - 20
+        : Dimensions.get("window").width / 3 - 20,
+    height: 150,
+    margin: 10,
+    backgroundColor: "#2E8B57",
+    borderRadius: 10,
+    padding: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 3,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#333",
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+  });
 
   //console log the selected condition
   const selectedCondition = async (conditionName) => {
-    console.log("Selected the following condition"+ conditionName)
+    console.log("Selected the following condition" + conditionName);
 
     // Get the user's document reference
     const userDocRef = db.collection("users").doc(user);
-  
+
     // Use the get() method to fetch the user's document
     const userDocSnapshot = await userDocRef.get();
 
@@ -67,25 +92,20 @@ function ConditionScreen({ route }) {
       const userData = userDocSnapshot.data();
 
       //check if the searches property of the user is at least 20
-       if(userData && userData.searches)
-       {
-         if(userData.searches.length <= 19)
-         {
+      if (userData && userData.searches) {
+        if (userData.searches.length <= 19) {
           userData.searches.push(conditionName);
 
-             // Update the user's document in the database
+          // Update the user's document in the database
           await userDocRef.update({
-          searches: userData.searches
-        });
-
-         }
-         else{
-          console.log("Cannot add conditions anymore")
-         }
-       }
+            searches: userData.searches,
+          });
+        } else {
+          console.log("Cannot add conditions anymore");
+        }
+      }
     }
-
-  }
+  };
 
   // TODO: Uncomment the lines of code below, if there is some caching problem, herbs from db are not showing up etc.
   // useEffect(() => {
@@ -163,22 +183,30 @@ function ConditionScreen({ route }) {
         data={conditions}
         renderItem={({ item }) => (
           <View style={styles.container}>
-            <BigButton
+            <TouchableOpacity
+              style={getCardStyle(conditions.length)}
               onPress={() => {
                 navigation.navigate("Remedies", {
                   bp: bp,
                   con: item.name,
                 });
-                
-                  selectedCondition(item.name)
-               
-              
+
+                selectedCondition(item.name);
               }}
             >
-              <Text style={styles.itemText}>{item.name}</Text>
-            </BigButton>
+              <Text
+                style={styles.itemText}
+                numberOfLines={3}
+                ellipsizeMode="tail"
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
           </View>
         )}
+        keyExtractor={(item) => item.id}
+        numColumns={3}
+        key={3}
       />
     </View>
   );
@@ -189,22 +217,24 @@ export default ConditionScreen;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    // padding: 32,
+    justifyContent: "flex-start",
+    alignItems: "stretch",
     paddingTop: 14, // personal preference
-  },
-  container: {
-    flex: 1,
+    backgroundColor: "white",
   },
   title: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "bold",
+    color: "black",
+    alignSelf: "center",
+    marginVertical: 20,
   },
   itemText: {
-    // Add desired styles for the item text
+    fontSize: 15,
+    color: "white",
+    textAlign: "center",
+    flexShrink: 1,
+    fontWeight: "bold",
   },
-  icon: {
-    // Add desired styles for the icons
-  },
+  icon: {},
 });
