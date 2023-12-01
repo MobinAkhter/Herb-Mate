@@ -9,6 +9,7 @@ import {
 import BigButton from "../components/ui/BigButton";
 import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../firebase";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const AppSettingsScreen = () => {
   const navigation = useNavigation();
@@ -54,6 +55,8 @@ const AppSettingsScreen = () => {
     return unsubscribe;
   }, [navigation]);
   return (
+    <>
+    <KeyboardAwareScrollView>
     <View style={styles.rootContainer}>
       <View style={styles.header}>
         <TouchableOpacity
@@ -85,6 +88,8 @@ const AppSettingsScreen = () => {
         </View>
       </View>
     </View>
+    </KeyboardAwareScrollView>
+    </>
   );
 };
 

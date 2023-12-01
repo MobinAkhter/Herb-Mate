@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import Button from "../components//ui/Button";
 import { useNavigation } from "@react-navigation/native";
-import { db, auth } from "../firebase";
+import { db, auth,  } from "../firebase";
+import * as Haptics from 'expo-haptics';
 
 function ViewAllRecommendationsScreen(){
     const [recommendations, setRecommendations] = useState([])
@@ -83,7 +84,17 @@ function ViewAllRecommendationsScreen(){
             data={recommendations}
             renderItem={({ item }) => (
                 <TouchableOpacity
-                onPress={() => itemSelected(item)}
+                
+                
+                onPress = { ()=> { 
+                    Haptics.ImpactFeedbackStyle.Light
+                    Haptics.selectionAsync()
+                    itemSelected(item)
+                }}
+                
+                
+                
+                
                 >
                 <View style={listItemStyle.rootContainer}>
                     <Text style={listItemStyle.Text}>{item.userCondition}</Text>
