@@ -92,14 +92,13 @@ function ViewAllRecommendationsScreen(){
                     itemSelected(item)
                 }}
                 
-                
-                
-                
                 >
                 <View style={listItemStyle.rootContainer}>
                     <Text style={listItemStyle.Text}>{item.userCondition}</Text>
+                    
                 </View>
                 </TouchableOpacity>
+                
             )}
         />
 
@@ -136,7 +135,8 @@ const listItemStyle = StyleSheet.create({
     Text:{
       fontSize: 20,
       color: "black",
-      fontWeight: "500"
+      fontWeight: "500",
+      fontFamily: 'DamascusSemiBold'
     }
     
   })
