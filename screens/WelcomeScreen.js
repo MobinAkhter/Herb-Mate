@@ -116,7 +116,7 @@ const WelcomeScreen = ({}) => {
           <View style={styles.searchWrapper}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search for remedy"
+              placeholder="Search for remedy/conditions..."
               keyboardType="default"
               onChangeText={(input) => setSearchInput(input)}
               value={searchInput}
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 16,
     height: "100%",
-    width: "60%",
+    width: "65%",
   },
   searchInput: {
     width: "100%",
