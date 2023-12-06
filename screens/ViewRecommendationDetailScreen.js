@@ -38,6 +38,14 @@ function ViewRecommendationDetailScreen({route}){
         }
       }
 
+      /**
+       * 
+       *  <Text style={styles.subTitle}>Question: {recommendation.Question}</Text>
+            <Text style={[styles.subTitle, { color: 'grey' }]}>Your Condition: {recommendation.UserCondition}</Text>
+            <Text style={[styles.subTitle, { color: 'purple' }]}>Your Biological Sex: {recommendation.Sex}</Text>
+            <Text style={[styles.subTitle, { color: 'red' }]}>How severe is your current condition?: {recommendation.Severity}</Text>
+            <Text style={[styles.subTitle, { color: 'green' }]}>Your recommended Remedy: {recommendation.Remedy}</Text>
+       */
       useEffect( () => {
           getRecommendation()
       },[])
@@ -49,17 +57,30 @@ function ViewRecommendationDetailScreen({route}){
 
       return(
         <>
-            <View style={styles.rootContainer}>
+           
+         
             
-            <Text style={[styles.subTitle, { color: 'blue' }]}>Your Age: {recommendation.Age}</Text>
-            <Text style={[styles.subTitle, { color: 'orange' }]}>Category: {recommendation.Category}</Text>
-            <Text style={styles.subTitle}>Question: {recommendation.Question}</Text>
-            <Text style={[styles.subTitle, { color: 'grey' }]}>Your Condition: {recommendation.UserCondition}</Text>
-            <Text style={[styles.subTitle, { color: 'purple' }]}>Your Biological Sex: {recommendation.Sex}</Text>
-            <Text style={[styles.subTitle, { color: 'red' }]}>How severe is your current condition?: {recommendation.Severity}</Text>
-            <Text style={[styles.subTitle, { color: 'green' }]}>Your recommended Remedy: {recommendation.Remedy}</Text>
+            <View style={styles.subContainer}>
+            
+                <View style={styles.rootContainer}>
+                    <Text style={styles.subTitle}>Age: </Text>
+                    <Text style={styles.subTitle}>Condition: </Text>
+                    <Text style={styles.subTitle}>Biological Sex: </Text>
+                    <Text style={styles.subTitle}>Severity: </Text>
+                    <Text style={styles.subTitle}>Recommended Remedy: </Text>
+                </View>
+            
+                <View style={styles.rootContainer}>
+                      <Text style={[styles.subTitle, { color: 'green' }]}>{recommendation.Age}</Text>
+                      <Text style={[styles.subTitle, { color: 'green' }]}>{recommendation.UserCondition}</Text>
+                      <Text style={[styles.subTitle, { color: 'green' }]}>{recommendation.Sex}</Text>
+                      <Text style={[styles.subTitle, { color: 'green' }]}>{recommendation.Severity}</Text>
+                      <Text style={[styles.subTitle, { color: 'green' }]}>{recommendation.Remedy}</Text>
 
-            </View> 
+                </View>
+            </View>
+
+            
         </>
       )
 
@@ -69,20 +90,22 @@ export default ViewRecommendationDetailScreen;
 
 const styles = StyleSheet.create({
     rootContainer: {
+      alignItems: "flex-start",
+    },
+    subContainer: {
       flex: 1,
-      justifyContent: "center",
+      justifyContent:"space-around",
+      flexDirection: "row",
       alignItems: "center",
-      padding: 32,
     },
     title: {
-      fontSize: 50,
-      fontWeight: "bold",
-      marginBottom: 8,
+      textAlign: "center",
+      paddingBottom: 190,
       color: '#32cd32'
     },
     subTitle: {
       fontWeight: "bold",
-      fontSize: 20,
+      fontSize: 15,
       textAlign: "center",
       paddingBottom: 10
     },
