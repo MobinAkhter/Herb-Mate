@@ -68,6 +68,7 @@ const DataAnalyticsScreen = () => {
       {
         navigation.navigate("QuestionTier2", {
           prevQuestion: "Skin Condition",
+          condition: userInput
        });
       }
       else

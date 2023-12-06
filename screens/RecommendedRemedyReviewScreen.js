@@ -39,6 +39,7 @@ function RecommendedRemedyReviewScreen({ route }) {
     {
         setSeverity("Critical");
     }
+    console.log("This is  " + userQuestion)
   })
 
   function buttonClick()
@@ -57,8 +58,19 @@ function RecommendedRemedyReviewScreen({ route }) {
       ageGroup = "50 and over"
     }
 
+    let area = category
+
+    if(category == "Digestive Wellness")
+    {
+        area = "Digestive Health"
+    }
+    else if(category == "Women's Health")
+    {
+        area = "Women’s Health"
+    }
+
     navigation.navigate("RecommendedRemedyScreen", {
-      category: category,
+      category: area,
       question: condition,
       age: ageGroup,
       gender: "Both",

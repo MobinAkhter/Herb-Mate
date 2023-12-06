@@ -66,7 +66,7 @@ const QuestionTier3Screen = ({ route }) => {
 
   useEffect(() => {
     setRating(3)
-    
+    console.log("This is " + condition)
   }, []);
 
   function buttonClick()

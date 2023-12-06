@@ -14,6 +14,9 @@ const QuestionTier2Screen = ({ route }) => {
   const documentRef = category.doc(prevQuestion.toString());
 
   useEffect(() => {
+
+
+    console.log("This is your " + condition)
     console.log("This is a prevQuestion lol" + prevQuestion)
     if (!prevQuestion) {
       console.error("prevQuestion is empty or undefined");

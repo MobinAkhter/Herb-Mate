@@ -17,9 +17,14 @@ const RecommendedRemedyScreen = ({ route }) => {
   const [pred, setPred] = useState("");
   const navigation = useNavigation();
   const user = auth.currentUser.uid;
+  const [area, setArea] = useState("")
   const apiUrl = "http://127.0.0.1:5001/predict"; 
 
   useEffect(() => {
+
+
+    
+
     const requestData = {
       Category: category,
       Question: question,
