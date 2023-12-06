@@ -75,17 +75,33 @@ return(
     <>
     <View style={styles.rootContainer}>
 
-        <Text style={styles.title}> Review </Text>
+    <Text style={styles.title}> Review </Text>
+
+      <View style={styles.subContainer} >
+
+        <View style={styles.textPosition}>
+            <Text style={ [{color: 'black'}, {fontWeight:"bold"}, {marginBottom: 30}]}> Category:</Text>
+            <Text style={ [{color: 'black'}, {fontWeight:"bold"}, {marginBottom: 30}]}> Condition:</Text>
+            <Text style={ [{color: 'black'}, {fontWeight:"bold"}, {marginBottom: 30}]}> Biological Sex:</Text>
+            <Text style={ [{color: 'black'}, {fontWeight:"bold"}, {marginBottom: 30}]}> Age:</Text>
+            <Text style={ [{color: 'black'}, {fontWeight:"bold"}, {marginBottom: 30}]}> Level of Severity:</Text>
+         
+        </View>
+            
+        <View style={styles.textPosition}>
+            <Text style={ [{color: 'green'}, {fontWeight:"bold"}, {marginBottom: 30}]}> {category}</Text>
+            <Text style={ [{color: 'green'}, {fontWeight:"bold"}, {marginBottom: 30}]}> {userQuestion}</Text>
+            <Text style={ [{color: 'green'}, {fontWeight:"bold"}, {marginBottom: 30}]}> {sex}</Text>
+            <Text style={ [{color: 'green'}, {fontWeight:"bold"}, {marginBottom: 30}]}> {age}</Text>
+            <Text style={ [{color: 'green'}, {fontWeight:"bold"}, {marginBottom: 30}]}> {severity}</Text>
+        </View>
+           
         
-        <Text> Category: {category} </Text>
+       
+      
+      </View>
 
-        <Text> Condition: {userQuestion} </Text>
-
-        <Text> Sex: {sex} </Text>
-
-        <Text> Again: {age} </Text>
-
-        <Text> Level of Severness: {severity} </Text>
+        
 
         <TouchableOpacity style={styles.continueButton} onPress={buttonClick}>
         <Text style={styles.buttonText}> CONTINUE </Text>
@@ -106,10 +122,20 @@ const styles = StyleSheet.create({
       alignItems: "center",
       padding: 32,
     },
+
+    textPosition:{
+      alignItems: "flex-start",
+      paddingLeft: 20
+    },
+    subContainer: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between"
+    },
     title: {
-      fontSize: 50,
+      fontSize: 40,
       fontWeight: "bold",
-      marginBottom: 8,
       color: '#32cd32'
     },
     subTitle: {
@@ -128,7 +154,7 @@ const styles = StyleSheet.create({
     continueButton:{
       borderRadius: 10,
       borderWidth: 1.5,
-      marginTop: 10,
+     
       justifyContent: "center",
       alignItems: "center",
       padding: 10,
