@@ -171,9 +171,10 @@ function RecommendationStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
+      
       <Stack.Screen
-        name="Data Analytics"
-        component={DataAnalyticsScreen}
+        name="Your Symptoms"
+        component={ViewAllRecommendationsScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
@@ -181,6 +182,11 @@ function RecommendationStack() {
             </TouchableOpacity>
           ),
         })}
+      />
+
+      <Stack.Screen
+        name="Data Analytics"
+        component={DataAnalyticsScreen}
       />
       <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
       <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
@@ -336,7 +342,7 @@ function AuthenticatedStack() {
       /> */}
       <Tab.Screen
         name="Recommendation System"
-        component={ViewAllRecommendationsScreen}
+        component={RecommendationStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="md-analytics" size={size} color={color} />
