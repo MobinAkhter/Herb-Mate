@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, Image } from "react-native";
 import Button from "../components//ui/Button";
 import { useNavigation } from "@react-navigation/native";
 import { db, auth,  } from "../firebase";
@@ -57,7 +57,7 @@ function ViewAllRecommendationsScreen(){
 
       useEffect( () => {
           getRecommendations()
-      },[recommendations])
+      },[])
 
 
       //when an item gets clicked
@@ -73,6 +73,24 @@ function ViewAllRecommendationsScreen(){
         navigation.navigate("DataAnalyticsScreen1")
       
       }
+
+      //when x button gets clicked
+  function removeSymptom()
+  {
+    
+    Alert.alert(
+      //This is title
+     'Warning',
+       //This is body text
+     'Are you sure you want to remove this ',
+     [
+       {text: 'Yes', onPress: () => console.log("Yes")},
+       {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+     ],
+     { cancelable: false }
+     //on clicking out side, Alert will not dismiss
+   );
+  }
 
       return(
         <>
@@ -95,7 +113,10 @@ function ViewAllRecommendationsScreen(){
                 >
                 <View style={listItemStyle.rootContainer}>
                     <Text style={listItemStyle.Text}>{item.userCondition}</Text>
-                    
+                    <TouchableOpacity onPress={() => removeSymptom()}>
+                          <Image style={listItemStyle.herbImage} source={require("../assets/trash.jpeg")}/>
+                    </TouchableOpacity>
+                   
                 </View>
                 </TouchableOpacity>
                 
@@ -129,7 +150,8 @@ const listItemStyle = StyleSheet.create({
       paddingLeft: 10,
       borderBottomWidth: 1, // Add a border width for the black line
       borderBottomColor: "grey",
-     
+     justifyContent: "space-between",
+     flexDirection: "row"
     },
   
     Text:{
@@ -137,8 +159,13 @@ const listItemStyle = StyleSheet.create({
       color: "black",
       fontWeight: "500",
       fontFamily: 'DamascusSemiBold'
-    }
-    
+    },
+    herbImage: {
+      width: 80,
+      height: 60,
+      marginLeft: 0,
+      borderRadius: 0,
+    },
   })
   
   const styles = StyleSheet.create({

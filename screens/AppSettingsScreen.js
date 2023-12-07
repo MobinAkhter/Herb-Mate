@@ -27,20 +27,19 @@ const AppSettingsScreen = () => {
       const userDocSnapshot = await userDocRef.get();
 
       if (userDocSnapshot.exists) {
-        // Check if the document exists
+        
 
         const userData = userDocSnapshot.data();
 
         if (userData && userData.bookmarks) {
-          // Check if the 'bookmarks' property exists in the user's data
-          // userData.bookmarks should be an array containing the bookmarked items
+         
           setBookmarkCollection(userData.bookmarks);
         } else {
-          // Handle the case where 'bookmarks' property does not exist or is empty
+          
           setBookmarkCollection([]);
         }
       } else {
-        // Handle the case where the user's document does not exist
+       
         setBookmarkCollection([]);
       }
     } catch (error) {
