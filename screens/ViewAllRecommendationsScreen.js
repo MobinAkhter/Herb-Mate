@@ -57,7 +57,7 @@ function ViewAllRecommendationsScreen(){
 
       useEffect( () => {
           getRecommendations()
-      },[])
+      },[recommendations])
 
 
       //when an item gets clicked
@@ -70,7 +70,7 @@ function ViewAllRecommendationsScreen(){
 
       function lol()
       {
-        navigation.navigate("DataAnalyticsScreen")
+        navigation.navigate("DataAnalyticsScreen1")
       
       }
 

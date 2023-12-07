@@ -61,32 +61,8 @@ function Home() {
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
       <Stack.Screen name="Donation" component={DonationScreen} />
       <Stack.Screen name="RemediesBar" component={RemediesBarGraphScreen} />
-      <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
-      <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
-      <Stack.Screen name="DataAnalyticsScreen" component={DataAnalyticsScreen} />
-      <Stack.Screen
-        name="RecommendedRemedyScreen"
-        component={RecommendedRemedyScreen}
-      />
-      <Stack.Screen
-        name="RecommendedRemediesScreen"
-        component={RecommendedRemediesScreen}
-      />
-
-      <Stack.Screen
-        name="RecommendedRemedyReviewScreen"
-        component={RecommendedRemedyReviewScreen}
-      />
-
-       <Stack.Screen
-        name="ViewAllRecommendationsScreen"
-        component={ViewAllRecommendationsScreen}
-      />
-
-      <Stack.Screen
-        name="ViewRecommendationDetailScreen"
-        component={ViewRecommendationDetailScreen}
-      />
+      
+      
       <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
       <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
@@ -173,7 +149,7 @@ function RecommendationStack() {
     >
       
       <Stack.Screen
-        name="Your Symptoms"
+        name="ViewAllRecommendationsScreen"
         component={ViewAllRecommendationsScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -185,19 +161,28 @@ function RecommendationStack() {
       />
 
       <Stack.Screen
-        name="Data Analytics"
+        name="DataAnalyticsScreen1"
         component={DataAnalyticsScreen}
       />
       <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
       <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
+
+      <Stack.Screen
+        name="RecommendedRemedyReviewScreen"
+        component={RecommendedRemedyReviewScreen}
+      />
+
+<Stack.Screen
+        name="ViewRecommendationDetailScreen"
+        component={ViewRecommendationDetailScreen}
+      />
+
       <Stack.Screen
         name="RecommendedRemedyScreen"
         component={RecommendedRemedyScreen}
       />
-      <Stack.Screen
-        name="RecommendedRemediesScreen"
-        component={RecommendedRemediesScreen}
-      />
+
+
     </Stack.Navigator>
   );
 }
@@ -341,7 +326,7 @@ function AuthenticatedStack() {
         }}
       /> */}
       <Tab.Screen
-        name="Recommendation System"
+        name="Symptoms"
         component={RecommendationStack}
         options={{
           tabBarIcon: ({ color, size }) => (
