@@ -5,6 +5,8 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  Image,
+  Alert 
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../firebase";
@@ -46,6 +48,61 @@ const AppSettingsScreen = () => {
     }
   };
 
+
+
+
+  //when x button gets clicked
+  function clickX(name)
+  {
+    console.log("This is a " + name)
+    Alert.alert(
+      //This is title
+     'Hello',
+       //This is body text
+     'This is two option alert.',
+     [
+       {text: 'Yes', onPress: () => removeBookmark(name)},
+       {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+     ],
+     { cancelable: false }
+     //on clicking out side, Alert will not dismiss
+   );
+  }
+
+  const removeBookmark = async (remedyName) => {
+    try {
+      // Create a copy of the current bookmark collection
+      const updatedBookmarks = [...bookmarkCollection];
+  
+      // Find the index of the bookmark with the specified name
+      const indexToRemove = updatedBookmarks.findIndex(
+        (item) => item.name === remedyName
+      );
+  
+      // Remove the bookmark if found
+      if (indexToRemove !== -1) {
+        updatedBookmarks.splice(indexToRemove, 1);
+  
+        // Update the state with the new bookmark collection
+        setBookmarkCollection((prevBookmarks) => [...prevBookmarks]);
+  
+        // Update the 'bookmarks' property in the user's document in Firestore
+        await userRef.update({
+          bookmarks: updatedBookmarks,
+        });
+
+       fetchBookmarks();
+  
+        // Optionally, you can show a message indicating successful removal
+        console.log(`Bookmark for ${remedyName} removed successfully.`);
+      } else {
+        console.log(`Bookmark for ${remedyName} not found.`);
+      }
+    } catch (error) {
+      console.error("Error removing bookmark:", error);
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchBookmarks();
@@ -62,7 +119,7 @@ const AppSettingsScreen = () => {
           onPress={() => navigation.navigate("Home")}
           style={styles.iconContainer}
         >
-          {/* Add your arrow-left icon component here */}
+          
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
@@ -78,7 +135,21 @@ const AppSettingsScreen = () => {
                 }}
               >
                 <View style={listItemStyle.rootContainer}>
+
+                <Image
+              source={
+                item.image && item.image[0]
+                  ? { uri: item.image[0] }
+                  : require("../assets/leaf_icon.jpeg")
+              }
+              style={listItemStyle.herbImage}/>
+                
                   <Text style={listItemStyle.Text}>{item.name}</Text>
+                  <TouchableOpacity
+                    onPress={() => clickX(item.name)}
+                  >
+                     <Text  style={listItemStyle.xText}>X</Text>
+                    </TouchableOpacity>
                   {/* Shane had item.name, just incase something get's messed up */}
                 </View>
               </TouchableOpacity>
@@ -95,18 +166,41 @@ const AppSettingsScreen = () => {
 const listItemStyle = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: "space-between",
     paddingTop: 20,
     paddingBottom: 20,
-    paddingLeft: 10,
-    borderBottomWidth: 1, // Add a border width for the black line
-    borderBottomColor: "grey",
+    paddingLeft: 15,
+    borderRadius: 70,
+    borderColor: "black",
+    borderWidth: 2,
+    marginBottom: 5,
+    marginTop: 5,
+    backgroundColor: "#4169e1",
+    height: 100
   },
 
   Text: {
-    fontSize: 20,
-    color: "green",
+    fontSize: 13,
+    color: "white",
     fontWeight: "bold",
+    marginLeft: -20,
+    marginTop: 20
+  },
+
+  xText:{
+    fontSize: 25,
+    marginTop: 15,
+    marginRight: 13,
+    color: "#ff0000",
+    fontWeight: "bold",
+    borderColor: "black",
+  },
+  herbImage: {
+    width: 60,
+    height: 60,
+    marginLeft: -14,
+    borderRadius: 25,
   },
 });
 

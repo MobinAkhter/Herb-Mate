@@ -52,8 +52,7 @@ function ViewRecommendationDetailScreen({route}){
 
       useEffect(() => {
         console.log(recommendation);
-      }, [recommendation]);
-
+      }, []);
 
       return(
         <>
