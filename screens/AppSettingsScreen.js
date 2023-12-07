@@ -54,12 +54,12 @@ const AppSettingsScreen = () => {
   //when x button gets clicked
   function clickX(name)
   {
-    console.log("This is a " + name)
+    
     Alert.alert(
       //This is title
-     'Hello',
+     'Warning',
        //This is body text
-     'This is two option alert.',
+     'Are you sure you want to remove ' + name + " from your bookmarks",
      [
        {text: 'Yes', onPress: () => removeBookmark(name)},
        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
