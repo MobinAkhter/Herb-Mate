@@ -74,19 +74,39 @@ function ViewAllRecommendationsScreen(){
       
       }
 
-      //when x button gets clicked
-  function removeSymptom()
+  //when x button gets clicked
+  function removeSymptom(item)
   {
     
     Alert.alert(
       //This is title
      'Warning',
        //This is body text
-     'Are you sure you want to remove this ',
+     'Are you sure you want to remove this symptom?',
      [
-       {text: 'Yes', onPress: () => console.log("Yes")},
-       {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
-     ],
+      {
+        text: 'Yes',
+        onPress: async () => {
+          try {
+            const collection = db.collection("users").doc(user).collection("recommendedRemedies");
+
+            // Find the document reference with the specified ID
+            const docRef = collection.doc(item.id);
+
+            // Delete the document
+            await docRef.delete();
+
+            // Fetch recommendations again after updating the Firestore collection
+            getRecommendations();
+
+            console.log(`Symptom with ID ${item.id} removed successfully.`);
+          } catch (error) {
+            console.error("Error removing symptom:", error);
+          }
+        },
+      },
+      { text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel' },
+    ],
      { cancelable: false }
      //on clicking out side, Alert will not dismiss
    );
@@ -113,7 +133,7 @@ function ViewAllRecommendationsScreen(){
                 >
                 <View style={listItemStyle.rootContainer}>
                     <Text style={listItemStyle.Text}>{item.userCondition}</Text>
-                    <TouchableOpacity onPress={() => removeSymptom()}>
+                    <TouchableOpacity onPress={() => removeSymptom(item)}>
                           <Image style={listItemStyle.herbImage} source={require("../assets/trash.jpeg")}/>
                     </TouchableOpacity>
                    
