@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,16 +6,39 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 70;
+
+const AlphabetIndex = ({ selectedLetter, onLetterPress }) => {
+  return (
+    <View style={styles.alphabetContainer}>
+      {Array.from(Array(26)).map((_, i) => {
+        const letter = String.fromCharCode(65 + i);
+        const isSelected = letter === selectedLetter;
+        return (
+          <TouchableOpacity
+            key={letter}
+            style={isSelected ? styles.selectedLetter : styles.letterContainer}
+            onPress={() => onLetterPress(letter)}
+          >
+            <Text style={styles.letter}>{letter}</Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
 
 const SortedRemedies = () => {
   const [herbs, setHerbs] = useState([]);
   const [lastVisibleRemedy, setLastVisibleRemedy] = useState(null);
   const [allHerbsLoaded, setAllHerbsLoaded] = useState(false);
+  const [selectedLetter, setSelectedLetter] = useState("A");
+  const listRef = useRef(null);
   const navigation = useNavigation();
 
   const fetchHerbs = async () => {
@@ -53,11 +76,20 @@ const SortedRemedies = () => {
     navigation.navigate("Remedy Details", { rem: id });
   };
 
+  const onLetterPress = (letter) => {
+    setSelectedLetter(letter);
+    const index = herbs.findIndex((herb) => herb.name.startsWith(letter));
+    if (index !== -1) {
+      listRef.current.scrollToIndex({ index, animated: true });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={herbs}
         keyExtractor={(item) => item.id}
+        ref={listRef}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.listItem}
@@ -76,6 +108,10 @@ const SortedRemedies = () => {
         )}
         onEndReached={allHerbsLoaded ? null : fetchHerbs}
         onEndReachedThreshold={0.9}
+      />
+      <AlphabetIndex
+        selectedLetter={selectedLetter}
+        onLetterPress={onLetterPress}
       />
     </View>
   );
@@ -103,5 +139,22 @@ const styles = StyleSheet.create({
   herbName: {
     fontSize: 18,
     marginRight: 70,
+  },
+  alphabetContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+  },
+  selectedLetter: {
+    backgroundColor: "#87ceeb",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+
+  letter: {
+    fontSize: 14,
+    padding: 4,
+    color: "black",
   },
 });

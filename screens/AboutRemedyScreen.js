@@ -292,7 +292,7 @@ const HerbDetails = ({ interactions }) => {
   return hasDetails ? (
     <>
       <ScrollView
-        style={{ flex: 1, margin: 24 }}
+        style={{ flex: 1, margin: 24, marginBottom: 0 }}
         showsVerticalScrollIndicator={false}
         ref={scrollViewRef}
       >
@@ -307,7 +307,7 @@ const HerbDetails = ({ interactions }) => {
             >
               <Text style={styles.herbDetailHeader}>Interactions:</Text>
               <TouchableOpacity
-                style={{ marginLeft: 100 }}
+                style={{ marginLeft: 80 }}
                 onPress={
                   isSpeaking
                     ? stopSpeech
@@ -906,7 +906,10 @@ export default HerbScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    padding: 24,
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingTop: 24,
+    // padding: 24,
   },
   titleRow: {
     flexDirection: "row",
