@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import Button from "../components//ui/Button";
 import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase";
@@ -112,9 +106,17 @@ const RecommendedRemedyScreen = ({ route }) => {
           Remedy: pred,
         });
       }
+
+      Alert.alert('Congratulations',
+      'Your details have been recorded', [
+       
+       {text: 'Continue', onPress: () => console.log('OK Pressed')},
+     ]);
+
     }
-    navigation.navigate("ViewAllRecommendationsScreen");
-  };
+    navigation.navigate("View Your Symptoms");
+
+  }
 
   return (
     <>
@@ -144,6 +146,7 @@ const RecommendedRemedyScreen = ({ route }) => {
               <Text style={styles.buttonText}> View {pred}</Text>
             </TouchableOpacity>
 
+<<<<<<< HEAD
             <TouchableOpacity
               onPress={() => lol()}
               style={styles.continueButton}
@@ -153,6 +156,24 @@ const RecommendedRemedyScreen = ({ route }) => {
           </View>
         </View>
       </View>
+=======
+     <View style={{ marginTop: 10, marginBottom: 10 }}>
+      
+     
+
+        <TouchableOpacity
+        onPress={() => lol()}
+     style={styles.continueButton}>
+        
+        <Text style={styles.buttonText}> Continue</Text>
+       
+        </TouchableOpacity>
+     </View>
+    
+     
+
+    </View>
+>>>>>>> code-refactor
     </>
   );
 };

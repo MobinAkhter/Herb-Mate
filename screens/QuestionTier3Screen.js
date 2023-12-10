@@ -73,10 +73,10 @@ const QuestionTier3Screen = ({ route }) => {
   {
     let ageGroup = ""
     console.log("This is +" + age)
-    if(age == null || age == "")
+    if(age == null || age == "" || age < 18 || age > 120)
     {
       Alert.alert('Error',
-      'Please enter you age', [
+      'Please enter an age between 18 to 120', [
        
        {text: 'OK', onPress: () => console.log('OK Pressed')},
      ]);
@@ -102,7 +102,7 @@ const QuestionTier3Screen = ({ route }) => {
       gender: "Both",
       rating: rating
     }); */
-    navigation.navigate("RecommendedRemedyReviewScreen", {
+    navigation.navigate("Symptom Details Review", {
       category: selectedCategory,
       condition: prevQuestion,
       age: age,

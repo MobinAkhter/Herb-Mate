@@ -51,7 +51,7 @@ const QuestionTier2Screen = ({ route }) => {
 
   function buttonClick(category, tier2)
   {
-    navigation.navigate("QuestionTier3", {
+    navigation.navigate("Enter Your Info", {
       selectedCategory: category,
       prevQuestion: tier2 ,
       condition: condition

@@ -63,14 +63,14 @@ function ViewAllRecommendationsScreen(){
       //when an item gets clicked
       function itemSelected(item)
       {
-        navigation.navigate("ViewRecommendationDetailScreen", {
+        navigation.navigate("View Symptoms Details", {
             recommendId: item.id
           });
       }
 
       function lol()
       {
-        navigation.navigate("DataAnalyticsScreen1")
+        navigation.navigate("About Recommendation System")
       
       }
 
@@ -171,14 +171,15 @@ const listItemStyle = StyleSheet.create({
       borderBottomWidth: 1, // Add a border width for the black line
       borderBottomColor: "grey",
      justifyContent: "space-between",
-     flexDirection: "row"
+     flexDirection: "row",
     },
   
     Text:{
       fontSize: 20,
       color: "black",
       fontWeight: "500",
-      fontFamily: 'DamascusSemiBold'
+      fontFamily: 'DamascusSemiBold',
+      marginTop: 20
     },
     herbImage: {
       width: 80,

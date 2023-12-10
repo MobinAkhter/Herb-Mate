@@ -147,7 +147,7 @@ function RecommendationStack() {
       }}
     >
       <Stack.Screen
-        name="ViewAllRecommendationsScreen"
+        name="View Your Symptoms"
         component={ViewAllRecommendationsScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -159,19 +159,19 @@ function RecommendationStack() {
       />
 
       <Stack.Screen
-        name="DataAnalyticsScreen1"
+        name="About Recommendation System"
         component={DataAnalyticsScreen}
       />
-      <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
-      <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
+      <Stack.Screen name="Specific Question" component={QuestionTier2Screen} />
+      <Stack.Screen name="Enter Your Info" component={QuestionTier3Screen} />
 
       <Stack.Screen
-        name="RecommendedRemedyReviewScreen"
+        name="Symptom Details Review"
         component={RecommendedRemedyReviewScreen}
       />
 
       <Stack.Screen
-        name="ViewRecommendationDetailScreen"
+        name="View Symptoms Details"
         component={ViewRecommendationDetailScreen}
       />
 
