@@ -21,6 +21,9 @@ import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/SortedRemedies";
 import DonationScreen from "../screens/DonationScreen";
 import RecommendedRemediesScreen from "../screens/RecommendedRemediesScreen";
+import RecommendedRemedyReviewScreen from "../screens/RecommendedRemedyReviewScreen";
+import ViewAllRecommendationsScreen from "../screens/ViewAllRecommendationsScreen";
+import ViewRecommendationDetailScreen from "../screens/ViewRecommendationDetailScreen";
 import PreparationScreen from "../screens/PreparationScreen";
 import PreparationDetails from "../screens/PreparationDetails";
 import NotesScreen from "../screens/NotesScreen";
@@ -58,16 +61,7 @@ function Home() {
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
       <Stack.Screen name="Donation" component={DonationScreen} />
       <Stack.Screen name="RemediesBar" component={RemediesBarGraphScreen} />
-      <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
-      <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
-      <Stack.Screen
-        name="RecommendedRemedyScreen"
-        component={RecommendedRemedyScreen}
-      />
-      <Stack.Screen
-        name="RecommendedRemediesScreen"
-        component={RecommendedRemediesScreen}
-      />
+
       <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
       <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
@@ -153,8 +147,8 @@ function RecommendationStack() {
       }}
     >
       <Stack.Screen
-        name="Data Analytics"
-        component={DataAnalyticsScreen}
+        name="ViewAllRecommendationsScreen"
+        component={ViewAllRecommendationsScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
@@ -163,8 +157,24 @@ function RecommendationStack() {
           ),
         })}
       />
+
+      <Stack.Screen
+        name="DataAnalyticsScreen1"
+        component={DataAnalyticsScreen}
+      />
       <Stack.Screen name="QuestionTier2" component={QuestionTier2Screen} />
       <Stack.Screen name="QuestionTier3" component={QuestionTier3Screen} />
+
+      <Stack.Screen
+        name="RecommendedRemedyReviewScreen"
+        component={RecommendedRemedyReviewScreen}
+      />
+
+      <Stack.Screen
+        name="ViewRecommendationDetailScreen"
+        component={ViewRecommendationDetailScreen}
+      />
+
       <Stack.Screen
         name="RecommendedRemedyScreen"
         component={RecommendedRemedyScreen}
@@ -319,7 +329,7 @@ function AuthenticatedStack() {
         }}
       /> */}
       <Tab.Screen
-        name="Recommendation System"
+        name="Symptoms"
         component={RecommendationStack}
         options={{
           tabBarIcon: ({ color, size }) => (

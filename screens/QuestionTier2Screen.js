@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const QuestionTier2Screen = ({ route }) => {
   const { prevQuestion } = route.params;
+  const {condition} = route.params;
   const navigation = useNavigation();
 
   const [questions, setQuestions] = useState([]);
@@ -13,6 +14,9 @@ const QuestionTier2Screen = ({ route }) => {
   const documentRef = category.doc(prevQuestion.toString());
 
   useEffect(() => {
+
+
+    console.log("This is your " + condition)
     console.log("This is a prevQuestion lol" + prevQuestion)
     if (!prevQuestion) {
       console.error("prevQuestion is empty or undefined");
@@ -49,12 +53,14 @@ const QuestionTier2Screen = ({ route }) => {
   {
     navigation.navigate("QuestionTier3", {
       selectedCategory: category,
-      prevQuestion: tier2 
+      prevQuestion: tier2 ,
+      condition: condition
     });
   }
 
   return (
     <View style={styles.rootContainer}>
+     
       <Text style={styles.title}> {prevQuestion} </Text>
       <Text style={styles.subTitle}>Please select any of the following questions below </Text>
       <FlatList
@@ -86,7 +92,7 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   title: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 15,
     color: "#000080"

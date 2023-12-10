@@ -200,6 +200,7 @@ function UserProfileScreen({ navigation }) {
               value={newFirstName}
               onChangeText={setFirstName}
               placeholder={userData.firstName}
+              placeholderTextColor={"black"}
             ></TextInput>
           </View>
 
@@ -211,20 +212,19 @@ function UserProfileScreen({ navigation }) {
               value={newLastName}
               onChangeText={setLastName}
               placeholder={userData.lastName}
+              placeholderTextColor={"black"}
             ></TextInput>
           </View>
 
-          <Pressable onPress={updateUser}>
-            <Text>Update</Text>
-          </Pressable>
+          <TouchableOpacity style={styles.continueButton} onPress={updateUser}>
+            <Text style={styles.text}>Update</Text>
+          </TouchableOpacity>
 
           <View>
-            <Pressable onPress={() => setModalVisible(true)}>
-              <Text> Change Password </Text>
+            <Pressable style={styles.continueButton} onPress={() => setModalVisible(true)}>
+              <Text style={styles.text}> Change Password </Text>
             </Pressable>
-            <Pressable onPress={() => setEmailChangeVisible(true)}>
-              <Text>Change Email </Text>
-            </Pressable>
+            
 
             <Modal visible={modalVisible} animationType="slide">
               <View
@@ -245,6 +245,7 @@ function UserProfileScreen({ navigation }) {
 
                 <TextInput
                   placeholder="Enter New Password"
+                  
                   secureTextEntry
                   value={newPassword}
                   onChangeText={setNewPassword}
@@ -344,24 +345,36 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   text: {
-    fontSize: 18,
-    marginBottom: 15,
+    fontSize: 15,
     fontWeight: "bold",
   },
   textInput: {
     padding: 20,
     backgroundColor: "white",
-    borderRadius: 50,
-    marginBottom: 15,
+    borderWidth: 2,
+    borderColor: "black",
+    marginTop: 20,
+  },
+  continueButton:{
+    borderRadius: 10,
+    borderWidth: 1.5,
+    marginTop: 10,
+    marginLeft: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    borderColor: "black",
+    width: "50%",
+    backgroundColor: "white"
   },
 });
 
 const textInputstyles = StyleSheet.create({
   textInput: {
-    borderColor: "black", // Add a black border
-    borderWidth: 1, // Specify the border width
-    padding: 10, // Add some padding for spacing
-    marginBottom: 10, // Add margin to separate text inputs
-    width: "90%", // Make sure the width is 100%
+    borderColor: "black", 
+    borderWidth: 1, 
+    padding: 10, 
+    marginBottom: 10, 
+    width: "90%", 
   },
 });

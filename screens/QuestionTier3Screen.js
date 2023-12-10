@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 const QuestionTier3Screen = ({ route }) => {
   const { prevQuestion } = route.params;
   const {selectedCategory} = route.params;
+  const {condition} = route.params;
   const navigation = useNavigation();
   const [questions, setQuestions] = useState([]);
   const category = db.collection("Tier2Questions");
@@ -59,18 +60,29 @@ const QuestionTier3Screen = ({ route }) => {
   {
      setRating(rating)
      console.log("This is your current rating: " + rating)
-     console.log("fff")
+    
   }
   
 
   useEffect(() => {
     setRating(3)
-    
+    console.log("This is " + condition)
   }, []);
 
   function buttonClick()
   {
     let ageGroup = ""
+    console.log("This is +" + age)
+    if(age == null || age == "")
+    {
+      Alert.alert('Error',
+      'Please enter you age', [
+       
+       {text: 'OK', onPress: () => console.log('OK Pressed')},
+     ]);
+    }
+    else
+    {
     if(age < 30)
     {
       ageGroup = "18 to 29"
@@ -83,13 +95,23 @@ const QuestionTier3Screen = ({ route }) => {
       ageGroup = "50 and over"
     }
 
-    navigation.navigate("RecommendedRemedyScreen", {
+    /*navigation.navigate("RecommendedRemedyScreen", {
       category: selectedCategory,
       question: prevQuestion,
       age: ageGroup,
       gender: "Both",
       rating: rating
+    }); */
+    navigation.navigate("RecommendedRemedyReviewScreen", {
+      category: selectedCategory,
+      condition: prevQuestion,
+      age: age,
+      gender: "Both",
+      rating: rating,
+      sex: sex,
+      userQuestion: condition
     });
+  }
   }
 
   //alert
@@ -135,6 +157,7 @@ const QuestionTier3Screen = ({ route }) => {
       />
 
 <Text onPress={createTwoButtonAlert}>Are you transgender or non-binary?</Text>
+
 
 <TextInput
         style={styles.input}
