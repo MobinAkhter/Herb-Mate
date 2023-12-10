@@ -102,7 +102,7 @@ const QuestionTier3Screen = ({ route }) => {
       gender: "Both",
       rating: rating
     }); */
-    navigation.navigate("RecommendedRemedyReviewScreen", {
+    navigation.navigate("Symptom Details Review", {
       category: selectedCategory,
       condition: prevQuestion,
       age: age,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import Button from "../components//ui/Button";
 import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../firebase";
@@ -97,8 +97,14 @@ const RecommendedRemedyScreen = ({ route }) => {
         });
       }
 
+      Alert.alert('Congratulations',
+      'Your details have been recorded', [
+       
+       {text: 'Continue', onPress: () => console.log('OK Pressed')},
+     ]);
+
     }
-    navigation.navigate("ViewAllRecommendationsScreen");
+    navigation.navigate("View Your Symptoms");
 
   }
 
@@ -121,7 +127,7 @@ const RecommendedRemedyScreen = ({ route }) => {
         onPress={() => lol()}
      style={styles.continueButton}>
         
-        <Text style={styles.buttonText}> Try Again</Text>
+        <Text style={styles.buttonText}> Continue</Text>
        
         </TouchableOpacity>
      </View>
