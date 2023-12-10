@@ -144,11 +144,7 @@ const DataAnalyticsScreen = () => {
       </Pressable>
 
 
-        <Pressable
-        onPress={() => lolClick()}
-        >
-          <Text>Show More</Text>
-        </Pressable>
+        
       
       
       

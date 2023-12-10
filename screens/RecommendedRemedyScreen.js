@@ -115,12 +115,7 @@ const RecommendedRemedyScreen = ({ route }) => {
 
      <View style={{ marginTop: 10, marginBottom: 10 }}>
       
-     <TouchableOpacity
-     style={styles.continueButton}
-       onPress={() => buttonClick()}>
-        
-        <Text style={styles.buttonText}> View {pred}</Text>
-        </TouchableOpacity>
+     
 
         <TouchableOpacity
         onPress={() => lol()}
