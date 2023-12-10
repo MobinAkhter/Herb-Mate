@@ -11,6 +11,7 @@ function RemedyListScreen({ route }) {
   const cacheKey = `remedies_${bp}_${con}`;
 
   useEffect(() => {
+    // AsyncStorage.clear();
     const fetchRemedies = async () => {
       try {
         const cachedRemedies = await AsyncStorage.getItem(cacheKey);
