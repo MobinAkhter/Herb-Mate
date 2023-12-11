@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { db, auth } from "../firebase";
+import { db, auth } from "../../../firebase";
 
 function RecommendedRemediesScreen() {
   const user = auth.currentUser.uid;

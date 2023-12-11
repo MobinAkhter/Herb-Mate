@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { db, auth } from "../firebase";
+import { db, auth } from "../../../firebase";
 import * as Haptics from "expo-haptics";
 
 function ViewAllRecommendationsScreen() {
@@ -132,7 +132,7 @@ function ViewAllRecommendationsScreen() {
                     <TouchableOpacity onPress={() => removeSymptom(item)}>
                       <Image
                         style={listItemStyle.herbImage}
-                        source={require("../assets/trash.jpeg")}
+                        source={require("../../../assets/trash.jpeg")}
                       />
                     </TouchableOpacity>
                   </View>

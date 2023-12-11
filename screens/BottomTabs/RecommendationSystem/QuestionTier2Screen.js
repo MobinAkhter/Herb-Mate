@@ -6,7 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { db } from "../firebase";
+import { db } from "../../../firebase";
 import { useNavigation } from "@react-navigation/native";
 
 const QuestionTier2Screen = ({ route }) => {

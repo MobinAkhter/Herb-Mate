@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { db } from "../../firebase";
+import { db } from "../../../firebase";
 
 const PAGE_SIZE = 100;
 
@@ -98,7 +98,7 @@ const SortedRemedies = () => {
               source={
                 item.image && item.image[0]
                   ? { uri: item.image[0] }
-                  : require("../../assets/leaf_icon.jpeg")
+                  : require("../../../assets/leaf_icon.jpeg")
               }
               style={styles.herbImage}
             />

@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { db } from "../firebase";
+import { db } from "../../../firebase";
 import { useNavigation } from "@react-navigation/native";
 
 const QuestionTier3Screen = ({ route }) => {

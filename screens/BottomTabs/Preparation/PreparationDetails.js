@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
-import { db } from "../firebase";
+import { db } from "../../../firebase";
 
 import "firebase/firestore";
 

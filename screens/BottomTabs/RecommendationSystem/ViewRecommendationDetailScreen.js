@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { db, auth } from "../firebase";
+import { db, auth } from "../../../firebase";
 
 function ViewRecommendationDetailScreen({ route }) {
   const { recommendId } = route.params;

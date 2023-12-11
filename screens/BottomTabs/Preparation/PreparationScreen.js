@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { db } from "../firebase";
+import { db } from "../../../firebase";
 
 const PreparationScreen = () => {
   const [preparations, setPreparations] = useState([]);
@@ -38,7 +38,7 @@ const PreparationScreen = () => {
         source={
           item.image && item.image.length > 0
             ? { uri: item.image }
-            : require("../assets/leaf_icon.jpeg")
+            : require("../../../assets/leaf_icon.jpeg")
         }
         style={styles.prepImage}
       />

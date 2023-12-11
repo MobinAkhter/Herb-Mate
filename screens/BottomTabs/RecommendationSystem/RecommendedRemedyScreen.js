@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import "firebase/firestore";
-import { db, auth } from "../firebase";
+import { db, auth } from "../../../firebase";
 
 const RecommendedRemedyScreen = ({ route }) => {
   const { category } = route.params;

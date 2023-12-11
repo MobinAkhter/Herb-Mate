@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { db, auth } from "../firebase";
+import { db, auth } from "../../../firebase";
 import { SafeAreaView } from "react-native";
 import { TouchableOpacity } from "react-native";
 
@@ -120,7 +120,7 @@ function NotesScreen() {
     return (
       <View style={{ flex: 1 }}>
         <Image
-          source={require("../assets/noNotes.png")}
+          source={require("../../../assets/noNotes.png")}
           style={{ width: "100%", height: "100%" }}
           resizeMode="cover"
         />

@@ -12,21 +12,20 @@ import AboutRemedyScreen from "../screens/MainFlow/AboutRemedyScreen";
 import UserProfileScreen from "../screens/SecondaryScreens/UserProfileScreen";
 import BookmarkScreen from "../screens/SecondaryScreens/BookmarkScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
-import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
-import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
-import QuestionTier2Screen from "../screens/QuestionTier2Screen";
-import QuestionTier3Screen from "../screens/QuestionTier3Screen";
-import RecommendedRemedyScreen from "../screens/RecommendedRemedyScreen";
+import DataAnalyticsScreen from "../screens/BottomTabs/RecommendationSystem/DataAnalyticsScreen";
+import QuestionTier2Screen from "../screens/BottomTabs/RecommendationSystem/QuestionTier2Screen";
+import QuestionTier3Screen from "../screens/BottomTabs/RecommendationSystem/QuestionTier3Screen";
+import RecommendedRemedyScreen from "../screens/BottomTabs/RecommendationSystem/RecommendedRemedyScreen";
 import ChatScreen from "../screens/ChatScreen";
-import SortedRemedies from "../screens/BottomTabs/SortedRemedies";
+import SortedRemedies from "../screens/BottomTabs/AtoZ/SortedRemedies";
 import DonationScreen from "../screens/SecondaryScreens/DonationScreen";
-import RecommendedRemediesScreen from "../screens/RecommendedRemediesScreen";
-import RecommendedRemedyReviewScreen from "../screens/RecommendedRemedyReviewScreen";
-import ViewAllRecommendationsScreen from "../screens/ViewAllRecommendationsScreen";
-import ViewRecommendationDetailScreen from "../screens/ViewRecommendationDetailScreen";
-import PreparationScreen from "../screens/PreparationScreen";
-import PreparationDetails from "../screens/PreparationDetails";
-import NotesScreen from "../screens/NotesScreen";
+import RecommendedRemediesScreen from "../screens/BottomTabs/RecommendationSystem/RecommendedRemediesScreen";
+import RecommendedRemedyReviewScreen from "../screens/BottomTabs/RecommendationSystem/RecommendedRemedyReviewScreen";
+import ViewAllRecommendationsScreen from "../screens/BottomTabs/RecommendationSystem/ViewAllRecommendationsScreen";
+import ViewRecommendationDetailScreen from "../screens/BottomTabs/RecommendationSystem/ViewRecommendationDetailScreen";
+import PreparationScreen from "../screens/BottomTabs/Preparation/PreparationScreen";
+import PreparationDetails from "../screens/BottomTabs/Preparation/PreparationDetails";
+import NotesScreen from "../screens/BottomTabs/Notes/NotesScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const Tab = createBottomTabNavigator();
@@ -60,7 +59,6 @@ function Home() {
       <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
       <Stack.Screen name="Donation" component={DonationScreen} />
-      <Stack.Screen name="RemediesBar" component={RemediesBarGraphScreen} />
       <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
       <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
