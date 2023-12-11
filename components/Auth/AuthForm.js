@@ -172,13 +172,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           value={enteredPassword}
           isInvalid={passwordIsInvalid}
         />
-        {/* <MaterialIcons
-          name={isPasswordVisible ? "visibility" : "visibility-off"}
-          size={24}
-          color="black"
-          onPress={() => setIsPasswordVisible((prevState) => !prevState)}
-          style={styles.eyeIcon}
-        /> */}
 
         {!isLogin && (
           <Input
@@ -268,29 +261,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
-
   checkboxLabel: {
     marginLeft: 8,
   },
-
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 8,
-    width: "80%",
-    maxHeight: "80%",
-  },
-
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 16,
-  },
-
-  mainContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   modalContainer: {
     flex: 1,
@@ -307,21 +284,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 15,
   },
-  modalComplianceTitle: {
-    marginBottom: 20,
-    color: "lightblue",
-    fontWeight: "bold",
-    textAlign: "center",
-    fontSize: 18,
-  },
   complianceText: {
     fontSize: 15,
-  },
-
-  checkbox: {
-    width: 25,
-    height: 25,
-    marginRight: 20,
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -334,11 +298,6 @@ const styles = StyleSheet.create({
   linkText: {
     color: "blue",
     textDecorationLine: "underline",
-  },
-  registerButton: {
-    marginTop: 20,
-    padding: 20,
-    borderRadius: 18,
   },
   closeButtonText: {
     fontSize: 16,

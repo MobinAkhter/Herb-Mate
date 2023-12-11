@@ -714,3 +714,72 @@ This is the styling for note picker for android devices.
             <Text style={[styles.subTitle, { color: 'red' }]}>How severe is your current condition?: {recommendation.Severity}</Text>
             <Text style={[styles.subTitle, { color: 'green' }]}>Your recommended Remedy: {recommendation.Remedy}</Text>
        */
+
+// -------------------------------------------AuthenticatedStack-------------------------------------
+{
+  /* <Tab.Screen
+        name="Bookmarks"
+        component={BookmarkStack}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bookmarks-outline" size={size} color={color} />
+          ),
+        }}
+      /> */
+}
+// this for preparation details
+// options={({ navigation }) => ({
+//   headerLeft: () => (
+//     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+//       <Ionicons name="menu-outline" size={28} />
+//     </TouchableOpacity>
+//   ),
+// })}
+
+// headerLeft: () => (
+//   <TouchableOpacity onPress={() => navigation.goBack()}>
+//     <Ionicons name="arrow-back" size={28} color="white" />
+//   </TouchableOpacity>
+// ),
+
+//------------------------------------------AuthForm------------------------------------------------
+{
+  /* <MaterialIcons
+          name={isPasswordVisible ? "visibility" : "visibility-off"}
+          size={24}
+          color="black"
+          onPress={() => setIsPasswordVisible((prevState) => !prevState)}
+          style={styles.eyeIcon}
+        /> */
+}
+
+// modalContent: {
+//   backgroundColor: "#fff",
+//   padding: 16,
+//   borderRadius: 8,
+//   width: "80%",
+//   maxHeight: "80%",
+// },
+// mainContainer: {
+//   flex: 1,
+//   justifyContent: "center",
+//   alignItems: "center",
+// },
+// modalComplianceTitle: {
+//   marginBottom: 20,
+//   color: "lightblue",
+//   fontWeight: "bold",
+//   textAlign: "center",
+//   fontSize: 18,
+// },
+// checkbox: {
+//   width: 25,
+//   height: 25,
+//   marginRight: 20,
+// },
+
+// registerButton: {
+//   marginTop: 20,
+//   padding: 20,
+//   borderRadius: 18,
+// },

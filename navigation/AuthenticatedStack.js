@@ -61,7 +61,6 @@ function Home() {
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
       <Stack.Screen name="Donation" component={DonationScreen} />
       <Stack.Screen name="RemediesBar" component={RemediesBarGraphScreen} />
-
       <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
       <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
@@ -123,11 +122,6 @@ export function BookmarkStack() {
           headerTitle: "Remedy Details",
           headerStyle: { backgroundColor: "#35D96F" },
           headerTintColor: "white",
-          // headerLeft: () => (
-          //   <TouchableOpacity onPress={() => navigation.goBack()}>
-          //     <Ionicons name="arrow-back" size={28} color="white" />
-          //   </TouchableOpacity>
-          // ),
         }}
       />
       <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
@@ -194,7 +188,6 @@ function AZHerbStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        //headerShown: false,
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
         headerTitleAlign: "center",
@@ -221,7 +214,6 @@ export function PreparationStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        //headerShown: false,
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
         headerTitleAlign: "center",
@@ -239,17 +231,7 @@ export function PreparationStack() {
           ),
         })}
       />
-      <Stack.Screen
-        name="Preparation Details"
-        component={PreparationDetails}
-        // options={({ navigation }) => ({
-        //   headerLeft: () => (
-        //     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-        //       <Ionicons name="menu-outline" size={28} />
-        //     </TouchableOpacity>
-        //   ),
-        // })}
-      />
+      <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
   );
 }
@@ -319,15 +301,7 @@ function AuthenticatedStack() {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="Bookmarks"
-        component={BookmarkStack}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bookmarks-outline" size={size} color={color} />
-          ),
-        }}
-      /> */}
+
       <Tab.Screen
         name="Symptoms"
         component={RecommendationStack}
