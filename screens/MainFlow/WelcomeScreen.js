@@ -3,7 +3,6 @@ import {
   FlatList,
   StyleSheet,
   View,
-  TextInput,
   Text,
   SafeAreaView,
   TouchableOpacity,
@@ -11,16 +10,16 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { db } from "../../firebase";
 import { Entypo } from "@expo/vector-icons";
 import { removeSpace, iconMapper } from "../../utils";
 import MIcon from "../../components/ui/MIcon";
+import SearchBar from "../../components/ui/SearchBar";
 
 const WelcomeScreen = ({}) => {
   const navigation = useNavigation();
   const [bodyParts, setBodyParts] = useState([]);
-  const [searchInput, setSearchInput] = useState();
+  const [searchInput, setSearchInput] = useState("");
   // const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
@@ -86,37 +85,22 @@ const WelcomeScreen = ({}) => {
     </TouchableOpacity>
   );
 
+  const navigateToSearchResult = () => {
+    console.log("nav to search results???");
+    navigation.navigate("SearchResult", {
+      searchVal: searchInput,
+    });
+  };
+
   return (
     <View style={styles.rootContainer}>
       <SafeAreaView>
-        {/* new */}
-        <View style={styles.searchContainer}>
-          <View style={styles.searchWrapper}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search for remedy/conditions..."
-              keyboardType="default"
-              onChangeText={(input) => setSearchInput(input)}
-              value={searchInput}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={styles.searchBtn}
-            onPress={() => {
-              console.log("nav to search results???");
-              navigation.navigate("SearchResult", {
-                searchVal: searchInput,
-              });
-            }}
-          >
-            <MagnifyingGlassIcon
-              color="white"
-              size={20}
-              style={styles.searchIcon}
-            />
-          </TouchableOpacity>
-        </View>
+        <SearchBar
+          searchValue={searchInput}
+          setSearchValue={setSearchInput}
+          placeholder="Search for remedy/conditions..."
+          onSearchPress={navigateToSearchResult}
+        />
         <View style={styles.bodyPartsContainer}>
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -137,13 +121,11 @@ export default WelcomeScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    // justifyContent: "center",
     alignItems: "center",
     paddingTop: 18,
   },
   searchContainer: {
     justifyContent: "center",
-    // alignItems: "center",
     flexDirection: "row",
     marginTop: 20,
     height: 50,
@@ -156,20 +138,15 @@ const styles = StyleSheet.create({
   searchWrapper: {
     backgroundColor: "white",
     marginRight: 12,
-    // justifyContent: "center",
-    // alignItems: "center",
     borderRadius: 16,
-    // height: "100%",
     width: "65%",
   },
   searchInput: {
-    // width: "100%",
     height: "100%",
     paddingHorizontal: 16,
   },
   searchBtn: {
     width: 45,
-    // height: "100%",
     backgroundColor: "#35D96F",
     borderRadius: 16,
     justifyContent: "center",
@@ -190,7 +167,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width / 2 - 50,
   },
   cardContent: {
-    // justifyContent: "center",
     alignItems: "center",
     paddingVertical: 20,
     paddingHorizontal: 10,

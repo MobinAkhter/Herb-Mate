@@ -7,17 +7,17 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  TextInput,
 } from "react-native";
-import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import MIcon from "../components/ui/MIcon";
 import { removeSpace, iconMapper } from "../utils";
 import { db, auth } from "../firebase";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import SearchBar from "../components/ui/SearchBar";
 
 function SearchResultScreen({ route }) {
   const { searchVal } = route.params;
+
   //console.log(searchVal);
   const navigation = useNavigation();
 
@@ -179,7 +179,7 @@ function SearchResultScreen({ route }) {
 
   //Fills list of conditions to show in flatlist based on the bodypart selected
   useEffect(() => {
-    setSearchValue(searchVal);
+    setSearchValue(searchValue);
     loadConditions().then(() => {
       loadRemedies().then(() => {
         handleSearch();
@@ -265,30 +265,12 @@ function SearchResultScreen({ route }) {
 
   return (
     <View style={styles.rootContainer}>
-      <View style={styles.searchContainer}>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search for remedy"
-            keyboardType="default"
-            onChangeText={(input) => setSearchValue(input)}
-            value={searchValue}
-          />
-        </View>
-
-        <TouchableOpacity
-          style={styles.searchBtn}
-          onPress={() => {
-            handleSearch();
-          }}
-        >
-          <MagnifyingGlassIcon
-            color="white"
-            size={20}
-            style={styles.searchIcon}
-          />
-        </TouchableOpacity>
-      </View>
+      <SearchBar
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        placeholder="Search for remedy"
+        onSearchPress={handleSearch}
+      />
       <TabView
         navigationState={{
           index,
