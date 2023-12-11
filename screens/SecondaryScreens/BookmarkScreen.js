@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { db, auth } from "../firebase";
+import { db, auth } from "../../firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const BookmarkScreen = () => {
@@ -127,7 +127,7 @@ const BookmarkScreen = () => {
                         source={
                           item.image && item.image[0]
                             ? { uri: item.image[0] }
-                            : require("../assets/leaf_icon.jpeg")
+                            : require("../../assets/leaf_icon.jpeg")
                         }
                         style={styles.listItemHerbImage}
                       />

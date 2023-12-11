@@ -18,11 +18,11 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "./firebase";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import UserProfileScreen from "./screens/UserProfileScreen";
-import DonationScreen from "./screens/DonationScreen";
+import UserProfileScreen from "./screens/SecondaryScreens/UserProfileScreen";
+import DonationScreen from "./screens/SecondaryScreens/DonationScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
-import ContactScreen from "./screens/ContactScreen";
-import AboutUsScreen from "./screens/AboutUsScreen";
+import ContactScreen from "./screens/SecondaryScreens/ContactScreen";
+import AboutUsScreen from "./screens/SecondaryScreens/AboutUsScreen";
 import { Ionicons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();

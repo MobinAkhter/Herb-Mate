@@ -1,4 +1,4 @@
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../../contexts/userContext";
 import React from "react";
 import {
   Text,
@@ -12,10 +12,10 @@ import {
   Pressable,
 } from "react-native";
 import { useState, useEffect, useLayoutEffect } from "react";
-import Button from "../components/ui/Button";
+import Button from "../../components/ui/Button";
 // import { useTheme } from "../contexts/ThemeContext";
 import firebase from "firebase/app";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 
 function UserProfileScreen({ navigation }) {
   const { setUser } = React.useContext(UserContext);
