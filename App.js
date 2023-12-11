@@ -5,7 +5,6 @@ import { StatusBar } from "expo-status-bar";
 import { UserContext } from "./contexts/userContext";
 import UserProvider from "./contexts/userContext";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
-import { PreparationStack } from "./navigation/AuthenticatedStack";
 import { BookmarkStack } from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
 import { LogBox, Text, View, TouchableOpacity } from "react-native";
@@ -21,12 +20,9 @@ import { auth } from "./firebase";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import DonationScreen from "./screens/DonationScreen";
-// import { ThemeProvider } from "./contexts/ThemeContext";
 import OnboardingScreen from "./screens/OnboardingScreen";
-import NotesScreen from "./screens/NotesScreen";
 import ContactScreen from "./screens/ContactScreen";
 import AboutUsScreen from "./screens/AboutUsScreen";
-import PreparationScreen from "./screens/PreparationScreen";
 import { Ionicons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
@@ -112,11 +108,7 @@ function DrawerNavigator() {
             <Icon name="home-outline" color={color} size={size} />
           ),
           headerLeft: () => (
-            <TouchableOpacity
-            // onPress={() => {
-            //   navigation.dispatch(DrawerActions.toggleDrawer());
-            // }}
-            >
+            <TouchableOpacity>
               <Ionicons name="bookmarks-outline" size={28} color={"white"} />
 
               {/* Same custom icon as in drawerIcon */}
@@ -268,10 +260,8 @@ function Navigation() {
 export default function App() {
   return (
     <UserProvider>
-      {/* <ThemeProvider> */}
       <StatusBar style="light" />
       <Navigation />
-      {/* </ThemeProvider> */}
     </UserProvider>
   );
 }

@@ -1,4 +1,3 @@
-// Please firebase keep supporting v8, just until the defense :P
 import * as firebase from "firebase";
 import "firebase/auth";
 import "firebase/firestore";
