@@ -11,8 +11,12 @@ const OnboardingScreen = () => {
   const navigation = useNavigation();
 
   const handleFinishOnboarding = async () => {
-    await AsyncStorage.setItem("alreadyLaunched", "true");
-    navigation.replace("Signup");
+    try {
+      await AsyncStorage.setItem("alreadyLaunched", "true");
+      navigation.replace("Signup");
+    } catch (error) {
+      console.error("Error setting item in AsyncStorage:", error);
+    }
   };
 
   return (

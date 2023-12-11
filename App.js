@@ -229,15 +229,22 @@ function Navigation() {
   const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
   useEffect(() => {
-    AsyncStorage.getItem("alreadyLaunched").then((value) => {
-      console.log(value);
-      if (value == null) {
-        AsyncStorage.setItem("alreadyLaunched", "true");
-        setIsFirstLaunch(true);
-      } else {
-        setIsFirstLaunch(false);
+    const checkFirstLaunch = async () => {
+      try {
+        const value = await AsyncStorage.getItem("alreadyLaunched");
+        console.log(value);
+        if (value == null) {
+          await AsyncStorage.setItem("alreadyLaunched", "true");
+          setIsFirstLaunch(true);
+        } else {
+          setIsFirstLaunch(false);
+        }
+      } catch (error) {
+        console.error("Error reading from AsyncStorage:", error);
       }
-    });
+    };
+
+    checkFirstLaunch();
   }, []);
 
   if (isFirstLaunch === null) {

@@ -653,11 +653,11 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
             nextButton={<Text style={styles.swipeButton}>›</Text>}
             prevButton={<Text style={styles.swipeButton}>‹</Text>}
           >
-            {remedy.image.map((imageUri) => (
+            {remedy.image.map((imageUri, index) => (
               <Image
                 source={{ uri: imageUri }}
                 style={styles.image}
-                resizeMode="contain"
+                resizeMode="cover"
               />
             ))}
           </Swiper>
