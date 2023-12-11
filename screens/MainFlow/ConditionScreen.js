@@ -14,7 +14,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db, auth } from "../firebase";
+import { db, auth } from "../../firebase";
 
 function ConditionScreen({ route }) {
   const { bp } = route.params;

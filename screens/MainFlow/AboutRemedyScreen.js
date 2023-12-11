@@ -19,8 +19,8 @@ import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
 import { AntDesign } from "@expo/vector-icons";
-import { db, auth } from "../firebase";
-import BookMarkButton from "../components/ui/BookmarkButton";
+import { db, auth } from "../../firebase";
+import BookMarkButton from "../../components/ui/BookmarkButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
@@ -376,7 +376,7 @@ const HerbDetails = ({ interactions }) => {
   ) : (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Image
-        source={require("../assets/nuh.png")}
+        source={require("../../assets/nuh.png")}
         style={styles.interactionContent}
         resizeMode="cover"
       />

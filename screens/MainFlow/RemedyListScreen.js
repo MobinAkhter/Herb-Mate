@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View, Text, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 
 function RemedyListScreen({ route }) {
   const { bp, con } = route.params;
@@ -77,7 +77,7 @@ function RemedyListScreen({ route }) {
     // If an image has existing image use the first 1, cause most images dont have 2nd image. Otherwise, use local default img.
     const imageSource = item?.image?.[0]
       ? { uri: item.image[0] }
-      : require("../assets/leaf_icon.jpeg");
+      : require("../../assets/leaf_icon.jpeg");
 
     const learnMorePressed = (item) => {
       console.log("Navigating to details with item: ", item);
