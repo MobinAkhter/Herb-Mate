@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 
 const ForgotPassword = ({}) => {
   const [email, setEmail] = useState("");

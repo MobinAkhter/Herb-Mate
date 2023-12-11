@@ -3,9 +3,9 @@ import { Colors } from "../constants/styles";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import OnboardingScreen from "../screens/OnboardingScreen";
-import SignupScreen from "../screens/SignupScreen";
-import LoginScreen from "../screens/LoginScreen";
-import ForgotPassword from "../screens/ForgotPassword";
+import SignupScreen from "../screens/Auth/SignupScreen";
+import LoginScreen from "../screens/Auth/LoginScreen";
+import ForgotPassword from "../screens/Auth/ForgotPassword";
 
 const Stack = createNativeStackNavigator();
 
