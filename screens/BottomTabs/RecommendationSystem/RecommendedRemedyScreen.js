@@ -19,6 +19,7 @@ const RecommendedRemedyScreen = ({ route }) => {
   const user = auth.currentUser.uid;
   // const [area, setArea] = useState("");
   const apiUrl = "http://127.0.0.1:5001/predict";
+  const remediesFirebase = db.collection("Remedies");
 
   useEffect(() => {
     const requestData = {
@@ -113,15 +114,6 @@ const RecommendedRemedyScreen = ({ route }) => {
         Remember to consult with a healthcare practitioner before you use any
         remedy.
       </Text>
-
-      <View style={{ marginTop: 10, marginBottom: 10 }}>
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={() => buttonClick()}
-        >
-          <Text style={styles.buttonText}> View {pred}</Text>
-        </TouchableOpacity>
-      </View>
 
       <View style={{ marginTop: 10, marginBottom: 10 }}>
         <TouchableOpacity style={styles.continueButton} onPress={() => lol()}>
