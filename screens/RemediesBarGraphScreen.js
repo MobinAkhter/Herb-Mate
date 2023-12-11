@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import Button from "../components//ui/Button";
-
 
 const RemediesBarGraphScreen = () => {
   const [pred, setPred] = useState("");
@@ -16,7 +15,6 @@ const RemediesBarGraphScreen = () => {
   const [blob, setBlob] = useState("");
   const [ray, setRay] = useState("");
 
-  
   // Send a POST request to the API
 
   function buttonClick() {

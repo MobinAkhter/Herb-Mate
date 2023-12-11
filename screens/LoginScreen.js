@@ -1,7 +1,7 @@
 import AuthContent from "../components/Auth/AuthContent";
 import { View } from "react-native";
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({}) => {
   return (
     <View>
       <AuthContent isLogin />

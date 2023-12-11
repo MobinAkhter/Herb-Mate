@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Linking,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 
 const AboutUsScreen = () => {
   return (
@@ -86,7 +79,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#34A853",
     marginBottom: 10,
-    // textAlign: "center",
   },
   text: {
     fontSize: 16,

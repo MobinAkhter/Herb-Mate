@@ -8,7 +8,6 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  Animated,
 } from "react-native";
 import axios from "axios";
 
@@ -149,6 +148,34 @@ const styles = StyleSheet.create({
   messagesContainer: {
     padding: 10,
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderTopWidth: 1,
+    borderColor: "#DDDDDD",
+    backgroundColor: "white",
+    padding: 10,
+  },
+  input: {
+    marginLeft: 4,
+    flex: 1,
+    minHeight: 40,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+    borderRadius: 4,
+    marginRight: 16,
+  },
+  sendButton: {
+    backgroundColor: "#35D96F",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 4,
+  },
+  sendButtonText: {
+    color: "white",
+    fontSize: 16,
+  },
   userMessageRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -187,7 +214,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 20,
     borderTopWidth: 20,
     borderRightColor: "transparent",
-    borderTopColor: "transparent",
+    borderTopColor: "#DCF8C6",
     borderBottomLeftRadius: 20,
     position: "absolute",
     right: -10,
@@ -201,7 +228,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 20,
     borderTopWidth: 20,
     borderLeftColor: "transparent",
-    borderTopColor: "transparent",
+    borderTopColor: "white",
     borderBottomRightRadius: 20,
     position: "absolute",
     left: -10,
@@ -211,36 +238,8 @@ const styles = StyleSheet.create({
     color: "#333333",
     fontSize: 16,
   },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderColor: "#DDDDDD",
-    backgroundColor: "white",
-    padding: 10,
-  },
-  input: {
-    marginLeft: 4,
-    flex: 1,
-    minHeight: 40,
-    paddingHorizontal: 8,
-    borderWidth: 1,
-    borderColor: "#CCCCCC",
-    borderRadius: 4,
-    marginRight: 16,
-  },
-  sendButton: {
-    backgroundColor: "#35D96F",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 4,
-  },
-  sendButtonText: {
-    color: "white",
-    fontSize: 16,
-  },
   typingIndicatorText: {
-    fontSize: 24, // iNCrease this if you want to increase the dots size in chatbot response animation
+    fontSize: 24,
     color: "#333333",
   },
 });

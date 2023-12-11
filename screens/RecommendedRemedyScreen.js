@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
-import Button from "../components//ui/Button";
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import firebase from "firebase";
 import "firebase/firestore";
 import { db, auth } from "../firebase";
 
@@ -107,74 +105,38 @@ const RecommendedRemedyScreen = ({ route }) => {
         });
       }
 
-      Alert.alert('Congratulations',
-      'Your details have been recorded', [
-       
-       {text: 'Continue', onPress: () => console.log('OK Pressed')},
-     ]);
-
+      Alert.alert("Congratulations", "Your details have been recorded", [
+        { text: "Continue", onPress: () => console.log("OK Pressed") },
+      ]);
     }
     navigation.navigate("View Your Symptoms");
-
-  }
+  };
 
   return (
-    <>
-      <View style={styles.rootContainer}>
-        <View>
-          <Text style={styles.subTitle}>Your recommended remedy is </Text>
-          <Text style={styles.title}>{pred}</Text>
+    <View style={styles.rootContainer}>
+      <Text style={styles.subTitle}>Your recommended remedy is </Text>
+      <Text style={styles.title}>{pred}</Text>
 
-          <Text style={styles.warning}>
-            Remember to consult with a healthcare practitioner before you use
-            any remedy.
-          </Text>
+      <Text style={styles.warning}>
+        Remember to consult with a healthcare practitioner before you use any
+        remedy.
+      </Text>
 
-          <View style={{ marginTop: 10, marginBottom: 10 }}>
-            <TouchableOpacity
-              style={styles.continueButton}
-              onPress={() => buttonClick()}
-            >
-              <Text style={styles.buttonText}> View {pred}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ marginTop: 10, marginBottom: 10 }}>
-            <TouchableOpacity
-              style={styles.continueButton}
-              onPress={() => buttonClick()}
-            >
-              <Text style={styles.buttonText}> View {pred}</Text>
-            </TouchableOpacity>
-
-<<<<<<< HEAD
-            <TouchableOpacity
-              onPress={() => lol()}
-              style={styles.continueButton}
-            >
-              <Text style={styles.buttonText}> Try Again</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-=======
-     <View style={{ marginTop: 10, marginBottom: 10 }}>
-      
-     
-
+      <View style={{ marginTop: 10, marginBottom: 10 }}>
         <TouchableOpacity
-        onPress={() => lol()}
-     style={styles.continueButton}>
-        
-        <Text style={styles.buttonText}> Continue</Text>
-       
+          style={styles.continueButton}
+          onPress={() => buttonClick()}
+        >
+          <Text style={styles.buttonText}> View {pred}</Text>
         </TouchableOpacity>
-     </View>
-    
-     
+      </View>
 
+      <View style={{ marginTop: 10, marginBottom: 10 }}>
+        <TouchableOpacity style={styles.continueButton} onPress={() => lol()}>
+          <Text style={styles.buttonText}> Continue</Text>
+        </TouchableOpacity>
+      </View>
     </View>
->>>>>>> code-refactor
-    </>
   );
 };
 

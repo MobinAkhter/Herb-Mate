@@ -1,5 +1,4 @@
 import { UserContext } from "../contexts/userContext";
-import Icon from "@expo/vector-icons/FontAwesome";
 import React from "react";
 import {
   Text,
@@ -30,11 +29,11 @@ function UserProfileScreen({ navigation }) {
 
   //var user = auth.currentUser;
   const [userData, setUserData] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
+  // const [isVisible, setIsVisible] = useState(false);
   const [newFirstName, setFirstName] = useState("");
   const [newLastName, setLastName] = useState("");
   const [newEmail, setEmail] = useState("");
-  const [currentPass, setCurrentPass] = useState("");
+  // const [currentPass, setCurrentPass] = useState("");
   const [newPass, setNewPass] = useState("");
 
   const [oldPassword, setOldPassword] = useState("");
@@ -221,10 +220,12 @@ function UserProfileScreen({ navigation }) {
           </TouchableOpacity>
 
           <View>
-            <Pressable style={styles.continueButton} onPress={() => setModalVisible(true)}>
+            <Pressable
+              style={styles.continueButton}
+              onPress={() => setModalVisible(true)}
+            >
               <Text style={styles.text}> Change Password </Text>
             </Pressable>
-            
 
             <Modal visible={modalVisible} animationType="slide">
               <View
@@ -245,7 +246,6 @@ function UserProfileScreen({ navigation }) {
 
                 <TextInput
                   placeholder="Enter New Password"
-                  
                   secureTextEntry
                   value={newPassword}
                   onChangeText={setNewPassword}
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     marginTop: 20,
   },
-  continueButton:{
+  continueButton: {
     borderRadius: 10,
     borderWidth: 1.5,
     marginTop: 10,
@@ -365,16 +365,16 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: "black",
     width: "50%",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
 });
 
 const textInputstyles = StyleSheet.create({
   textInput: {
-    borderColor: "black", 
-    borderWidth: 1, 
-    padding: 10, 
-    marginBottom: 10, 
-    width: "90%", 
+    borderColor: "black",
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10,
+    width: "90%",
   },
 });

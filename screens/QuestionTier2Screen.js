@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity} from "react-native";
-import Button from "../components//ui/Button";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { db } from "../firebase";
 import { useNavigation } from "@react-navigation/native";
 
 const QuestionTier2Screen = ({ route }) => {
   const { prevQuestion } = route.params;
-  const {condition} = route.params;
+  const { condition } = route.params;
   const navigation = useNavigation();
 
   const [questions, setQuestions] = useState([]);
@@ -14,10 +19,8 @@ const QuestionTier2Screen = ({ route }) => {
   const documentRef = category.doc(prevQuestion.toString());
 
   useEffect(() => {
-
-
-    console.log("This is your " + condition)
-    console.log("This is a prevQuestion lol" + prevQuestion)
+    console.log("This is your " + condition);
+    console.log("This is a prevQuestion lol" + prevQuestion);
     if (!prevQuestion) {
       console.error("prevQuestion is empty or undefined");
       return;
@@ -45,35 +48,33 @@ const QuestionTier2Screen = ({ route }) => {
         }
       })
       .catch((error) => {
-        console.error('Error retrieving data from Firestore: ', error);
+        console.error("Error retrieving data from Firestore: ", error);
       });
   }, []);
 
-  function buttonClick(category, tier2)
-  {
+  function buttonClick(category, tier2) {
     navigation.navigate("Enter Your Info", {
       selectedCategory: category,
-      prevQuestion: tier2 ,
-      condition: condition
+      prevQuestion: tier2,
+      condition: condition,
     });
   }
 
   return (
     <View style={styles.rootContainer}>
-     
       <Text style={styles.title}> {prevQuestion} </Text>
-      <Text style={styles.subTitle}>Please select any of the following questions below </Text>
+      <Text style={styles.subTitle}>
+        Please select any of the following questions below{" "}
+      </Text>
       <FlatList
         data={questions}
         renderItem={({ item }) => (
           <TouchableOpacity
-          style= {styles.button}
-          
-          onPress={() => buttonClick(prevQuestion, item.name)}>
-            <Text style={styles.textColor}>
-            {item.name}
-            </Text>
-            </TouchableOpacity>
+            style={styles.button}
+            onPress={() => buttonClick(prevQuestion, item.name)}
+          >
+            <Text style={styles.textColor}>{item.name}</Text>
+          </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id.toString()}
       />
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 15,
-    color: "#000080"
+    color: "#000080",
   },
   button: {
     backgroundColor: "white",
@@ -106,18 +107,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20
+    padding: 20,
   },
   textColor: {
     color: "#1e90ff",
     fontWeight: "bold",
     textAlign: "center",
-    fontStyle: "italic"
+    fontStyle: "italic",
   },
   subTitle: {
     color: "#191970",
     fontWeight: "bold",
     textAlign: "center",
-    paddingBottom: 10
-  }
+    paddingBottom: 10,
+  },
 });
