@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../../firebase";
 
-const PAGE_SIZE = 100;
+const PAGE_SIZE = 60;
 
 const AlphabetIndex = ({ selectedLetter, onLetterPress }) => {
   return (

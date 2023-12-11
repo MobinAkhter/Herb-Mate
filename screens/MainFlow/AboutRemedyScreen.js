@@ -21,6 +21,7 @@ import Collapsible from "react-native-collapsible";
 import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../../firebase";
 import BookMarkButton from "../../components/ui/BookmarkButton";
+import FloatingScrollButton from "../../components/ui/FloatingScrollButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
@@ -176,22 +177,6 @@ const HerbDetails = ({ interactions }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [spokenText, setSpokenText] = useState("");
 
-  const buttonStyle = {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    backgroundColor: isPressed ? "#dedede" : "white",
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 1,
-  };
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -359,19 +344,7 @@ const HerbDetails = ({ interactions }) => {
           );
         })}
       </ScrollView>
-      <TouchableOpacity
-        onPressIn={() => setIsPressed(true)}
-        onPressOut={() => setIsPressed(false)}
-        onPress={() => scrollViewRef.current.scrollTo({ y: 0, animated: true })}
-        style={buttonStyle}
-        activeOpacity={1}
-      >
-        <FontAwesome
-          name="arrow-up"
-          size={24}
-          color={isPressed ? "white" : "gray"}
-        />
-      </TouchableOpacity>
+      <FloatingScrollButton scrollViewRef={scrollViewRef} />
     </>
   ) : (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -444,23 +417,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   const userRef = db.collection("users").doc(user);
 
   //TODO: Put this in components and reuse it
-
-  const buttonStyle = {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    backgroundColor: isPressed ? "#dedede" : "white",
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 1,
-  };
 
   const shareHerbDetails = async () => {
     let message = `Check out this herb: ${remedy.name}.\n\n`;
@@ -826,19 +782,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
           </View>
         </View>
       </ScrollView>
-      <TouchableOpacity
-        onPressIn={() => setIsPressed(true)}
-        onPressOut={() => setIsPressed(false)}
-        onPress={() => scrollViewRef.current.scrollTo({ y: 0, animated: true })}
-        style={buttonStyle}
-        activeOpacity={1}
-      >
-        <FontAwesome
-          name="arrow-up"
-          size={24}
-          color={isPressed ? "white" : "gray"}
-        />
-      </TouchableOpacity>
+      <FloatingScrollButton scrollViewRef={scrollViewRef} />
     </View>
   );
 }
