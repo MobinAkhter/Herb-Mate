@@ -43,9 +43,6 @@ function SearchResultScreen({ route }) {
     "Urinary",
   ];
 
-  var width = Dimensions.get("window").width; //full width
-  var height = Dimensions.get("window").height; //full height
-  var rems = db.collectionGroup("Remedies");
   const user = auth.currentUser.uid;
 
   const loadConditions = async () => {
@@ -314,24 +311,7 @@ export default SearchResultScreen;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    //alignItems: "center",
   },
-  title: {
-    fontSize: 25,
-    fontWeight: "bold",
-  },
-  header: {
-    alignItems: "center",
-    width: Dimensions.get("window").width,
-    height: 40,
-    backgroundColor: "#dfede0",
-    bottomBorderWidth: "0.5px",
-    borderColor: "black",
-  },
-  list: {},
-  // container: {
-  //   flex: 1,
-  // },
   listItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -342,14 +322,11 @@ const styles = StyleSheet.create({
   herbImage: {
     width: 50,
     height: 50,
-    //marginRight: 10,
     borderRadius: 25,
   },
   herbName: {
     fontSize: 18,
-    //marginRight: 70,
   },
-
   searchContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -385,6 +362,5 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 2,
-    //borderRadius: 25,
   },
 });

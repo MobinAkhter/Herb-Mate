@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../firebase";
 
 function ViewRecommendationDetailScreen({ route }) {
   const { recommendId } = route.params;
   const user = auth.currentUser.uid;
   const [recommendation, setRecommendation] = useState({});
-  const navigation = useNavigation();
 
   const getRecommendation = async () => {
     const userDocRef = db.collection("users").doc(user);
@@ -37,14 +35,6 @@ function ViewRecommendationDetailScreen({ route }) {
     }
   };
 
-  /**
-       * 
-       *  <Text style={styles.subTitle}>Question: {recommendation.Question}</Text>
-            <Text style={[styles.subTitle, { color: 'grey' }]}>Your Condition: {recommendation.UserCondition}</Text>
-            <Text style={[styles.subTitle, { color: 'purple' }]}>Your Biological Sex: {recommendation.Sex}</Text>
-            <Text style={[styles.subTitle, { color: 'red' }]}>How severe is your current condition?: {recommendation.Severity}</Text>
-            <Text style={[styles.subTitle, { color: 'green' }]}>Your recommended Remedy: {recommendation.Remedy}</Text>
-       */
   useEffect(() => {
     getRecommendation();
   }, []);
@@ -98,36 +88,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  title: {
-    textAlign: "center",
-    paddingBottom: 190,
-    color: "#32cd32",
-  },
+
   subTitle: {
     fontWeight: "bold",
     fontSize: 15,
     textAlign: "center",
     paddingBottom: 10,
-  },
-  warning: {
-    fontWeight: "bold",
-    fontSize: 20,
-    textAlign: "center",
-    paddingBottom: 10,
-    fontStyle: "italic",
-  },
-  continueButton: {
-    borderRadius: 10,
-    borderWidth: 1.5,
-    marginTop: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    borderColor: "#1e90ff",
-  },
-  buttonText: {
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#1e90ff",
   },
 });

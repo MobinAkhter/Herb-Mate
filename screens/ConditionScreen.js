@@ -21,7 +21,6 @@ function ConditionScreen({ route }) {
   const navigation = useNavigation();
   const [conditions, setConditions] = useState([]);
   const col = db.collection("BodyParts");
-  let limit = false;
   const user = auth.currentUser.uid;
 
   // Loads the conditions from cache or database
@@ -133,48 +132,21 @@ function ConditionScreen({ route }) {
           />
         )}
         {bp === "Circulatory" && (
-          <Fontisto
-            styles={styles.icon}
-            name="blood-drop"
-            size={40}
-            color="black"
-          />
+          <Fontisto name="blood-drop" size={40} color="black" />
         )}
         {bp === "Head and Neck" && (
-          <FontAwesome5
-            styles={styles.icon}
-            name="head-side-virus"
-            size={40}
-            color="black"
-          />
+          <FontAwesome5 name="head-side-virus" size={40} color="black" />
         )}
         {bp === "Mental" && (
-          <MaterialCommunityIcons
-            styles={styles.icon}
-            name="brain"
-            size={40}
-            color="black"
-          />
+          <MaterialCommunityIcons name="brain" size={40} color="black" />
         )}
         {bp === "Respiratory" && (
-          <FontAwesome5
-            styles={styles.icon}
-            name="lungs"
-            size={40}
-            color="black"
-          />
+          <FontAwesome5 name="lungs" size={40} color="black" />
         )}
         {bp === "Skeletal" && (
-          <FontAwesome5
-            styles={styles.icon}
-            name="bone"
-            size={40}
-            color="black"
-          />
+          <FontAwesome5 name="bone" size={40} color="black" />
         )}
-        {bp === "Skin" && (
-          <Ionicons styles={styles.icon} name="body" size={40} color="black" />
-        )}
+        {bp === "Skin" && <Ionicons name="body" size={40} color="black" />}
         {bp} Conditions
       </Text>
 
@@ -217,24 +189,23 @@ export default ConditionScreen;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "stretch",
+    // justifyContent: "flex-start",
+    // alignItems: "stretch",
     paddingTop: 14, // personal preference
-    backgroundColor: "white",
+    // backgroundColor: "white",
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "black",
+    // color: "black",
     alignSelf: "center",
     marginVertical: 20,
   },
   itemText: {
     fontSize: 15,
     color: "white",
-    textAlign: "center",
+    textAlign: "center", // We can comment this out, still looks fine, might help with the text cutting off
     flexShrink: 1,
     fontWeight: "bold",
   },
-  icon: {},
 });

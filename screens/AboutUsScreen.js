@@ -29,8 +29,7 @@ const AboutUsScreen = () => {
         <Text style={styles.subHeader}>Meet the Team</Text>
         <Text style={styles.text}>
           A passionate team of herbal enthusiasts, discovering the best of
-          herbs. Idk what to say here, if we say we are students, nobody will
-          take us serious LOL.
+          herbs.
         </Text>
       </View>
 
@@ -86,11 +85,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: "#333",
   },
-  link: {
-    color: "#34A853",
-    textDecorationLine: "underline",
-    marginBottom: 5,
-  },
+
   section: {
     marginBottom: 10,
   },

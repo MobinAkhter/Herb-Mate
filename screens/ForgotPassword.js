@@ -8,7 +8,7 @@ import {
 import React, { useState } from "react";
 import { auth } from "../firebase";
 
-const ForgotPassword = ({ navigation }) => {
+const ForgotPassword = ({}) => {
   const [email, setEmail] = useState("");
 
   const forgotPassword = () => {
@@ -57,23 +57,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#35D96F",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingTop: 50,
-    paddingHorizontal: 20,
-    backgroundColor: "#35D96F",
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-    marginLeft: 20,
-  },
-  backIcon: {
-    padding: 5,
   },
   centerizedView: {
     width: "100%",

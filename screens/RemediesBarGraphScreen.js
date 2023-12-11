@@ -9,7 +9,7 @@ const RemediesBarGraphScreen = () => {
   const [t2, sett2] = useState("");
   const [t3, sett3] = useState("");
 
-  const apiUrl = "http://127.0.0.1:5000/predict"; // Replace with your API URL
+  const apiUrl = "http://127.0.0.1:5000/predict";
 
   // Define the data you want to send to the API
   const [blob, setBlob] = useState("");
@@ -86,10 +86,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 32,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
   },
 });

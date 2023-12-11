@@ -26,7 +26,6 @@ const DonationScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Donation Explanation Text */}
       <Text style={styles.header}>Support Our Mission</Text>
       <Text style={styles.explanationText}>
         Your support allows us to continue sharing the profound benefits of

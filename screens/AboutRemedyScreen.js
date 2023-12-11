@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   Dimensions,
   Share,
-  Slider,
 } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
@@ -39,7 +38,7 @@ function HerbScreen() {
     { key: "herbDetails", title: "Herb Details" },
   ]);
   const [remedy, setRemedy] = useState({});
-  const [bookMarkText, setBookMarkText] = useState();
+  // const [bookMarkText, setBookMarkText] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { rem } = route.params || {};
   const remediesFirebase = db.collection("Remedies");
@@ -268,27 +267,7 @@ const HerbDetails = ({ interactions }) => {
       Speech.stop();
     };
   }, []);
-  // const handleSpeak = () => {
-  //   if (isSpeaking) {
-  //     Speech.stop();
-  //   } else {
-  //     Speech.speak(spokenText || text, {
-  //       onDone: () => {
-  //         setSpokenText("");
-  //         setIsSpeaking(false);
-  //       },
-  //       onStopped: () => {
-  //         setSpokenText(text);
-  //       },
-  //     });
-  //     setIsSpeaking(true);
-  //   }
-  // };
 
-  // const handleStop = () => {
-  //   Speech.stop();
-  //   setIsSpeaking(false);
-  // };
   return hasDetails ? (
     <>
       <ScrollView
@@ -323,18 +302,7 @@ const HerbDetails = ({ interactions }) => {
               <TouchableOpacity onPress={resumeSpeech} disabled={!isPaused}>
                 {/* <Icon name="play" size={30} color="#000" /> */}
               </TouchableOpacity>
-              {/* <Slider
-                style={{
-                  width: 150,
-                  height: 40,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                minimumValue={0.5}
-                maximumValue={2.0}
-                value={speechRate}
-                onValueChange={(value) => setSpeechRate(value)}
-              /> */}
+
               <RNPickerSelect
                 onValueChange={(value) => handleVoiceChange(value)}
                 items={voices.map((voice) => ({
@@ -349,16 +317,6 @@ const HerbDetails = ({ interactions }) => {
                     borderWidth: 1,
                     borderColor: "gray",
                     borderRadius: 4,
-                    color: "black",
-                    paddingRight: 30, // to ensure the text is never behind the icon
-                  },
-                  inputAndroid: {
-                    fontSize: 16,
-                    paddingHorizontal: 10,
-                    paddingVertical: 8,
-                    borderWidth: 0.5,
-                    borderColor: "purple",
-                    borderRadius: 8,
                     color: "black",
                     paddingRight: 30, // to ensure the text is never behind the icon
                   },
@@ -465,12 +423,8 @@ function capitalizeFirstLetter(string) {
 }
 
 function AboutRemedyScreen({ remedy, navigation, remediesList }) {
-  // console.log("THIS IS REMEDY", remedy);
   const route = useRoute();
-
   const { rem } = route.params || {};
-  // console.log("THIS IS REM", rem);
-
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const [modalVisible, setModalVisible] = useState(false);
   const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
@@ -480,7 +434,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   const scrollViewRef = useRef();
 
   const [isPressed, setIsPressed] = useState(false);
-  // const [remediesList, setRemediesList] = useState([]);
 
   const [selectedCondition, setSelectedCondition] = useState();
   const [notes, setNotes] = useState("");
@@ -489,9 +442,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   const user = auth.currentUser.uid;
 
   const userRef = db.collection("users").doc(user);
-
-  // Putting it here right now, could be better to re use this in multiple places of the app.
-  // Make it a ui component later.
 
   //TODO: Put this in components and reuse it
 
@@ -531,9 +481,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
 
     //TODO: If we want to share dosage, logic should be updated since dosage is an array.
     // Did not implement this, cause why give the message recipient all this info. Download the app 🤷🏻‍♂️
-    // if (remedy.dosage) {
-    //   message += `Dosage: ${remedy.dosage}\n`;
-    // }
 
     try {
       const result = await Share.share({
@@ -545,7 +492,8 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
         if (result.activityType) {
           console.log("Shared with activity type: ", result.activityType);
         } else {
-          alert("Thanks for sharing!");
+          // alert("Thanks for sharing!");
+          // These alerts don't look good to me based on UX
         }
       } else if (result.action === Share.dismissedAction) {
         // alert("Share cancelled.");
@@ -560,7 +508,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
     }
   }, [rem]);
   const openModalWithSelectedRemedy = () => {
-    console.log("THIS IS REM BRUV", rem);
     setSelectedRemedy(rem);
     setModalVisible(true);
   };
@@ -582,22 +529,17 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
     });
   }, [navigation, selectedRemedy]);
 
-  //saves notes function
   //TODO: This does not work on Herb Details tab. FIX ME
   const saveNotes = () => {
     console.log("Save notes got executed");
     if (selectedRemedy && (selectedCondition || notes)) {
       const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
-      // const timestamp = new Date();
-      // const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       userNotesRef
         .set(
           {
             herb: selectedRemedy,
-            // condition: selectedCondition || "Not specified",
             notes: notes,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            // createdAt: new Date().toISOString,
           },
           { merge: true }
         )
@@ -759,7 +701,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
               <Image
                 source={{ uri: imageUri }}
                 style={styles.image}
-                // resizeMode="contain"
+                resizeMode="contain"
               />
             ))}
           </Swiper>
@@ -879,8 +821,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
 
           <View style={{ alignItems: "center" }}>
             <BookMarkButton onPress={bookMarkRemedy}>
-              {/* Tried adding an icon, did not look good, need margin, but the way code is written, its not as easy as I thought it would be. */}
-              {/* <FontAwesome5 name="bookmark" style={styles.bookmarkIcon} /> */}
               {bookMarkText}
             </BookMarkButton>
           </View>
@@ -933,23 +873,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 70,
     fontWeight: "600",
-
-    // fontWeight: "bold",
   },
-
-  bookmarkIcon: {
-    fontSize: 24,
-    color: "white",
-    marginRight: 4,
-  },
-
   image: {
     width: 400,
     height: undefined,
     aspectRatio: 1.5,
-  },
-  titleCon: {
-    alignItems: "center",
   },
   desc: {
     fontSize: 16,
@@ -1013,9 +941,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
-  dosageValue: {
-    marginLeft: 10,
-  },
+
   divider: {
     borderBottomColor: "gainsboro",
     borderBottomWidth: 1,

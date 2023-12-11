@@ -126,6 +126,7 @@ function ViewAllRecommendationsScreen() {
                     itemSelected(item);
                   }}
                 >
+                  {/* TODO: Fix the styling later, no point in using listItemStyle */}
                   <View style={listItemStyle.rootContainer}>
                     <Text style={listItemStyle.Text}>{item.userCondition}</Text>
                     <TouchableOpacity onPress={() => removeSymptom(item)}>
@@ -183,57 +184,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    backgroundColor: "#35D96F",
-  },
+
   container: {
     flex: 1,
     width: "100%",
   },
-  topSection: {
-    backgroundColor: "#35D96F",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  bookmarksText: {
-    textAlign: "center",
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+
   bottomSection: {
     flex: 1,
     backgroundColor: "white",
   },
-  bigButtonContainer: {
-    alignItems: "center",
-  },
-  iconContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-  },
-  logoutText: {
-    color: "white",
-  },
-  continueButton: {
-    borderRadius: 10,
-    borderWidth: 1.5,
-    marginTop: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    borderColor: "black",
-  },
+
   buttonText: {
     fontWeight: "bold",
     fontSize: "90",

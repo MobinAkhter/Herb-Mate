@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase";
 
 const SortedConditions = () => {
-    const [herbs, setHerbs] = useState([]);
+  const [herbs, setHerbs] = useState([]);
   const [lastVisibleRemedy, setLastVisibleRemedy] = useState(null);
   const [allHerbsLoaded, setAllHerbsLoaded] = useState(false);
   const navigation = useNavigation();
@@ -77,29 +77,29 @@ const SortedConditions = () => {
       />
     </View>
   );
-}
+};
 
 export default SortedConditions;
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    listItem: {
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: "#e0e0e0",
-    },
-    herbImage: {
-      width: 50,
-      height: 50,
-      marginRight: 10,
-      borderRadius: 25,
-    },
-    herbName: {
-      fontSize: 18,
-      marginRight: 70,
-    },
-  });
+  container: {
+    flex: 1,
+  },
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+  },
+  herbImage: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+    borderRadius: 25,
+  },
+  herbName: {
+    fontSize: 18,
+    marginRight: 70,
+  },
+});

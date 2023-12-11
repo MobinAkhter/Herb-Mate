@@ -1,54 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  TextInput,
-} from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, Text, Pressable, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const DataAnalyticsScreen = () => {
   const navigation = useNavigation();
-
-  const DATA = [
-    {
-      id: 0,
-      title: "Heart and Circulatory Health",
-    },
-    {
-      id: 1,
-      title: "Digestive Wellness",
-    },
-    {
-      id: 2,
-      title: "Women's Health",
-    },
-    {
-      id: 3,
-      title: "Well Being",
-    },
-    {
-      id: 4,
-      title: "Respiratory Health",
-    },
-    {
-      id: 5,
-      title: "Joint and Bone Health",
-    },
-    {
-      id: 5,
-      title: "Skin Condition",
-    },
-    {
-      id: 6,
-      title: "Urinary Health",
-    },
-  ];
-
   const [userInput, setUserInput] = useState("");
-  const [prediction, setPrediction] = useState("");
+  // const [prediction, setPrediction] = useState("");
 
   const handlePredict = async () => {
     try {
@@ -81,39 +38,12 @@ const DataAnalyticsScreen = () => {
           condition: userInput,
         });
       }
-
       //setPrediction(data.predicted_category);
-
       // buttonClick(prediction)
     } catch (error) {
       console.error("Error:", error.message);
     }
   };
-
-  function buttonClick(title) {
-    if (title == "Skin Conditions") {
-      title = "Skin Condition";
-    }
-    console.log("This iss a " + title);
-    console.log(userInput);
-
-    navigation.navigate("Specific Question", {
-      prevQuestion: title,
-    });
-    //console.log()
-  }
-
-  function lolClick() {
-    navigation.navigate("RecommendedRemediesScreen");
-  }
-
-  const Item = ({ title }) => (
-    <View>
-      <Pressable style={styles.button} onPress={() => buttonClick(title)}>
-        <Text style={styles.buttonText}> {title} </Text>
-      </Pressable>
-    </View>
-  );
 
   return (
     <>
@@ -186,7 +116,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 2,
   },
-
   instructions: {
     justifyContent: "flex-start",
   },

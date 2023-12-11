@@ -17,7 +17,7 @@ const RecommendedRemedyScreen = ({ route }) => {
   const [pred, setPred] = useState("");
   const navigation = useNavigation();
   const user = auth.currentUser.uid;
-  const [area, setArea] = useState("");
+  // const [area, setArea] = useState("");
   const apiUrl = "http://127.0.0.1:5001/predict";
 
   useEffect(() => {
@@ -70,14 +70,6 @@ const RecommendedRemedyScreen = ({ route }) => {
       rem: remedy,
     });
   }
-
-  /**
-  <Text>{category}</Text>
-  <Text>{question}</Text>
-  <Text>{age}</Text>
-  <Text>{gender}</Text>
-  <Text>{rating}</Text>
-  <Text>Your recommended remedy is {pred}</Text> */
 
   const lol = async () => {
     const userDocRef = db.collection("users").doc(user);

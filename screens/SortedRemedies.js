@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-
   letter: {
     fontSize: 14,
     padding: 4,

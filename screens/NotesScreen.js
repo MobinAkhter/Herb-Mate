@@ -24,8 +24,6 @@ function NotesScreen() {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [currentNote, setCurrentNote] = useState(null);
 
-  const { width, height } = Dimensions.get("window");
-
   const openEditModal = (note) => {
     setCurrentNote(note);
     setEditModalVisible(true);
@@ -179,7 +177,6 @@ function NotesScreen() {
           <SafeAreaView style={styles.modal}>
             <Text style={styles.header}>Edit Note</Text>
             <Text style={styles.text}>Herb Name: {currentNote.herb}</Text>
-            {/* <Text style={styles.text}>Condtion: {currentNote.condition}</Text> */}
             <TextInput
               value={currentNote.notes}
               onChangeText={(text) =>

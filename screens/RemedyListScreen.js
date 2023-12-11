@@ -126,8 +126,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   row: {
-    flex: 1,
-    justifyContent: "space-around", // This will distribute space evenly around the items.
+    justifyContent: "space-around", // This distributes space evenly around the items.
   },
   card: {
     backgroundColor: "#ffffff",
@@ -156,23 +155,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   cardDescription: {
-    fontSize: 14,
     color: "#666",
     marginBottom: 10,
-  },
-  tagContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: 10,
-  },
-  tag: {
-    backgroundColor: "#e0e0e0",
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginRight: 5,
-    marginBottom: 5,
-    fontSize: 12,
   },
   learnMore: {
     fontSize: 16,

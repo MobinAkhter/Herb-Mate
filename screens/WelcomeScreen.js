@@ -85,28 +85,6 @@ const WelcomeScreen = ({}) => {
       </View>
     </TouchableOpacity>
   );
-  // const renderFooter = () => {
-  //   if (!showAll && bodyParts.length > 4) {
-  //     return (
-  //       <TouchableOpacity
-  //         onPress={() => setShowAll(true)}
-  //         style={styles.disclosureButton}
-  //       >
-  //         <Text style={styles.disclosureButtonText}>See More</Text>
-  //       </TouchableOpacity>
-  //     );
-  //   } else if (showAll) {
-  //     return (
-  //       <TouchableOpacity
-  //         onPress={() => setShowAll(false)}
-  //         style={styles.disclosureButton}
-  //       >
-  //         <Text style={styles.disclosureButtonText}>See Less</Text>
-  //       </TouchableOpacity>
-  //     );
-  //   }
-  //   return null;
-  // };
 
   return (
     <View style={styles.rootContainer}>
@@ -159,13 +137,13 @@ export default WelcomeScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
     paddingTop: 18,
   },
   searchContainer: {
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
     flexDirection: "row",
     marginTop: 20,
     height: 50,
@@ -178,39 +156,26 @@ const styles = StyleSheet.create({
   searchWrapper: {
     backgroundColor: "white",
     marginRight: 12,
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
     borderRadius: 16,
-    height: "100%",
+    // height: "100%",
     width: "65%",
   },
   searchInput: {
-    width: "100%",
+    // width: "100%",
     height: "100%",
     paddingHorizontal: 16,
   },
   searchBtn: {
     width: 45,
-    height: "100%",
+    // height: "100%",
     backgroundColor: "#35D96F",
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
   },
-  disclosureButton: {
-    marginLeft: 125,
-    width: "auto",
-    height: 50,
-    backgroundColor: "#35D96F",
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 15,
-  },
-  disclosureButtonText: {
-    color: "white",
-    fontSize: 16,
-  },
+
   card: {
     margin: 10,
     borderRadius: 10,
@@ -225,7 +190,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width / 2 - 50,
   },
   cardContent: {
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
     paddingVertical: 20,
     paddingHorizontal: 10,

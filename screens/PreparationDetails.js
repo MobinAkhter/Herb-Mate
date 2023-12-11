@@ -90,24 +90,15 @@ const styles = StyleSheet.create({
   rootContainer: {
     padding: 24,
   },
-  titleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "baseline",
-  },
   title: {
     fontSize: 26,
     fontWeight: "bold",
     marginBottom: 24,
   },
-
   image: {
     width: 400,
     height: undefined,
     aspectRatio: 1.5,
-  },
-  titleCon: {
-    alignItems: "center",
   },
   desc: {
     fontSize: 16,
@@ -121,41 +112,27 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     alignSelf: "flex-start",
   },
-  header: {
-    fontSize: 26,
-    marginBottom: 20,
-    fontWeight: "bold",
-    backgroundColor: "#f5f5f5",
-    padding: 10,
-    borderRadius: 8,
-  },
-
   divider: {
     borderBottomColor: "gainsboro",
     borderBottomWidth: 1,
     marginVertical: 9,
   },
-
   stepContainer: {
     flexDirection: "row",
     alignItems: "baseline",
     marginBottom: 8,
   },
-
   stepNumberContainer: {
     marginRight: 8,
     width: 40,
     marginBottom: 8,
   },
-
   stepNumber: {
     fontSize: 45,
   },
-
   stepTextContainer: {
     flex: 1,
   },
-
   stepText: {
     fontSize: 16,
   },

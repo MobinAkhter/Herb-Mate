@@ -129,7 +129,7 @@ function RecommendedRemediesScreen() {
               </TouchableOpacity>
             )}
             ItemSeparatorComponent={() => (
-              <View style={{ width: 10 }} /> // Adjust the width based on your desired spacing
+              <View style={{ width: 10 }} /> // We can adjust the width based on our desired spacing
             )}
           />
         </View>
@@ -156,7 +156,7 @@ function RecommendedRemediesScreen() {
               </TouchableOpacity>
             )}
             ItemSeparatorComponent={() => (
-              <View style={{ width: 10 }} /> // Adjust the width based on your desired spacing
+              <View style={{ width: 10 }} /> // We can adjust the width based on our desired spacing
             )}
           />
         </View>
@@ -183,7 +183,7 @@ function RecommendedRemediesScreen() {
               </TouchableOpacity>
             )}
             ItemSeparatorComponent={() => (
-              <View style={{ width: 10 }} /> // Adjust the width based on your desired spacing
+              <View style={{ width: 10 }} /> // We can adjust the width based on our desired spacing
             )}
           />
         </View>
@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     marginLeft: 10,
   },
-
   button: {
     backgroundColor: "white",
     borderRadius: 10,
@@ -212,17 +211,6 @@ const styles = StyleSheet.create({
     width: 150,
     marginBottom: 10,
   },
-  buttonText: {
-    color: "#1e90ff",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
   title: {
     fontSize: 15,
     fontWeight: "bold",
@@ -232,9 +220,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 15,
     paddingLeft: 2,
-  },
-
-  because: {
-    justifyContent: "flex-start",
   },
 });

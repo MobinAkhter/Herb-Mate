@@ -10,7 +10,7 @@ import ConditionScreen from "../screens/ConditionScreen";
 import RemedyListScreen from "../screens/RemedyListScreen";
 import AboutRemedyScreen from "../screens/AboutRemedyScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
-import AppSettingsScreen from "../screens/AppSettingsScreen";
+import BookmarkScreen from "../screens/BookmarkScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
 import DataAnalyticsScreen from "../screens/DataAnalyticsScreen";
 import RemediesBarGraphScreen from "../screens/RemediesBarGraphScreen";
@@ -106,7 +106,7 @@ export function BookmarkStack() {
     >
       <Stack.Screen
         name="Bookmarks"
-        component={AppSettingsScreen}
+        component={BookmarkScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.toggleDrawer()}>

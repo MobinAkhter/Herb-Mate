@@ -17,7 +17,6 @@ const QuestionTier3Screen = ({ route }) => {
   const { selectedCategory } = route.params;
   const { condition } = route.params;
   const navigation = useNavigation();
-  const [questions, setQuestions] = useState([]);
   const category = db.collection("Tier2Questions");
   const documentRef = category.doc(prevQuestion);
   const [sex, setSex] = useState("Male");
@@ -83,14 +82,6 @@ const QuestionTier3Screen = ({ route }) => {
       } else {
         ageGroup = "50 and over";
       }
-
-      /*navigation.navigate("RecommendedRemedyScreen", {
-      category: selectedCategory,
-      question: prevQuestion,
-      age: ageGroup,
-      gender: "Both",
-      rating: rating
-    }); */
       navigation.navigate("Symptom Details Review", {
         category: selectedCategory,
         condition: prevQuestion,
@@ -184,11 +175,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 32,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
 
   input: {
     height: 40,
@@ -211,7 +197,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    // backgroundColor: "#f5fffa"
   },
   buttonText: {
     fontWeight: "bold",

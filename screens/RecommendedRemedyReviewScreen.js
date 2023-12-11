@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 32,
   },
-
   textPosition: {
     alignItems: "flex-start",
     paddingLeft: 20,
@@ -206,23 +205,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#32cd32",
   },
-  subTitle: {
-    fontWeight: "bold",
-    fontSize: 30,
-    textAlign: "center",
-    paddingBottom: 10,
-  },
-  warning: {
-    fontWeight: "bold",
-    fontSize: 20,
-    textAlign: "center",
-    paddingBottom: 10,
-    fontStyle: "italic",
-  },
   continueButton: {
     borderRadius: 10,
     borderWidth: 1.5,
-
     justifyContent: "center",
     alignItems: "center",
     padding: 10,

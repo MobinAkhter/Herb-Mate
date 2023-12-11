@@ -180,13 +180,6 @@ function UserProfileScreen({ navigation }) {
     ]);
   };
 
-  // const getThemeStyles = (theme) => ({
-  //   background: theme === "dark" ? "black" : "white",
-  //   color: theme === "dark" ? "white" : "black",
-  // });
-
-  // const themeStyles = getThemeStyles(theme);
-
   return (
     <>
       {userData && (
@@ -241,7 +234,7 @@ function UserProfileScreen({ navigation }) {
                   value={oldPassword}
                   onChangeText={setOldPassword}
                   placeholderTextColor={"black"}
-                  style={textInputstyles.textInput}
+                  style={styles.pwTextInput}
                 />
 
                 <TextInput
@@ -250,7 +243,7 @@ function UserProfileScreen({ navigation }) {
                   value={newPassword}
                   onChangeText={setNewPassword}
                   placeholderTextColor={"black"}
-                  style={textInputstyles.textInput}
+                  style={styles.pwTextInput}
                 />
 
                 <TextInput
@@ -259,7 +252,7 @@ function UserProfileScreen({ navigation }) {
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   placeholderTextColor={"black"}
-                  style={textInputstyles.textInput}
+                  style={styles.pwTextInput}
                 />
 
                 <View style={{ marginTop: 10, marginBottom: 10 }}>
@@ -288,7 +281,7 @@ function UserProfileScreen({ navigation }) {
                   value={oldPassword}
                   onChangeText={setOldPassword}
                   placeholderTextColor={"black"}
-                  style={textInputstyles.textInput}
+                  style={styles.pwTextInput}
                 />
 
                 <TextInput
@@ -297,7 +290,7 @@ function UserProfileScreen({ navigation }) {
                   value={newPassword}
                   onChangeText={setNewPassword}
                   placeholderTextColor={"black"}
-                  style={textInputstyles.textInput}
+                  style={styles.pwTextInput}
                 />
                 <View style={{ marginTop: 10, marginBottom: 10 }}>
                   <Button title="Submit" onPress={handleChangePassword}>
@@ -323,23 +316,6 @@ function UserProfileScreen({ navigation }) {
 export default UserProfileScreen;
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingTop: 50,
-    justifyContent: "space-between",
-    backgroundColor: "#35D96F",
-    padding: 16,
-  },
-
-  title: {
-    flex: 1, // Add flex property
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-    marginLeft: 40,
-    textAlign: "center",
-  },
   textContainer: {
     marginHorizontal: 20,
     marginTop: 15,
@@ -367,10 +343,7 @@ const styles = StyleSheet.create({
     width: "50%",
     backgroundColor: "white",
   },
-});
-
-const textInputstyles = StyleSheet.create({
-  textInput: {
+  pwTextInput: {
     borderColor: "black",
     borderWidth: 1,
     padding: 10,
