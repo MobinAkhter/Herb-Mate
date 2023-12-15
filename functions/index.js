@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const {Expo} = require("expo-server-sdk");
-const {SessionsClient} = require("@google-cloud/dialogflow");
+const { Expo } = require("expo-server-sdk");
+const { SessionsClient } = require("@google-cloud/dialogflow");
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -86,7 +86,7 @@ exports.dialogflowGateway = functions.https.onRequest(async (req, res) => {
     return res.status(405).send("Method Not Allowed");
   }
 
-  const {text} = req.body;
+  const { text } = req.body;
 
   const sessionPath = client.projectAgentSessionPath(projectId, sessionId);
 
@@ -104,7 +104,7 @@ exports.dialogflowGateway = functions.https.onRequest(async (req, res) => {
     const responses = await client.detectIntent(request);
     const result = responses[0].queryResult.fulfillmentText;
     console.log("Received response from Dialogflow:", result);
-    return res.status(200).send({message: result});
+    return res.status(200).send({ message: result });
   } catch (error) {
     console.error("Error calling Dialogflow:", error.message);
     return res.status(500).send(error);
@@ -112,49 +112,50 @@ exports.dialogflowGateway = functions.https.onRequest(async (req, res) => {
 });
 
 // This function pushes notifications, will need to see how it works.
-// TODO: This function only works if the app is running in background.
+// TODO: This function only works if the app is running in background. Apparently not.
+// It works when it feels like it. Created a function more innovative than AI. Damnnn 🔥
 // Will need to ensure it notifies the user even if the app is not running!
 exports.sendPushNotifications = functions.pubsub
-    .schedule("52 04 * * *")
-    .timeZone("America/Toronto")
-    .onRun(async (context) => {
-      const messages = [];
-      const usersSnapshot = await db.collection("users").get();
+  .schedule("52 04 * * *")
+  .timeZone("America/Toronto")
+  .onRun(async (context) => {
+    const messages = [];
+    const usersSnapshot = await db.collection("users").get();
 
-      usersSnapshot.forEach((doc) => {
-        const expoPushToken = doc.data().expoPushToken;
+    usersSnapshot.forEach((doc) => {
+      const expoPushToken = doc.data().expoPushToken;
 
-        const randomIndex = Math.floor(
-            Math.random() * notificationMessages.length,
-        );
-        const randomMessage = notificationMessages[randomIndex];
-        if (Expo.isExpoPushToken(expoPushToken)) {
-          messages.push({
-            to: expoPushToken,
-            sound: "default",
-            body: randomMessage,
-            data: {withSome: "data"},
-          });
-        }
-      });
-
-      console.log("Preparing to send push notifications...");
-
-      const chunks = expo.chunkPushNotifications(messages);
-      const tickets = [];
-      for (const chunk of chunks) {
-        try {
-          const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-          console.log(
-              "Successfully sent a chunk of push notifications:",
-              ticketChunk,
-          );
-          tickets.push(...ticketChunk);
-        } catch (error) {
-          console.error(
-              "Error sending a chunk of push notifications:",
-              error.message,
-          );
-        }
+      const randomIndex = Math.floor(
+        Math.random() * notificationMessages.length
+      );
+      const randomMessage = notificationMessages[randomIndex];
+      if (Expo.isExpoPushToken(expoPushToken)) {
+        messages.push({
+          to: expoPushToken,
+          sound: "default",
+          body: randomMessage,
+          data: { withSome: "data" },
+        });
       }
     });
+
+    console.log("Preparing to send push notifications...");
+
+    const chunks = expo.chunkPushNotifications(messages);
+    const tickets = [];
+    for (const chunk of chunks) {
+      try {
+        const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+        console.log(
+          "Successfully sent a chunk of push notifications:",
+          ticketChunk
+        );
+        tickets.push(...ticketChunk);
+      } catch (error) {
+        console.error(
+          "Error sending a chunk of push notifications:",
+          error.message
+        );
+      }
+    }
+  });

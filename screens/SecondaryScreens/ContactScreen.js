@@ -30,7 +30,7 @@ const ContactScreen = () => {
       return;
     }
 
-    fetch("http://localhost:5000/send-email", {
+    fetch("http://127.0.0.1:5000/send-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,6 +46,10 @@ const ContactScreen = () => {
       .then((data) => {
         if (data.message) {
           Alert.alert("Success", data.message);
+          setName("");
+          setEmail("");
+          setSubject("");
+          setMessage("");
         } else {
           throw new Error("Error sending email");
         }
