@@ -80,12 +80,23 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
       );
       return;
     }
+    if (!isLogin && enteredPassword !== enteredConfirmPassword) {
+      Alert.alert("Password Error", "Passwords do not match.");
+      return;
+    }
     if (!isLogin) {
+      const passwordStrengthRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!enteredPassword.match(passwordStrengthRegex)) {
+        Alert.alert(
+          "Weak Password",
+          "Password must be at least 8 characters long, include a number, a symbol, and both uppercase and lowercase letters."
+        );
+        return;
+      }
       auth
         .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
-          // setUser(authUser.user);
-          console.log(authUser.user.uid);
           const authId = authUser.user.uid;
           const usersCollection = firestore.collection("users").doc(authId);
           const newUser = {
