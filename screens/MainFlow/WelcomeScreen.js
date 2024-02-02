@@ -60,18 +60,18 @@ const WelcomeScreen = ({}) => {
     fetchBodyParts();
   }, []);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Chat")}
-          style={styles.chatButton}
-        >
-          <Entypo name="chat" size={24} color="royalblue" />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableOpacity
+  //         onPress={() => navigation.navigate("Chat")}
+  //         style={styles.chatButton}
+  //       >
+  //         <Entypo name="chat" size={24} color="royalblue" />
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // }, [navigation]);
 
   const renderBodyPartCard = ({ item }) => (
     <TouchableOpacity

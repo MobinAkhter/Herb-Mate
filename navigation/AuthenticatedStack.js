@@ -300,7 +300,7 @@ function AuthenticatedStack() {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Symptoms"
         component={RecommendationStack}
         options={{
@@ -308,7 +308,7 @@ function AuthenticatedStack() {
             <Ionicons name="md-analytics" size={size} color={color} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Notes"
         component={NotesStack}
