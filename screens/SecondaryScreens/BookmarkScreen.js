@@ -72,25 +72,40 @@ const BookmarkScreen = () => {
           data={bookmarkCollection}
           keyExtractor={(item) => item.name}
           renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-              <Image
-                source={
-                  item.image && item.image[0]
-                    ? { uri: item.image[0] }
-                    : require("../../assets/leaf_icon.jpeg")
-                }
-                style={styles.listItemHerbImage}
-              />
-              <Text style={styles.listItemText}>{item.name}</Text>
-              <TouchableOpacity
-                style={styles.listItemXButton}
-                onPress={() => clickX(item.name)}
-              >
-                <AntDesign name="delete" size={24} color="#B0B0B0" />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Remedy Details", { rem: item });
+              }}
+            >
+              <View style={styles.listItemContainer}>
+                <Image
+                  source={
+                    item.image && item.image[0]
+                      ? { uri: item.image[0] }
+                      : require("../../assets/leaf_icon.jpeg")
+                  }
+                  style={styles.listItemHerbImage}
+                />
+                <Text style={styles.listItemText}>{item.name}</Text>
+                <TouchableOpacity
+                  style={styles.listItemXButton}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    called;
+                    clickX(item.name);
+                  }}
+                >
+                  <AntDesign name="delete" size={24} color="#B0B0B0" />
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
           )}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No bookmarks yet.</Text>
+            </View>
+          )}
         />
       </View>
     </KeyboardAwareScrollView>
@@ -127,6 +142,15 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 50,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: "#666",
   },
 });
 

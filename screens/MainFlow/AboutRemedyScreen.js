@@ -398,6 +398,8 @@ function capitalizeFirstLetter(string) {
 function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   const route = useRoute();
   const { rem } = route.params || {};
+  const { herbDetail } = route.params;
+
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const [modalVisible, setModalVisible] = useState(false);
   const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
