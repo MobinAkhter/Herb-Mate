@@ -13,6 +13,7 @@ import { db, auth } from "../../firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { AntDesign } from "@expo/vector-icons";
 
+// UPGRADING TO EXPO SDK 49
 const BookmarkScreen = () => {
   const navigation = useNavigation();
   const user = auth.currentUser.uid;
