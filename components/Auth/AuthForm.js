@@ -13,10 +13,14 @@ import {
 import Button from "../ui/Button";
 import Input from "./Input";
 import Checkbox from "expo-checkbox";
-import { auth } from "../../firebase";
+import { auth, firestore } from "../../firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import firebase from "firebase/app";
-import "firebase/firestore";
+// import firebase from "firebase/app";
+// import "firebase/firestore";
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [enteredFirstName, setFirstName] = useState("");
@@ -70,7 +74,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
     }
   }
 
-  const firestore = firebase.firestore();
+  // const firestore = firebase.firestore();
 
   function submitHandler() {
     if (!isLogin && !termsAgreed) {
@@ -94,8 +98,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         );
         return;
       }
-      auth
-        .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
+      createUserWithEmailAndPassword(enteredEmail, enteredPassword)
         .then((authUser) => {
           const authId = authUser.user.uid;
           const usersCollection = firestore.collection("users").doc(authId);
@@ -127,9 +130,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         })
         .catch((error) => alert(error.message));
     } else {
-      auth
-        .signInWithEmailAndPassword(enteredEmail, enteredPassword)
+      signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
         .then((authUser) => {
+          console.log(authUser);
           if (authUser.user.emailVerified) {
             setUser(authUser.user);
             navigation.navigate("Home"); // Navigate to welcome screen if email is verified
@@ -143,7 +146,10 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
             navigation.replace("Login");
           }
         })
-        .catch((error) => alert(error));
+        .catch((error) => {
+          console.log(error);
+          // alert(error)
+        });
     }
   }
 

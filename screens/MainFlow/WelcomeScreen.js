@@ -10,12 +10,13 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db } from "../../firebase";
+import { db, firestore } from "../../firebase";
 import { Entypo } from "@expo/vector-icons";
 import { removeSpace, iconMapper } from "../../utils";
 import MIcon from "../../components/ui/MIcon";
 import SearchBar from "../../components/ui/SearchBar";
 
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 const WelcomeScreen = ({}) => {
   const navigation = useNavigation();
   const [bodyParts, setBodyParts] = useState([]);
@@ -37,14 +38,20 @@ const WelcomeScreen = ({}) => {
 
         // Always fetch the latest data from Firestore and update the state and cache
         const parts = [];
-        const querySnapshot = await db.collection("BodyParts").get();
-        console.log("Fetching body parts from Firestore...");
+        const querySnapshot = await getDocs(collection(db, "BodyParts"));
+        querySnapshot.forEach((doc) => {
+          console.log(`${doc.id}`);
+        });
+
+        // // console.log("Fetching body parts from Firestore...");
         querySnapshot.forEach((doc) => {
           parts.push({
             ...doc.data(),
             key: doc.id,
           });
         });
+
+        console.log(parts);
 
         // Update state with the latest body parts
         setBodyParts(parts);

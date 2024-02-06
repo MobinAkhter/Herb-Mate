@@ -1,13 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View } from "react-native";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { UserContext } from "./contexts/userContext";
+
 import UserProvider from "./contexts/userContext";
-import AuthenticatedStack from "./navigation/AuthenticatedStack";
+// import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import { BookmarkStack } from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
-import { LogBox, Text, View, TouchableOpacity } from "react-native";
+import { LogBox, TouchableOpacity } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -24,6 +27,7 @@ import OnboardingScreen from "./screens/OnboardingScreen";
 import ContactScreen from "./screens/SecondaryScreens/ContactScreen";
 import AboutUsScreen from "./screens/SecondaryScreens/AboutUsScreen";
 import { Ionicons } from "@expo/vector-icons";
+import AuthenticatedStack from "./navigation/AuthenticatedStack";
 
 const Drawer = createDrawerNavigator();
 

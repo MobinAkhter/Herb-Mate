@@ -27,8 +27,7 @@ import Swiper from "react-native-swiper";
 import RNPickerSelect from "react-native-picker-select";
 import * as Speech from "expo-speech"; // This is better cause the other lib wanted me to link it or something. Extra steps for expo managed workflow.
 import Icon from "react-native-vector-icons/FontAwesome";
-import firebase from "firebase";
-import "firebase/firestore";
+import { FieldValue } from "firebase/firestore";
 
 function HerbScreen() {
   const navigation = useNavigation();
@@ -497,7 +496,8 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
           {
             herb: selectedRemedy,
             notes: notes,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            // createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAt: FieldValue.serverTimestamp(),
           },
           { merge: true }
         )

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Notifications from "expo-notifications";
-import { db, auth } from "../firebase";
+import { db } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 export const UserContext = React.createContext();
 
@@ -18,19 +19,18 @@ function UserProvider({ children }) {
   }, [user]);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
-      if (firebaseUser) {
-        if (firebaseUser.emailVerified) {
-          setUser(firebaseUser);
-        } else {
-          // alert("Please verify your email");
-        }
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => unsubscribe();
+    // const unsubscribe = onAuthStateChanged((firebaseUser) => {
+    //   if (firebaseUser) {
+    //     if (firebaseUser.emailVerified) {
+    //       setUser(firebaseUser);
+    //     } else {
+    //       // alert("Please verify your email");
+    //     }
+    //   } else {
+    //     setUser(null);
+    //   }
+    // });
+    // return () => unsubscribe();
   }, []);
 
   async function registerForPushNotificationsAsync() {
