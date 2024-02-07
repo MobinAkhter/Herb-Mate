@@ -12,7 +12,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db, auth } from "../../firebase";
 
@@ -20,7 +20,7 @@ function ConditionScreen({ route }) {
   const { bp } = route.params;
   const navigation = useNavigation();
   const [conditions, setConditions] = useState([]);
-  const col = db.collection("BodyParts");
+  const col = collection(db, "BodyParts");
   const user = auth.currentUser.uid;
 
   // Loads the conditions from cache or database
@@ -35,9 +35,10 @@ function ConditionScreen({ route }) {
         setConditions(JSON.parse(cachedConditions));
       } else {
         console.log(`Fetching conditions from Firestore for body part: ${bp}`);
-        const con = [];
-        const querySnapshot = await col.doc(bp).collection("Conditions").get();
+        const conditionsRef = collection(db, "BodyParts", bp, "Conditions");
+        const querySnapshot = await getDocs(conditionsRef);
 
+        const con = [];
         querySnapshot.forEach((doc) => {
           con.push({
             ...doc.data(),
@@ -81,12 +82,12 @@ function ConditionScreen({ route }) {
     console.log("Selected the following condition" + conditionName);
 
     // Get the user's document reference
-    const userDocRef = db.collection("users").doc(user);
+    const userDocRef = doc(db, "users", user);
 
     // Use the get() method to fetch the user's document
-    const userDocSnapshot = await userDocRef.get();
+    const userDocSnapshot = await getDoc(userDocRef);
 
-    if (userDocSnapshot.exists) {
+    if (userDocSnapshot.exists()) {
       // Check if the document exists
       const userData = userDocSnapshot.data();
 
