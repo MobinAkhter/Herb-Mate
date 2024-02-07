@@ -9,108 +9,71 @@ import {
   Modal,
   TextInput,
   Image,
-  Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../../../firebase";
-import { SafeAreaView } from "react-native";
-import { TouchableOpacity } from "react-native";
+import {
+  collection,
+  onSnapshot,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function NotesScreen() {
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const user = auth.currentUser.uid;
-  const userRef = db.collection("users").doc(user);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [currentNote, setCurrentNote] = useState(null);
 
-  const openEditModal = (note) => {
+  useEffect(() => {
+    const notesRef = collection(db, "users", auth.currentUser.uid, "notes");
+    const unsubscribe = onSnapshot(notesRef, (snapshot) => {
+      const fetchedNotes = [];
+      snapshot.forEach((doc) => {
+        const noteData = doc.data();
+        fetchedNotes.push({
+          id: doc.id,
+          ...noteData,
+          createdAt: noteData.createdAt?.toDate(),
+          updatedAt: noteData.updatedAt?.toDate(),
+        });
+      });
+      setNotes(fetchedNotes.sort((a, b) => b.updatedAt - a.updatedAt));
+      setIsLoading(false);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleEditModal = (note) => {
     setCurrentNote(note);
     setEditModalVisible(true);
   };
 
-  const saveEditedNote = () => {
-    const updatedNotes = notes.map((note) => {
-      if (note.id === currentNote.id) {
-        return { ...currentNote, updatedAt: new Date() };
-      }
-      return note;
-    });
-    setNotes(updatedNotes);
-    userRef
-      .collection("notes")
-      .doc(currentNote.id)
-      .set(
-        {
-          herb: currentNote.herb,
-          notes: currentNote.notes,
-          updatedAt: new Date(),
-        },
-        { merge: true }
-      )
-      .then(() => {
-        setEditModalVisible(false);
-        Alert.alert("Note updated successfully!");
-      })
-      .catch((error) => {
-        console.error("Error updating note:", error);
-      });
-  };
-
-  const confirmDelete = (noteId) => {
-    Alert.alert(
-      "Delete Note",
-      "Are you sure you want to delete this note?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Deletion cancelled"),
-          style: "cancel",
-        },
-        { text: "Yes", onPress: () => deleteNote(noteId) },
-      ],
-      { cancelable: true }
+  const handleSaveNote = async () => {
+    const noteRef = doc(
+      db,
+      "users",
+      auth.currentUser.uid,
+      "notes",
+      currentNote.id
     );
-  };
-  const deleteNote = (noteId) => {
-    userRef
-      .collection("notes")
-      .doc(noteId)
-      .delete()
-      .then(() => {
-        console.log("Note successfully deleted!");
-      })
-      .catch((error) => {
-        console.error("Error removing note: ", error);
-      });
-  };
-
-  useEffect(() => {
-    const unsubscribe = userRef.collection("notes").onSnapshot((snapshot) => {
-      const fetchedNotes = snapshot.docs
-        .map((doc) => {
-          const data = doc.data();
-          console.log(doc.id, data);
-
-          const createdAt = data.createdAt?.toDate() ?? new Date();
-          const updatedAt = data.updatedAt?.toDate();
-
-          return {
-            id: doc.id,
-            ...data,
-            createdAt,
-            updatedAt,
-          };
-        })
-        .sort((a, b) => {
-          return (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt);
-        });
-      setNotes(fetchedNotes);
-      setIsLoading(false);
+    await updateDoc(noteRef, {
+      ...currentNote,
+      updatedAt: new Date(),
     });
+    setEditModalVisible(false);
+    Alert.alert("Note updated successfully!");
+  };
 
-    return () => unsubscribe();
-  }, []);
+  const handleDeleteNote = async (noteId) => {
+    const noteRef = doc(db, "users", auth.currentUser.uid, "notes", noteId);
+    await deleteDoc(noteRef);
+    Alert.alert("Note deleted successfully!");
+  };
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -118,10 +81,10 @@ function NotesScreen() {
 
   if (notes.length === 0) {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.fullScreen}>
         <Image
           source={require("../../../assets/noNotes.png")}
-          style={{ width: "100%", height: "100%" }}
+          style={styles.fullScreenImage}
           resizeMode="cover"
         />
       </View>
@@ -131,81 +94,65 @@ function NotesScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {notes.map((note) => (
-        <View key={note.id} style={styles.note}>
-          <View style={styles.noteTitleContainer}>
+        <View key={note.id} style={styles.noteContainer}>
+          <View style={styles.noteTitleRow}>
             <Text style={styles.noteTitle}>Herb: {note.herb}</Text>
             <AntDesign
               name="delete"
               size={24}
               color="red"
-              onPress={() => confirmDelete(note.id)}
-              style={{
-                position: "absolute",
-                marginLeft: "80%",
-                alignItems: "center",
-              }}
+              onPress={() => handleDeleteNote(note.id)}
+              style={styles.icon}
             />
             <AntDesign
               name="edit"
               size={24}
               color="blue"
-              onPress={() => openEditModal(note)}
-              style={{ alignItems: "center" }}
+              onPress={() => handleEditModal(note)}
+              style={styles.icon}
             />
           </View>
-
-          <Text style={styles.noteDetail}>Notes: {note.notes}</Text>
-          <Text style={styles.noteDetail}>
+          <Text style={styles.noteText}>Notes: {note.notes}</Text>
+          <Text style={styles.noteText}>
+            Last Edited:{" "}
             {note.updatedAt
-              ? `Last Edited on: ${note.updatedAt.toLocaleDateString()} at ${note.updatedAt.toLocaleTimeString(
-                  [],
-                  { hour: "numeric", minute: "2-digit" }
-                )}`
-              : `Created on: ${note.createdAt.toLocaleDateString()} at ${note.createdAt.toLocaleTimeString(
-                  [],
-                  { hour: "numeric", minute: "2-digit" }
-                )}`}
+              ? note.updatedAt.toLocaleDateString() +
+                " " +
+                note.updatedAt.toLocaleTimeString()
+              : "N/A"}
           </Text>
         </View>
       ))}
-      {editModalVisible && (
-        <Modal
-          animationType="fade" // or we can use slide
-          visible={editModalVisible}
-          onRequestClose={() => setEditModalVisible(false)}
-        >
-          <SafeAreaView style={styles.modal}>
-            <Text style={styles.header}>Edit Note</Text>
-            <Text style={styles.text}>Herb Name: {currentNote.herb}</Text>
-            <TextInput
-              value={currentNote.notes}
-              onChangeText={(text) =>
-                setCurrentNote((prev) => ({ ...prev, notes: text }))
-              }
-              placeholder="Notes"
-              style={styles.input}
-              textAlignVertical="top"
-              multiline={true}
-            />
-            <TouchableOpacity
-              onPress={saveEditedNote}
-              style={styles.saveButton}
-            >
-              <Text style={styles.buttonText}>Save Note</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setEditModalVisible(false)}
-              style={styles.closeButton}
-            >
-              <Text style={styles.buttonText}>Close</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </Modal>
-      )}
+      <Modal
+        animationType="fade"
+        visible={editModalVisible}
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Edit Note</Text>
+          <TextInput
+            value={currentNote.notes}
+            onChangeText={(text) =>
+              setCurrentNote({ ...currentNote, notes: text })
+            }
+            placeholder="Notes"
+            style={styles.modalInput}
+            multiline
+          />
+          <TouchableOpacity onPress={handleSaveNote} style={styles.saveButton}>
+            <Text style={styles.buttonText}>Save Note</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setEditModalVisible(false)}
+            style={styles.closeButton}
+          >
+            <Text style={styles.buttonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
-
 export default NotesScreen;
 
 const styles = StyleSheet.create({
