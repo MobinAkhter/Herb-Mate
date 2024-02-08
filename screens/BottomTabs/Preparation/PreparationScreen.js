@@ -9,28 +9,31 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const PreparationScreen = () => {
   const [preparations, setPreparations] = useState([]);
   const navigation = useNavigation();
 
-  //getting the list of preparation methods
   const fetchPreparations = async () => {
-    let query = db.collection("Preparations");
-
-    const querySnapshot = await query.get();
-
+    const querySnapshot = await getDocs(collection(db, "Preparations"));
     const prepArray = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    //console.log("prep array: " + prepArray[1].name);
     setPreparations(prepArray);
   };
 
-  const renderPreparation = ({ item, index }) => (
+  useEffect(() => {
+    fetchPreparations();
+  }, []);
+
+  const navigateToDetails = (name) => {
+    navigation.navigate("Preparation Details", { method: name });
+  };
+
+  const renderPreparation = ({ item }) => (
     <TouchableOpacity
-      key={item.name}
       style={styles.cardContainer}
       onPress={() => navigateToDetails(item.name)}
     >
@@ -46,20 +49,11 @@ const PreparationScreen = () => {
     </TouchableOpacity>
   );
 
-  useEffect(() => {
-    fetchPreparations();
-  }, []);
-
-  const navigateToDetails = (id) => {
-    console.log("Navigating to prep: ", id);
-    navigation.navigate("Preparation Details", { method: id });
-  };
-
   return (
     <View style={styles.container}>
       <FlatList
         data={preparations}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={renderPreparation}
         numColumns={2}
         columnWrapperStyle={styles.row}

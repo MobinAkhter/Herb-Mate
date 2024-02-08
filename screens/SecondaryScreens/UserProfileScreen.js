@@ -8,11 +8,16 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import { UserContext } from "../../contexts/userContext";
 import Icon from "react-native-vector-icons/FontAwesome";
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
+import { UserContext } from "../../contexts/userContext";
+import { auth, db } from "../../firebase";
+import {
+  signOut,
+  reauthenticateWithCredential,
+  updatePassword,
+  EmailAuthProvider,
+} from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 function UserProfileScreen({ navigation }) {
   const { setUser } = useContext(UserContext);
@@ -26,8 +31,8 @@ function UserProfileScreen({ navigation }) {
   const [isEditingFirstName, setEditingFirstName] = useState(false);
   const [isEditingLastName, setEditingLastName] = useState(false);
 
-  const firestore = firebase.firestore();
-  const auth = firebase.auth();
+  // const firestore = firebase.firestore();
+  // const auth = firebase.auth();
   const authId = auth.currentUser ? auth.currentUser.uid : null;
 
   useLayoutEffect(() => {
@@ -42,26 +47,33 @@ function UserProfileScreen({ navigation }) {
   }, [navigation]);
 
   useEffect(() => {
-    if (authId) {
-      const userRef = firestore.collection("users").doc(authId);
-      userRef.get().then((doc) => {
-        if (doc.exists) {
-          const userDocData = doc.data();
+    if (auth.currentUser) {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      getDoc(userRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const userDocData = docSnap.data();
           setUserData(userDocData);
           setFirstName(userDocData.firstName);
           setLastName(userDocData.lastName);
         }
       });
     }
-  }, [authId]);
+  }, []);
 
   const handleLogout = async () => {
-    await auth.signOut();
-    navigation.navigate("Login");
-    setUser(null);
+    try {
+      await signOut(auth);
+      navigation.navigate("Login");
+      setUser(null);
+    } catch (error) {
+      // Handle any errors
+      console.error(error);
+    }
   };
 
   const updateUserField = async (field, value) => {
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    await setDoc(userRef, { [field]: value }, { merge: true });
     await firestore
       .collection("users")
       .doc(authId)
@@ -85,15 +97,14 @@ function UserProfileScreen({ navigation }) {
       return;
     }
     try {
-      const auth = firebase.auth();
       const user = auth.currentUser;
       if (user) {
-        const credentials = firebase.auth.EmailAuthProvider.credential(
+        const credentials = EmailAuthProvider.credential(
           user.email,
           oldPassword
         );
-        await user.reauthenticateWithCredential(credentials);
-        await user.updatePassword(newPassword);
+        await reauthenticateWithCredential(user, credentials);
+        await updatePassword(user, newPassword);
         Alert.alert("Success", "Password updated successfully.");
         setModalVisible(false);
       }

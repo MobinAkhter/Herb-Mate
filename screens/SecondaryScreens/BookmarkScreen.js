@@ -9,62 +9,66 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import {
+  collection,
+  getDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { db, auth } from "../../firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { AntDesign } from "@expo/vector-icons";
 
-// UPGRADING TO EXPO SDK 49
 const BookmarkScreen = () => {
   const navigation = useNavigation();
   const user = auth.currentUser.uid;
-  const userRef = db.collection("users").doc(user);
+  const userRef = doc(db, "users", user); // Adjusted for Firestore modular SDK
   const [bookmarkCollection, setBookmarkCollection] = useState([]);
 
   const fetchBookmarks = async () => {
-    const userDocRef = db.collection("users").doc(user);
-    const userDocSnapshot = await userDocRef.get();
+    const docSnap = await getDoc(userRef);
 
-    if (userDocSnapshot.exists) {
-      const userData = userDocSnapshot.data();
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
       setBookmarkCollection(userData.bookmarks || []);
     } else {
       setBookmarkCollection([]);
     }
   };
 
-  function clickX(name) {
+  const clickX = (name) => {
     Alert.alert(
       "Warning",
-      `Are you sure you want to remove ${name} from your bookmarks`,
+      `Are you sure you want to remove ${name} from your bookmarks?`,
       [
         { text: "Yes", onPress: () => removeBookmark(name) },
         {
           text: "No",
-          onPress: () => {},
           style: "cancel",
         },
       ],
       { cancelable: false }
     );
-  }
+  };
 
   const removeBookmark = async (remedyName) => {
-    const updatedBookmarks = [...bookmarkCollection];
-    const indexToRemove = updatedBookmarks.findIndex(
-      (item) => item.name === remedyName
+    const newBookmarks = bookmarkCollection.filter(
+      (item) => item.name !== remedyName
     );
-
-    if (indexToRemove !== -1) {
-      updatedBookmarks.splice(indexToRemove, 1);
-      setBookmarkCollection(updatedBookmarks);
-      await userRef.update({ bookmarks: updatedBookmarks });
-    }
+    await updateDoc(userRef, { bookmarks: newBookmarks });
+    fetchBookmarks(); // Refresh bookmarks after removal
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", fetchBookmarks);
-    return unsubscribe;
-  }, [navigation]);
+    // Listen for real-time updates
+    const unsubscribe = onSnapshot(userRef, (doc) => {
+      const userData = doc.data();
+      setBookmarkCollection(userData?.bookmarks || []);
+    });
+
+    return unsubscribe; // Detach listener on unmount
+  }, []);
 
   return (
     <KeyboardAwareScrollView style={{ backgroundColor: "white" }}>
@@ -74,9 +78,9 @@ const BookmarkScreen = () => {
           keyExtractor={(item) => item.name}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Remedy Details", { rem: item });
-              }}
+              onPress={() =>
+                navigation.navigate("Remedy Details", { rem: item })
+              }
             >
               <View style={styles.listItemContainer}>
                 <Image
@@ -92,7 +96,6 @@ const BookmarkScreen = () => {
                   style={styles.listItemXButton}
                   onPress={(e) => {
                     e.stopPropagation();
-                    called;
                     clickX(item.name);
                   }}
                 >
@@ -112,7 +115,6 @@ const BookmarkScreen = () => {
     </KeyboardAwareScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,

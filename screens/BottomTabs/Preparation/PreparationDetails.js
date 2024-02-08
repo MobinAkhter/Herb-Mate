@@ -1,33 +1,30 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
-import { db } from "../../../firebase";
-
-import "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore"; // Updated import for Firestore modular SDK
+import { db } from "../../../firebase"; // Ensure db is correctly initialized in your firebase.js
 
 function PreparationDetails({ route }) {
-  const prepFirebase = db.collection("Preparations");
-
-  const { method } = route.params || {};
+  const { method } = route.params;
   const [prepDetails, setPreparationDetails] = useState(null);
 
   const fetchDetails = async () => {
-    await prepFirebase
-      .doc(method)
-      .get()
-      .then((doc) => {
-        const data = doc.data();
-        console.log("Fetching details from Firebase", data);
-        setPreparationDetails(data);
-        console.log("Storing in cache: ", data);
-      })
-      .catch((error) => {
-        console.error("Error fetching details from Firestore:", error);
-      });
+    const prepRef = doc(db, "Preparations", method); // Updated reference to preparation document
+    try {
+      const docSnap = await getDoc(prepRef);
+      if (docSnap.exists()) {
+        console.log("Fetching details from Firebase", docSnap.data());
+        setPreparationDetails(docSnap.data());
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching details from Firestore:", error);
+    }
   };
 
   useEffect(() => {
     fetchDetails();
-  }, []);
+  }, [method]);
 
   return (
     <View style={styles.rootContainer}>

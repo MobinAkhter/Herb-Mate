@@ -3,6 +3,14 @@ import { FlatList, StyleSheet, View, Text, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../../firebase";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 function RemedyListScreen({ route }) {
   const { bp, con } = route.params;
@@ -11,7 +19,6 @@ function RemedyListScreen({ route }) {
   const cacheKey = `remedies_${bp}_${con}`;
 
   useEffect(() => {
-    // AsyncStorage.clear();
     const fetchRemedies = async () => {
       try {
         const cachedRemedies = await AsyncStorage.getItem(cacheKey);
@@ -19,37 +26,26 @@ function RemedyListScreen({ route }) {
           setRemedies(JSON.parse(cachedRemedies));
           console.log("Remedies retrieved from cache");
         } else {
-          const querySnapshot = await db
-            .collection("BodyParts")
-            .doc(bp)
-            .collection("Conditions")
-            .doc(con)
-            .get();
-
-          if (querySnapshot.exists) {
-            const conditionData = querySnapshot.data();
+          const conditionRef = doc(db, "BodyParts", bp, "Conditions", con);
+          const conditionSnap = await getDoc(conditionRef);
+          if (conditionSnap.exists()) {
+            const conditionData = conditionSnap.data();
             if (conditionData && conditionData.remedies) {
               const remediesDetails = await Promise.all(
-                conditionData.remedies.map(async (remedyName) => {
-                  const remedyDoc = await db
-                    .collection("Remedies")
-                    .doc(remedyName)
-                    .get();
-                  return remedyDoc.exists
-                    ? { id: remedyDoc.id, ...remedyDoc.data() }
+                conditionData.remedies.map(async (remedyId) => {
+                  const remedyRef = doc(db, "Remedies", remedyId);
+                  const remedySnap = await getDoc(remedyRef);
+                  return remedySnap.exists()
+                    ? { id: remedySnap.id, ...remedySnap.data() }
                     : null;
                 })
               );
               const validRemedies = remediesDetails.filter(Boolean);
               setRemedies(validRemedies);
-
               await AsyncStorage.setItem(
                 cacheKey,
                 JSON.stringify(validRemedies)
-              )
-                .then(() => console.log("Remedies cached successfully"))
-                .catch((error) => console.error(error));
-
+              );
               console.log("Remedies retrieved from Firestore");
             }
           }
@@ -58,29 +54,14 @@ function RemedyListScreen({ route }) {
         console.error("Error fetching remedies:", error);
       }
     };
-
     fetchRemedies();
   }, [bp, con]);
 
-  const truncateDescription = (description, maxLength) => {
-    if (
-      description &&
-      typeof description === "string" &&
-      description.length > maxLength
-    ) {
-      return description.slice(0, maxLength) + "...";
-    }
-    return description || "";
-  };
-
   const renderItem = ({ item }) => {
-    // If an image has existing image use the first 1, cause most images dont have 2nd image. Otherwise, use local default img.
     const imageSource = item?.image?.[0]
       ? { uri: item.image[0] }
       : require("../../assets/leaf_icon.jpeg");
-
     const learnMorePressed = (item) => {
-      console.log("Navigating to details with item: ", item);
       navigation.navigate("Remedy Details", { rem: item });
     };
     return (
@@ -91,11 +72,7 @@ function RemedyListScreen({ route }) {
           <Text style={styles.cardDescription}>
             {truncateDescription(item.description, 60)}
           </Text>
-          <Text
-            onPress={() => learnMorePressed(item)} // tryna debug this ^
-            // onPress={() => navigation.navigate("Remedy Details", { rem: item })}
-            style={styles.learnMore}
-          >
+          <Text onPress={() => learnMorePressed(item)} style={styles.learnMore}>
             Learn more
           </Text>
         </View>
@@ -103,14 +80,20 @@ function RemedyListScreen({ route }) {
     );
   };
 
+  const truncateDescription = (description, maxLength) => {
+    return description?.length > maxLength
+      ? description.substring(0, maxLength - 3) + "..."
+      : description;
+  };
+
   return (
     <View style={styles.rootContainer}>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={remedies}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        numColumns={2} // 2 columns grid
+        numColumns={2}
         columnWrapperStyle={styles.row}
       />
     </View>

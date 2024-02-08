@@ -9,6 +9,14 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../../firebase";
+import {
+  collection,
+  query,
+  orderBy,
+  startAfter,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 
 const PAGE_SIZE = 100;
 
@@ -41,38 +49,36 @@ const SortedRemedies = () => {
   const navigation = useNavigation();
 
   const fetchHerbs = async () => {
-    let query = db.collection("Remedies").orderBy("name").limit(PAGE_SIZE);
+    let herbsQuery = query(
+      collection(db, "Remedies"),
+      orderBy("name"),
+      limit(PAGE_SIZE)
+    );
 
     if (lastVisibleRemedy) {
-      query = query.startAfter(lastVisibleRemedy);
+      herbsQuery = query(herbsQuery, startAfter(lastVisibleRemedy));
     }
 
-    const querySnapshot = await query.get();
+    const querySnapshot = await getDocs(herbsQuery);
 
-    if (querySnapshot.empty) {
+    if (!querySnapshot.empty) {
+      const newHerbs = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setHerbs((prevHerbs) => [...prevHerbs, ...newHerbs]);
+      setLastVisibleRemedy(querySnapshot.docs[querySnapshot.docs.length - 1]);
+    } else {
       setAllHerbsLoaded(true);
-      return;
     }
-
-    const herbsArray = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    const newLastVisibleRemedy =
-      querySnapshot.docs[querySnapshot.docs.length - 1];
-    setLastVisibleRemedy(newLastVisibleRemedy);
-
-    setHerbs((prevHerbs) => [...prevHerbs, ...herbsArray]);
   };
 
   useEffect(() => {
     fetchHerbs();
   }, []);
 
-  const navigateToDetails = (id) => {
-    console.log("Navigating with remedy:", id);
-    navigation.navigate("Remedy Details", { rem: id });
+  const navigateToDetails = (herb) => {
+    navigation.navigate("Remedy Details", { rem: herb.id });
   };
 
   const onLetterPress = (letter) => {
