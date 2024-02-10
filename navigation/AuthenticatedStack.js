@@ -31,7 +31,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function Home() {
+function HomeStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -42,7 +42,7 @@ function Home() {
       }}
     >
       <Stack.Screen
-        name="Home"
+        name="Welcome" // Renamed to avoid duplication
         component={WelcomeScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -52,15 +52,18 @@ function Home() {
           ),
         })}
       />
-      <Stack.Screen name="Chat" component={ChatScreen} />
-      <Stack.Screen name="Profile" component={UserProfileScreen} />
-      <Stack.Screen name="Condition" component={ConditionScreen} />
-      <Stack.Screen name="Remedies" component={RemedyListScreen} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
+      <Stack.Screen name="ProfileScreen" component={UserProfileScreen} />
+      <Stack.Screen name="Condition List" component={ConditionScreen} />
+      <Stack.Screen name="Remedies List" component={RemedyListScreen} />
       <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
-      <Stack.Screen name="SearchResult" component={SearchResultScreen} />
-      <Stack.Screen name="Donation" component={DonationScreen} />
-      <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
-      <Stack.Screen name="Preparation Details" component={PreparationDetails} />
+      <Stack.Screen name="SearchResultScreen" component={SearchResultScreen} />
+      <Stack.Screen name="DonationScreen" component={DonationScreen} />
+      <Stack.Screen name="PreparationScreen" component={PreparationScreen} />
+      <Stack.Screen
+        name="PreparationDetailsScreen"
+        component={PreparationDetails}
+      />
     </Stack.Navigator>
   );
 }
@@ -76,7 +79,7 @@ function ProfileStack() {
       }}
     >
       <Stack.Screen
-        name="Profile"
+        name="UserProfileScreen" // Ensured unique name
         component={UserProfileScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -94,7 +97,6 @@ export function BookmarkStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        //headerShown: false,
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
         headerTitleAlign: "center",
@@ -102,7 +104,7 @@ export function BookmarkStack() {
       }}
     >
       <Stack.Screen
-        name="Bookmarks"
+        name="BookmarksScreen" // Ensured unique name
         component={BookmarkScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -113,7 +115,7 @@ export function BookmarkStack() {
         })}
       />
       <Stack.Screen
-        name="Remedy Details"
+        name="BookmarkRemedyDetailsScreen" // Ensured unique name
         component={AboutRemedyScreen}
         options={{
           headerShown: true,
@@ -122,8 +124,14 @@ export function BookmarkStack() {
           headerTintColor: "white",
         }}
       />
-      <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
-      <Stack.Screen name="Preparation Details" component={PreparationDetails} />
+      <Stack.Screen
+        name="BookmarkPreparationScreen"
+        component={PreparationScreen}
+      />
+      <Stack.Screen
+        name="BookmarkPreparationDetailsScreen"
+        component={PreparationDetails}
+      />
     </Stack.Navigator>
   );
 }
@@ -139,7 +147,7 @@ function RecommendationStack() {
       }}
     >
       <Stack.Screen
-        name="View Your Symptoms"
+        name="ViewSymptomsScreen" // Ensured unique name
         component={ViewAllRecommendationsScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -149,35 +157,46 @@ function RecommendationStack() {
           ),
         })}
       />
-
       <Stack.Screen
-        name="About Recommendation System"
+        name="AboutRecommendationSystemScreen" // Ensured unique name
         component={DataAnalyticsScreen}
       />
-      <Stack.Screen name="Specific Question" component={QuestionTier2Screen} />
-      <Stack.Screen name="Enter Your Info" component={QuestionTier3Screen} />
-
       <Stack.Screen
-        name="Symptom Details Review"
+        name="SpecificQuestionScreen"
+        component={QuestionTier2Screen}
+      />
+      <Stack.Screen
+        name="EnterYourInfoScreen"
+        component={QuestionTier3Screen}
+      />
+      <Stack.Screen
+        name="SymptomDetailsReviewScreen" // Ensured unique name
         component={RecommendedRemedyReviewScreen}
       />
-
       <Stack.Screen
-        name="View Symptoms Details"
+        name="ViewSymptomsDetailsScreen" // Ensured unique name
         component={ViewRecommendationDetailScreen}
       />
-
       <Stack.Screen
-        name="RecommendedRemedyScreen"
+        name="RecommendedRemedyScreen" // Ensured unique name
         component={RecommendedRemedyScreen}
       />
       <Stack.Screen
-        name="RecommendedRemediesScreen"
+        name="RecommendedRemediesScreen" // Ensured unique name
         component={RecommendedRemediesScreen}
       />
-      <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
-      <Stack.Screen name="Preparation Screen" component={PreparationScreen} />
-      <Stack.Screen name="Preparation Details" component={PreparationDetails} />
+      <Stack.Screen
+        name="RecommendationRemedyDetailsScreen"
+        component={AboutRemedyScreen}
+      />
+      <Stack.Screen
+        name="RecommendationPreparationScreen"
+        component={PreparationScreen}
+      />
+      <Stack.Screen
+        name="RecommendationPreparationDetailsScreen"
+        component={PreparationDetails}
+      />
     </Stack.Navigator>
   );
 }
@@ -193,7 +212,7 @@ function AZHerbStack() {
       }}
     >
       <Stack.Screen
-        name="A-Z Herbs"
+        name="SortedRemediesScreen" // Ensured unique name
         component={SortedRemedies}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -203,7 +222,10 @@ function AZHerbStack() {
           ),
         })}
       />
-      <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
+      <Stack.Screen
+        name="HerbRemedyDetailsScreen"
+        component={AboutRemedyScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -219,7 +241,7 @@ export function PreparationStack() {
       }}
     >
       <Stack.Screen
-        name="Herb Preparation"
+        name="HerbPreparationScreen" // Ensured unique name
         component={PreparationScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -229,7 +251,10 @@ export function PreparationStack() {
           ),
         })}
       />
-      <Stack.Screen name="Preparation Details" component={PreparationDetails} />
+      <Stack.Screen
+        name="HerbPreparationDetailsScreen"
+        component={PreparationDetails}
+      />
     </Stack.Navigator>
   );
 }
@@ -238,14 +263,13 @@ function NotesStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        //headerShown: false,
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
         headerTitleAlign: "center",
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      <Stack.Screen name="Notes" component={NotesScreen} />
+      <Stack.Screen name="NotesScreen" component={NotesScreen} />
     </Stack.Navigator>
   );
 }
@@ -255,33 +279,21 @@ function AuthenticatedStack() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: "#35D96F" },
-        headerTintColor: "white",
-        headerTitleAlign: "center",
-        contentStyle: { backgroundColor: Colors.white },
-        tabBarHideOnKeyboard: Platform.OS === "android" ? true : false,
         tabBarActiveTintColor: "#35D96F",
         tabBarInactiveTintColor: "#A9A9A9",
-        tabBarLabelStyle: {
-          fontSize: 11,
-        },
-        tabBarStyle: {
-          display: "flex",
-        },
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="Home" // Changed for clarity and to ensure uniqueness
+        component={HomeStack} // Changed to use the corrected HomeStack
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="md-home" size={size} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="A-Z Herbs"
+        name="A-Z Herbs" // Ensured unique name
         component={AZHerbStack}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -290,27 +302,16 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="Preparation"
+        name="Preparation" // Ensured unique name
         component={PreparationStack}
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon name="eyedrop-outline" color={color} size={size} />
           ),
         }}
       />
-
-      {/* <Tab.Screen
-        name="Symptoms"
-        component={RecommendationStack}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="md-analytics" size={size} color={color} />
-          ),
-        }}
-      /> */}
       <Tab.Screen
-        name="Notes"
+        name="Notes" // Ensured unique name
         component={NotesStack}
         options={{
           tabBarIcon: ({ color, size }) => (

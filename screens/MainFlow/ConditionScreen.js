@@ -159,7 +159,7 @@ function ConditionScreen({ route }) {
             <TouchableOpacity
               style={getCardStyle(conditions.length)}
               onPress={() => {
-                navigation.navigate("Remedies", {
+                navigation.navigate("Remedies List", {
                   bp: bp,
                   con: item.name,
                 });

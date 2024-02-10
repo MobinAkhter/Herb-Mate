@@ -82,7 +82,7 @@ const WelcomeScreen = ({}) => {
 
   const renderBodyPartCard = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("Condition", { bp: item.name })}
+      onPress={() => navigation.navigate("Condition List", { bp: item.name })}
       style={styles.card}
     >
       <View style={styles.cardContent}>

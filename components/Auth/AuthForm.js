@@ -121,7 +121,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
                 );
 
                 // Navigate to sign-in screen
-                navigation.replace("Login");
+                navigation.navigate("Login");
               })
               .catch((error) => {
                 console.log("Error sending verification email:", error);
@@ -143,7 +143,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
             );
 
             // Redirect to sign-in screen
-            navigation.replace("Login");
+            navigation.navigate("Login");
           }
         })
         .catch((error) => {

@@ -28,7 +28,19 @@ import RNPickerSelect from "react-native-picker-select";
 import * as Speech from "expo-speech"; // This is better cause the other lib wanted me to link it or something. Extra steps for expo managed workflow.
 import Icon from "react-native-vector-icons/FontAwesome";
 import { FieldValue } from "firebase/firestore";
-
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import DropDownPicker from "react-native-dropdown-picker";
+import DropDown from "react-native-dropdown-picker";
 function HerbScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -41,72 +53,62 @@ function HerbScreen() {
   // const [bookMarkText, setBookMarkText] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { rem } = route.params || {};
-  const remediesFirebase = db.collection("Remedies");
   const [remediesList, setRemediesList] = useState([]);
-
-  const col = db.collection("BodyParts");
-  // const [conditionsList, setConditionsList] = useState([]);
+  const firestore = getFirestore();
 
   useEffect(() => {
-    // loadConditions();
-    AsyncStorage.clear(); // This is important if you dont see the images, apparently the cache is messing up with image property.
+    AsyncStorage.clear(); // Important for clearing image cache issues.
     setIsLoading(true);
-    // define the key for AsyncStorage
     const remedyKey = "remedy-" + rem.id;
 
-    // check if the remedy is in the cache and if the data is still fresh
     AsyncStorage.getItem(remedyKey).then((cachedData) => {
       if (cachedData) {
         const { data, timestamp } = JSON.parse(cachedData);
         console.log("Retrieved from cache: ", data);
         const ageInMinutes = (Date.now() - timestamp) / (1000 * 60);
         if (ageInMinutes < 120) {
-          console.log("Remedy was cached");
           setRemedy(data);
           setIsLoading(false);
           return;
         }
       }
 
-      // fetch the remedy from Firestore and save it in the cache
-      remediesFirebase
-        .doc(rem.id)
-        .get()
-        .then((doc) => {
-          const data = doc.data();
-          console.log("Fetching remedy from Firebase", data);
-          setRemedy(data);
-          setIsLoading(false);
-          AsyncStorage.setItem(
-            remedyKey,
-            JSON.stringify({
-              data,
-              timestamp: Date.now(),
-            })
-          );
-          console.log("Storing in cache: ", data);
+      // Using the new Firestore modular syntax for fetching a document
+      const docRef = doc(db, "Remedies", rem.id);
+      getDoc(docRef)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            console.log("Fetching remedy from Firebase", data);
+            setRemedy(data);
+            setIsLoading(false);
+            AsyncStorage.setItem(
+              remedyKey,
+              JSON.stringify({ data, timestamp: Date.now() })
+            );
+          } else {
+            console.log("No such document!");
+            setIsLoading(false);
+          }
         })
         .catch((error) => {
           console.error("Error fetching remedy from Firestore:", error);
           setIsLoading(false);
         });
     });
-    remediesFirebase
-      .get()
+
+    // Fetching all remedies
+    const remediesCollectionRef = collection(db, "Remedies");
+    getDocs(remediesCollectionRef)
       .then((querySnapshot) => {
         const remedies = querySnapshot.docs.map((doc) => ({
           label: doc.data().name,
           value: doc.id,
         }));
         if (!remedies.some((item) => item.value === rem)) {
-          const currentRemedy = {
-            label: remedy.name,
-            value: rem,
-          };
-          remedies.unshift(currentRemedy);
+          remedies.unshift({ label: remedy.name, value: rem });
         }
         setRemediesList(remedies);
-        console.log("This is the remedies list", remediesList);
       })
       .catch((error) => {
         console.error("Error fetching remedies list:", error);
@@ -413,9 +415,11 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   const [notes, setNotes] = useState("");
 
   const [bookMarkText, setBookMarkText] = useState("Bookmark");
-  const user = auth.currentUser.uid;
+  const auth = getAuth();
+  const user = auth.currentUser ? auth.currentUser.uid : null;
 
-  const userRef = db.collection("users").doc(user);
+  const firestore = getFirestore();
+  const userRef = doc(firestore, "users", user);
 
   //TODO: Put this in components and reuse it
 
@@ -487,91 +491,81 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   }, [navigation, selectedRemedy]);
 
   //TODO: This does not work on Herb Details tab. FIX ME
-  const saveNotes = () => {
-    console.log("Save notes got executed");
+  const saveNotes = async () => {
     if (selectedRemedy && (selectedCondition || notes)) {
-      const userNotesRef = userRef.collection("notes").doc(selectedRemedy);
-      userNotesRef
-        .set(
+      const userNotesRef = doc(
+        firestore,
+        "users",
+        user,
+        "notes",
+        selectedRemedy
+      );
+      try {
+        await setDoc(
+          userNotesRef,
           {
             herb: selectedRemedy,
             notes: notes,
-            // createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            createdAt: FieldValue.serverTimestamp(),
+            createdAt: serverTimestamp(),
           },
           { merge: true }
-        )
-        .then(() => {
-          Alert.alert("Notes saved successfully!");
-          setModalVisible(false);
-        })
-        .catch((error) => {
-          console.error("Error saving notes:", error);
-        });
+        );
+        Alert.alert("Notes saved successfully!");
+        setModalVisible(false);
+      } catch (error) {
+        console.error("Error saving notes:", error);
+      }
     }
   };
 
   useEffect(() => {
-    checkBookMark();
-  }, []);
+    const checkBookMark = async () => {
+      try {
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+          const currentBookmarks = docSnap.data().bookmarks || [];
+          const isRemedyBookmarked = currentBookmarks.some(
+            (item) => item.name === remedy
+          );
+          setBookMarkText(isRemedyBookmarked ? "Remove Bookmark" : "Bookmark");
+        }
+      } catch (error) {
+        console.error("Error checking bookmarks:", error);
+      }
+    };
 
-  function checkBookMark() {
-    const userDoc = userRef;
-    userDoc.get().then((doc) => {
-      if (doc.exists) {
-        // Get the user's current bookmarks array (if it exists)
-        const currentBookmarks = doc.data().bookmarks || [];
+    if (user) {
+      checkBookMark();
+    }
+  }, [remedy, user]);
 
-        // Check if the current remedy is already bookmarked
-        const isRemedyBookmarked = currentBookmarks.some(
-          (item) => item.name === remedy
+  //bookmark remedy function
+  const bookMarkRemedy = async () => {
+    try {
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        const currentBookmarks = userData.bookmarks || [];
+        const remedyIndex = currentBookmarks.findIndex(
+          (item) => item.name === rem.name
         );
 
-        if (isRemedyBookmarked) {
-          console.log("its in");
+        if (remedyIndex === -1) {
+          currentBookmarks.push(rem);
+          await updateDoc(userRef, { bookmarks: currentBookmarks });
+          Alert.alert(`${rem.name} has been bookmarked!`);
           setBookMarkText("Remove Bookmark");
         } else {
+          currentBookmarks.splice(remedyIndex, 1);
+          await updateDoc(userRef, { bookmarks: currentBookmarks });
+          Alert.alert(`${rem.name} has been removed from your bookmarks!`);
           setBookMarkText("Bookmark");
         }
       }
-    });
-  }
-
-  //bookmark remedy function
-  function bookMarkRemedy() {
-    const userDoc = userRef;
-
-    userDoc
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const currentBookmarks = doc.data().bookmarks || [];
-          // Define remedyIndex in the scope of the bookMarkRemedy function
-          const remedyIndex = currentBookmarks.findIndex(
-            (item) => item.name === rem.name
-          );
-
-          if (remedyIndex === -1) {
-            currentBookmarks.push(rem);
-            userDoc.update({ bookmarks: currentBookmarks }).then(() => {
-              Alert.alert(`${rem.name} has been bookmarked!`);
-              setBookMarkText("Remove Bookmark");
-            });
-          } else {
-            currentBookmarks.splice(remedyIndex, 1);
-            userDoc.update({ bookmarks: currentBookmarks }).then(() => {
-              Alert.alert(`${rem.name} has been removed from your bookmarks!`);
-              setBookMarkText("Bookmark");
-            });
-          }
-        } else {
-          throw new Error("User document does not exist.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating bookmarks:", error);
-      });
-  }
+    } catch (error) {
+      console.error("Error updating bookmarks:", error);
+    }
+  };
 
   return (
     <View style={styles.rootContainer}>
@@ -583,23 +577,16 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
         <SafeAreaView style={styles.modal}>
           <Text style={styles.header}>Add Notes</Text>
           <View>
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedRemedy(value)}
+            <DropDown
               items={remediesList}
-              placeholder={{ label: "Select a herb", value: null }}
-              value={selectedRemedy}
-              style={{
-                inputIOS: {
-                  marginTop: 10,
-                  marginBottom: 10,
-                  borderRadius: 8,
-                  padding: 8,
-                  height: 30,
-                  fontSize: 18,
-                  borderWidth: 1,
-                  borderColor: "gray",
-                },
+              defaultValue={selectedRemedy}
+              containerStyle={{ height: 40 }}
+              style={{ backgroundColor: "#fafafa" }}
+              itemStyle={{
+                justifyContent: "flex-start",
               }}
+              dropDownStyle={{ backgroundColor: "#fafafa" }}
+              onChangeItem={(item) => setSelectedRemedy(item.value)}
             />
 
             <TextInput
@@ -645,12 +632,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
               />
             ))}
           </Swiper>
-
-          {/* <ImageViewer
-              style={{ flex: 1 }}
-              imageUrls={remedy.image.map((uri) => ({ url: uri }))}
-              renderIndicator={() => null}
-            /> */}
 
           <View style={styles.info}>
             {remedy.description && remedy.description.trim().length > 0 && (
@@ -885,7 +866,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   interactionContent: {
-    fontSize: 14,
+    // fontSize: 14,
     width: "100%",
     flex: 1,
   },

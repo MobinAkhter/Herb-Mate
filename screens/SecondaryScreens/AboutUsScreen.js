@@ -25,20 +25,20 @@ const AboutUsScreen = () => {
       </View>
 
       {/* Team Section */}
-      <View style={styles.section}>
+      {/* <View style={styles.section}>
         <Text style={styles.subHeader}>Meet the Team</Text>
         <Text style={styles.text}>
           A passionate team of herbal enthusiasts, discovering the best of
           herbs.
         </Text>
-      </View>
+      </View> */}
 
       {/* Contact Information */}
       <View style={styles.section}>
         <Text style={styles.subHeader}>Contact Information</Text>
         <Text style={styles.text}>
           Questions or feedback? We’d love to hear from you. Reach out to us at
-          sheridancapstone@gmail.com
+          herbmateinfo@gmail.com
         </Text>
       </View>
 

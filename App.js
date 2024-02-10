@@ -71,7 +71,7 @@ function CustomDrawerContent(props) {
           }}
         >
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#30a46c" }}>
-            HerbalLife
+            Herb Mate
           </Text>
           {/* You can replace 'AppName' with your actual app name */}
         </View>

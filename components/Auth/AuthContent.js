@@ -21,14 +21,14 @@ function AuthContent({ isLogin, onAuthenticate }) {
 
   function switchAuthModeHandler() {
     if (isLogin) {
-      navigation.replace("Signup");
+      navigation.navigate("Signup");
     } else {
-      navigation.replace("Login");
+      navigation.navigate("Login");
     }
   }
   function switchToForgot() {
     if (isLogin) {
-      navigation.replace("Reset Password");
+      navigation.navigate("Reset Password");
     }
   }
 

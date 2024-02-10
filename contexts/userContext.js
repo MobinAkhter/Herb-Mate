@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import * as Notifications from "expo-notifications";
-import { db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from "../firebase"; // Import db and auth from your firebase.js file
+import { doc, updateDoc } from "firebase/firestore";
 
-export const UserContext = React.createContext();
+export const UserContext = createContext();
 
 function UserProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -19,18 +20,19 @@ function UserProvider({ children }) {
   }, [user]);
 
   useEffect(() => {
-    // const unsubscribe = onAuthStateChanged((firebaseUser) => {
-    //   if (firebaseUser) {
-    //     if (firebaseUser.emailVerified) {
-    //       setUser(firebaseUser);
-    //     } else {
-    //       // alert("Please verify your email");
-    //     }
-    //   } else {
-    //     setUser(null);
-    //   }
-    // });
-    // return () => unsubscribe();
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        if (firebaseUser.emailVerified) {
+          setUser(firebaseUser);
+        } else {
+          // Handle unverified email case here
+          console.log("Please verify your email");
+        }
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
   async function registerForPushNotificationsAsync() {
@@ -43,24 +45,24 @@ function UserProvider({ children }) {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      console.warn(
-        "Failed to get push token for push notification. Also before production, get rid of the alert message"
-      );
-      alert("Failed to get push token for push notification!");
+      console.warn("Failed to get push token for push notification.");
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
+    console.log("Expo Push Token:", token);
   }
 
-  async function saveTokenToDatabase(user) {
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    const usersRef = db.collection("users");
-    await usersRef.doc(user.uid).update({
-      expoPushToken: token,
-    });
-
-    console.log("Token saved to database");
+  async function saveTokenToDatabase(currentUser) {
+    try {
+      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await updateDoc(userDocRef, {
+        expoPushToken: token,
+      });
+      console.log("Token saved to database");
+    } catch (error) {
+      console.error("Error saving token to database:", error);
+    }
   }
 
   return (
