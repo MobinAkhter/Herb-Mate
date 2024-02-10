@@ -78,7 +78,7 @@ const SortedRemedies = () => {
   }, []);
 
   const navigateToDetails = (herb) => {
-    navigation.navigate("Remedy Details", { rem: herb.id });
+    navigation.navigate("Remedy Details", { rem: herb });
   };
 
   const onLetterPress = (letter) => {

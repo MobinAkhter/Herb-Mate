@@ -124,7 +124,7 @@ function DrawerNavigator() {
         name="Profile"
         component={UserProfileScreen}
         options={({ navigation }) => ({
-          headerTitle: "User Profile",
+          headerTitle: "Your Profile",
           headerStyle: { backgroundColor: "#35D96F" },
           headerTitleAlign: "center",
           headerTintColor: "white",

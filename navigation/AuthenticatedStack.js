@@ -104,7 +104,7 @@ export function BookmarkStack() {
       }}
     >
       <Stack.Screen
-        name="BookmarksScreen" // Ensured unique name
+        name="Your Bookmarks" // Ensured unique name
         component={BookmarkScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -115,7 +115,7 @@ export function BookmarkStack() {
         })}
       />
       <Stack.Screen
-        name="BookmarkRemedyDetailsScreen" // Ensured unique name
+        name="Remedy Details" // Ensured unique name
         component={AboutRemedyScreen}
         options={{
           headerShown: true,
@@ -212,7 +212,7 @@ function AZHerbStack() {
       }}
     >
       <Stack.Screen
-        name="SortedRemediesScreen" // Ensured unique name
+        name="A-Z Herbs" // Ensured unique name
         component={SortedRemedies}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -222,10 +222,7 @@ function AZHerbStack() {
           ),
         })}
       />
-      <Stack.Screen
-        name="HerbRemedyDetailsScreen"
-        component={AboutRemedyScreen}
-      />
+      {/* <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} /> */}
     </Stack.Navigator>
   );
 }
@@ -241,7 +238,7 @@ export function PreparationStack() {
       }}
     >
       <Stack.Screen
-        name="HerbPreparationScreen" // Ensured unique name
+        name="Herbs Preparation"
         component={PreparationScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -251,10 +248,7 @@ export function PreparationStack() {
           ),
         })}
       />
-      <Stack.Screen
-        name="HerbPreparationDetailsScreen"
-        component={PreparationDetails}
-      />
+      <Stack.Screen name="Preparation Details" component={PreparationDetails} />
     </Stack.Navigator>
   );
 }
@@ -269,7 +263,7 @@ function NotesStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      <Stack.Screen name="NotesScreen" component={NotesScreen} />
+      <Stack.Screen name="Your Notes" component={NotesScreen} />
     </Stack.Navigator>
   );
 }

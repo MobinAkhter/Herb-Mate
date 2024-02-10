@@ -289,27 +289,25 @@ const HerbDetails = ({ interactions }) => {
                 {/* <Icon name="play" size={30} color="#000" /> */}
               </TouchableOpacity>
 
-              <RNPickerSelect
+              {/* <DropDown
                 onValueChange={(value) => handleVoiceChange(value)}
                 items={voices.map((voice) => ({
                   label: voice.name,
                   value: voice.identifier,
                 }))}
                 style={{
-                  inputIOS: {
-                    fontSize: 16,
-                    paddingVertical: 12,
-                    paddingHorizontal: 10,
-                    borderWidth: 1,
-                    borderColor: "gray",
-                    borderRadius: 4,
-                    color: "black",
-                    paddingRight: 30, // to ensure the text is never behind the icon
-                  },
+                  fontSize: 16,
+                  paddingVertical: 12,
+                  paddingHorizontal: 10,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  borderRadius: 4,
+                  color: "black",
+                  paddingRight: 30, // Adjust based on Dropdown's icon or design
                 }}
                 value={selectedVoice}
-                placeholder={{ label: "Select a voice...", value: null }}
-              />
+                placeholder="Select a voice..."
+              /> */}
             </View>
             <Text style={styles.interactionHeader}>
               {capitalizeFirstLetter("overview")}:
