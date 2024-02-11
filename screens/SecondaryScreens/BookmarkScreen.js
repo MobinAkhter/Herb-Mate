@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  Animated,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -19,6 +20,7 @@ import {
 import { db, auth } from "../../firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { AntDesign } from "@expo/vector-icons";
+import { Swipeable } from "react-native-gesture-handler";
 
 const BookmarkScreen = () => {
   const navigation = useNavigation();
@@ -47,8 +49,7 @@ const BookmarkScreen = () => {
           text: "No",
           style: "cancel",
         },
-      ],
-      { cancelable: false }
+      ]
     );
   };
 
@@ -60,8 +61,28 @@ const BookmarkScreen = () => {
     fetchBookmarks(); // Refresh bookmarks after removal
   };
 
+  const renderRightActions = (progress, dragX, name) => {
+    const scale = dragX.interpolate({
+      inputRange: [-100, 0],
+      outputRange: [1, 0],
+      extrapolate: "clamp",
+    });
+
+    return (
+      <TouchableOpacity
+        onPress={() => clickX(name)}
+        style={styles.deleteButton}
+      >
+        <Animated.View
+          style={[styles.trashIconContainer, { transform: [{ scale }] }]}
+        >
+          <AntDesign name="delete" size={24} color="white" />
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  };
+
   useEffect(() => {
-    // Listen for real-time updates
     const unsubscribe = onSnapshot(userRef, (doc) => {
       const userData = doc.data();
       setBookmarkCollection(userData?.bookmarks || []);
@@ -77,32 +98,29 @@ const BookmarkScreen = () => {
           data={bookmarkCollection}
           keyExtractor={(item) => item.name}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Remedy Details", { rem: item })
+            <Swipeable
+              renderRightActions={(progress, dragX) =>
+                renderRightActions(progress, dragX, item.name)
               }
             >
-              <View style={styles.listItemContainer}>
-                <Image
-                  source={
-                    item.image && item.image[0]
-                      ? { uri: item.image[0] }
-                      : require("../../assets/leaf_icon.jpeg")
-                  }
-                  style={styles.listItemHerbImage}
-                />
-                <Text style={styles.listItemText}>{item.name}</Text>
-                <TouchableOpacity
-                  style={styles.listItemXButton}
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    clickX(item.name);
-                  }}
-                >
-                  <AntDesign name="delete" size={24} color="#B0B0B0" />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Remedy Details", { rem: item })
+                }
+              >
+                <View style={styles.listItemContainer}>
+                  <Image
+                    source={
+                      item.image && item.image[0]
+                        ? { uri: item.image[0] }
+                        : require("../../assets/leaf_icon.jpeg")
+                    }
+                    style={styles.listItemHerbImage}
+                  />
+                  <Text style={styles.listItemText}>{item.name}</Text>
+                </View>
+              </TouchableOpacity>
+            </Swipeable>
           )}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={() => (
@@ -115,45 +133,65 @@ const BookmarkScreen = () => {
     </KeyboardAwareScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: "white",
   },
   listItemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
+    padding: 10,
+    marginVertical: 6,
+    marginHorizontal: 12,
+    borderRadius: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+  listItemHerbImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
   },
   listItemText: {
     flex: 1,
-    fontSize: 16,
-    color: "#333",
-    marginLeft: 15,
   },
   listItemXButton: {
     padding: 10,
   },
   separator: {
     height: 1,
-    width: "100%",
-    backgroundColor: "#E8E8E8",
-  },
-  listItemHerbImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    backgroundColor: "#EEEEEE",
+    marginHorizontal: 12,
   },
   emptyContainer: {
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 50,
+    marginTop: 20,
   },
   emptyText: {
-    fontSize: 18,
-    color: "#666",
+    fontSize: 16,
+    color: "#AAAAAA",
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    width: 100,
+    height: "100%",
+  },
+  trashIconContainer: {
+    width: 100,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

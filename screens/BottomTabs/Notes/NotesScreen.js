@@ -16,6 +16,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../../../firebase";
 import {
   collection,
+  setDoc,
   onSnapshot,
   updateDoc,
   deleteDoc,

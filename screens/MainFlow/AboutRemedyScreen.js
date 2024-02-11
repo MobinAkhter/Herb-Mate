@@ -346,12 +346,8 @@ const HerbDetails = ({ interactions }) => {
       <FloatingScrollButton scrollViewRef={scrollViewRef} />
     </>
   ) : (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Image
-        source={require("../../assets/nuh.png")}
-        style={styles.interactionContent}
-        resizeMode="cover"
-      />
+    <View style={styles.noDetailsContainer}>
+      <Text style={styles.noDetailsText}>No Herb Details Available</Text>
     </View>
   );
 };
@@ -399,6 +395,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   const { rem } = route.params || {};
   const { herbDetail } = route.params;
 
+  const [herbInput, setHerbInput] = useState("");
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const [modalVisible, setModalVisible] = useState(false);
   const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
@@ -490,19 +487,14 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
 
   //TODO: This does not work on Herb Details tab. FIX ME
   const saveNotes = async () => {
-    if (selectedRemedy && (selectedCondition || notes)) {
-      const userNotesRef = doc(
-        firestore,
-        "users",
-        user,
-        "notes",
-        selectedRemedy
-      );
+    // changing from selectedRemedy to setHerbInput cause moving from picker to text input
+    if (herbInput && (selectedCondition || notes)) {
+      const userNotesRef = doc(firestore, "users", user, "notes", herbInput);
       try {
         await setDoc(
           userNotesRef,
           {
-            herb: selectedRemedy,
+            herb: herbInput,
             notes: notes,
             createdAt: serverTimestamp(),
           },
@@ -575,7 +567,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
         <SafeAreaView style={styles.modal}>
           <Text style={styles.header}>Add Notes</Text>
           <View>
-            <DropDown
+            {/* <DropDown
               items={remediesList}
               defaultValue={selectedRemedy}
               containerStyle={{ height: 40 }}
@@ -585,6 +577,14 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
               onChangeItem={(item) => setSelectedRemedy(item.value)}
+            /> */}
+
+            <TextInput
+              placeholder="Herb Name: "
+              value={herbInput}
+              onChangeText={setHerbInput}
+              style={styles.textInput}
+              accessibilityLabel="Herb Name input field"
             />
 
             <TextInput
@@ -866,7 +866,7 @@ const styles = StyleSheet.create({
   interactionContent: {
     // fontSize: 14,
     width: "100%",
-    flex: 1,
+    height: "100%",
   },
   evidenceText: {
     fontStyle: "italic",
@@ -879,5 +879,38 @@ const styles = StyleSheet.create({
   prepLink: {
     textDecorationLine: "underline",
     color: "blue",
+  },
+  noDetailsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20, // Adjust padding as needed
+    backgroundColor: "#f2f2f2", // Soft background color for contrast
+  },
+  noDetailsText: {
+    fontSize: 24, // Large, readable text
+    fontWeight: "bold", // Bold text for emphasis
+    color: "#2e8b57", // Color that signifies nature or herbal theme
+    textAlign: "center", // Ensure text is centered
+    padding: 10, // Add some padding for spacing
+    borderRadius: 10, // Optional: round corners for a softer look
+    borderWidth: 2, // Optional: border to make the text stand out more
+    borderColor: "#2e8b57", // Border color to match the text
+    backgroundColor: "rgba(255, 255, 255, 0.8)", // Slightly transparent background for depth
+    shadowColor: "#000", // Shadow for a subtle depth effect
+    shadowOffset: { width: 0, height: 2 }, // Shadow direction
+    shadowOpacity: 0.25, // Shadow visibility
+    shadowRadius: 3.84, // Shadow blur radius
+    elevation: 5, // Elevation for Android shadow
+  },
+  textInput: {
+    fontSize: 18,
+    height: 40, // Adjust height as needed
+    // margin: ,
+    borderWidth: 1,
+    borderColor: "#ccc", // Light grey border
+    backgroundColor: "#fafafa", // Light grey background
+    padding: 10,
+    borderRadius: 5, // Rounded corners for a softer look
   },
 });
