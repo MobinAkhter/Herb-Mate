@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   StyleSheet,
   View,
@@ -22,6 +22,7 @@ function SearchResultScreen({ route }) {
   const [conditions, setConditions] = useState([]);
   const [remedies, setRemedies] = useState([]);
   const [searchValue, setSearchValue] = useState(searchVal);
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchVal);
   const [index, setIndex] = useState(0);
   const bpList = [
     "Circulatory",
@@ -36,9 +37,19 @@ function SearchResultScreen({ route }) {
     "Urinary",
   ];
 
-  const loadConditions = async () => {
-    let conditionList = [];
-    try {
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchValue(searchValue);
+    }, 500);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchValue]);
+
+  useEffect(() => {
+    async function fetchData() {
+      let conditionList = [];
+      let remList = [];
       for (const element of bpList) {
         const colRef = collection(db, `BodyParts/${element}/Conditions`);
         const q = query(colRef, orderBy("name"));
@@ -51,15 +62,6 @@ function SearchResultScreen({ route }) {
           });
         });
       }
-    } catch (error) {
-      console.error("Error loading conditions:", error);
-    }
-    return conditionList;
-  };
-
-  const loadRemedies = async () => {
-    let remList = [];
-    try {
       const q = query(collection(db, "Remedies"), orderBy("name"));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -68,36 +70,33 @@ function SearchResultScreen({ route }) {
           id: doc.id,
         });
       });
-    } catch (error) {
-      console.error("Error loading remedies:", error);
+      setConditions(conditionList);
+      setRemedies(remList);
     }
-    return remList;
-  };
+    fetchData();
+  }, []);
 
-  const applyFilters = async () => {
-    const conditionList = await loadConditions();
-    const remList = await loadRemedies();
+  const filteredConditions = useMemo(
+    () =>
+      conditions.filter((condition) =>
+        condition.name
+          .toLowerCase()
+          .includes(debouncedSearchValue.toLowerCase())
+      ),
+    [debouncedSearchValue, conditions]
+  );
 
-    const filteredConditions = conditionList.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    const filteredRemedies = remList.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
+  const filteredRemedies = useMemo(
+    () =>
+      remedies.filter((remedy) =>
+        remedy.name.toLowerCase().includes(debouncedSearchValue.toLowerCase())
+      ),
+    [debouncedSearchValue, remedies]
+  );
 
-    setConditions(filteredConditions);
-    setRemedies(filteredRemedies);
-  };
-
-  useEffect(() => {
-    setSearchValue(searchVal);
-  }, [searchVal]);
-
-  useEffect(() => {
-    applyFilters();
-  }, [searchValue]);
-
-  const initialLayout = { width: Dimensions.get("window").width };
+  const renderNotFound = (searchText) => (
+    <Text style={styles.notFoundText}>No results found for "{searchText}"</Text>
+  );
 
   const renderTabBar = (props) => (
     <TabBar
@@ -109,48 +108,62 @@ function SearchResultScreen({ route }) {
   );
 
   const renderRemedies = () => (
-    <FlatList
-      data={remedies}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          key={item.id}
-          style={styles.listItem}
-          onPress={() => navigation.navigate("Remedy Details", { rem: item })}
-        >
-          <Image
-            source={
-              item.image && item.image.length > 0
-                ? { uri: item.image[0] }
-                : require("../assets/leaf_icon.jpeg")
-            }
-            style={styles.herbImage}
-          />
-          <Text style={styles.herbName}>{item.name}</Text>
-        </TouchableOpacity>
+    <View>
+      {filteredRemedies.length > 0 ? (
+        <FlatList
+          data={filteredRemedies}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.listItem}
+              onPress={() =>
+                navigation.navigate("Remedy Details", { rem: item })
+              }
+            >
+              <Image
+                source={
+                  item.image && item.image.length > 0
+                    ? { uri: item.image[0] }
+                    : require("../assets/leaf_icon.jpeg")
+                }
+                style={styles.herbImage}
+              />
+              <Text style={styles.herbName}>{item.name}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      ) : (
+        renderNotFound(debouncedSearchValue)
       )}
-    />
+    </View>
   );
 
   const renderConditions = () => (
-    <FlatList
-      data={conditions}
-      keyExtractor={(item) => item.key}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          key={item.key}
-          style={styles.listItem}
-          onPress={() =>
-            navigation.navigate("Remedies", { bp: item.bp, con: item.name })
-          }
-        >
-          <View style={styles.bpIcon}>
-            <MIcon size={10} {...iconMapper[removeSpace(item.bp)]} />
-          </View>
-          <Text style={styles.herbName}>{item.name}</Text>
-        </TouchableOpacity>
+    <View>
+      {filteredConditions.length > 0 ? (
+        <FlatList
+          data={filteredConditions}
+          keyExtractor={(item) => item.key}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              key={item.key}
+              style={styles.listItem}
+              onPress={() =>
+                navigation.navigate("Remedies", { bp: item.bp, con: item.name })
+              }
+            >
+              <View style={styles.bpIcon}>
+                <MIcon size={10} {...iconMapper[removeSpace(item.bp)]} />
+              </View>
+              <Text style={styles.herbName}>{item.name}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      ) : (
+        renderNotFound(debouncedSearchValue)
       )}
-    />
+    </View>
   );
 
   const renderScene = SceneMap({
@@ -164,7 +177,6 @@ function SearchResultScreen({ route }) {
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         placeholder="Search for remedies or conditions"
-        onSearchPress={applyFilters}
       />
       <TabView
         navigationState={{
@@ -176,14 +188,12 @@ function SearchResultScreen({ route }) {
         }}
         renderScene={renderScene}
         onIndexChange={setIndex}
-        initialLayout={initialLayout}
+        initialLayout={{ width: Dimensions.get("window").width }}
         renderTabBar={renderTabBar}
       />
     </View>
   );
 }
-
-export default SearchResultScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -191,53 +201,27 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: "row",
-    alignItems: "center",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderColor: "#ddd",
   },
   herbImage: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    marginRight: 10,
   },
   herbName: {
     fontSize: 18,
-  },
-  searchContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    marginTop: 20,
-    height: 50,
-    marginBottom: 10,
-  },
-  searchWrapper: {
-    flex: 1,
-    backgroundColor: "white",
-    marginRight: 12,
-    marginLeft: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 16,
-    height: "100%",
-  },
-  searchInput: {
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 16,
-  },
-  searchBtn: {
-    width: 45,
-    height: "100%",
-    backgroundColor: "#35D96F",
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
+    alignSelf: "center",
   },
   bpIcon: {
-    width: 50,
-    height: 50,
-    marginRight: 2,
+    marginRight: 10,
+  },
+  notFoundText: {
+    marginTop: 20,
+    textAlign: "center",
+    fontSize: 18,
   },
 });
+
+export default SearchResultScreen;
