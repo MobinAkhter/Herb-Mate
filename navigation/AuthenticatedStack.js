@@ -57,7 +57,7 @@ function HomeStack() {
       <Stack.Screen name="Condition List" component={ConditionScreen} />
       <Stack.Screen name="Remedies List" component={RemedyListScreen} />
       <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
-      <Stack.Screen name="SearchResultScreen" component={SearchResultScreen} />
+      <Stack.Screen name="SearchResult" component={SearchResultScreen} />
       <Stack.Screen name="DonationScreen" component={DonationScreen} />
       <Stack.Screen name="PreparationScreen" component={PreparationScreen} />
       <Stack.Screen

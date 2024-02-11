@@ -11,25 +11,18 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import MIcon from "../components/ui/MIcon";
 import { removeSpace, iconMapper } from "../utils";
-import { db, auth } from "../firebase";
+import { db } from "../firebase";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import SearchBar from "../components/ui/SearchBar";
+import { collection, query, getDocs, orderBy } from "firebase/firestore";
 
 function SearchResultScreen({ route }) {
   const { searchVal } = route.params;
-
-  //console.log(searchVal);
   const navigation = useNavigation();
-
-  //gets/sets list of remedies to show in flatlist
   const [conditions, setConditions] = useState([]);
   const [remedies, setRemedies] = useState([]);
-  const [initialConditions, setInitialConditions] = useState([]);
-  const [initialRemedies, setInitialRemedies] = useState([]);
   const [searchValue, setSearchValue] = useState(searchVal);
   const [index, setIndex] = useState(0);
-  const col = db.collection("BodyParts");
-  const remedyCol = db.collection("Remedies");
   const bpList = [
     "Circulatory",
     "Digestive",
@@ -43,157 +36,66 @@ function SearchResultScreen({ route }) {
     "Urinary",
   ];
 
-  const user = auth.currentUser.uid;
-
   const loadConditions = async () => {
-    const conditionList = [];
-    // bpList.forEach((element) => {
-    //   col
-    //     .doc(element)
-    //     .collection("Conditions")
-    //     .orderBy("name")
-    //     .get()
-    //     .then((querySnapshot) => {
-    //       querySnapshot.forEach((doc) => {
-    //         if (doc.id.toLowerCase().includes(searchValue.toLowerCase())) {
-    //           console.log("con result: " + doc.id);
-    //           conditionList.push({
-    //             ...doc.data(),
-    //             key: doc.id,
-    //             bp: element,
-    //           });
-    //         }
-    //       });
-    //       setConditions(conditionList);
-    //     })
-    //     .catch((error) => {
-    //       console.log("Error getting documents: ", error);
-    //     });
-    // });
-    await bpList.forEach((element) => {
-      col
-        .doc(element)
-        .collection("Conditions")
-        .orderBy("name")
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            console.log("con result: " + doc.id);
-            conditionList.push({
-              ...doc.data(),
-              key: doc.id,
-              bp: element,
-            });
+    let conditionList = [];
+    try {
+      for (const element of bpList) {
+        const colRef = collection(db, `BodyParts/${element}/Conditions`);
+        const q = query(colRef, orderBy("name"));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          conditionList.push({
+            ...doc.data(),
+            key: doc.id,
+            bp: element,
           });
-          setInitialConditions(conditionList);
-        })
-        .catch((error) => {
-          console.log("Error getting documents: ", error);
         });
-    });
+      }
+    } catch (error) {
+      console.error("Error loading conditions:", error);
+    }
+    return conditionList;
   };
 
   const loadRemedies = async () => {
-    //if (initialRemedies.length === 0) {
-    const remList = [];
-    //Gets a list of remedies to populate the second flat list depending on search terms entered
-    // remedyCol
-    //   .orderBy("name")
-    //   .get()
-    //   .then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //       if (doc.id.toLowerCase().includes(searchValue.toLowerCase())) {
-    //         console.log("rem result: " + doc.id);
-    //         remList.push({
-    //           ...doc.data(),
-    //           key: doc.id,
-    //         });
-    //       }
-    //     });
-    //     setRemedies(remList);
-    //   });
-    await remedyCol
-      .orderBy("name")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          console.log("rem result: " + doc.id);
-          remList.push({
-            ...doc.data(),
-            id: doc.id,
-          });
+    let remList = [];
+    try {
+      const q = query(collection(db, "Remedies"), orderBy("name"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        remList.push({
+          ...doc.data(),
+          id: doc.id,
         });
-        setInitialRemedies(remList);
-        //setRemedies(remList);
       });
-    //}
-  };
-
-  const handleSearch = async () => {
-    console.log("handling search?" + searchValue.toLowerCase());
-    // Filter the conditions list based on the search input
-    const filteredConditions = initialConditions.filter((item) => {
-      return item.name.toLowerCase().includes(searchValue.toLowerCase());
-    });
-    setConditions(filteredConditions);
-
-    // Filter the remedies list based on the search input
-    const filteredRemedies = await initialRemedies.filter((item) => {
-      console.log("items " + item.name);
-      return item.name.toLowerCase().includes(searchValue.toLowerCase());
-    });
-    setRemedies(filteredRemedies);
-
-    // setConditions(filteredConditions);
-    // setRemedies(filteredRemedies);
-    //loadConditions();
-    //loadRemedies();
-  };
-
-  const searchCondition = async (conditionName) => {
-    // Get the user's document reference
-    const userDocRef = db.collection("users").doc(user);
-
-    // Use the get() method to fetch the user's document
-    const userDocSnapshot = await userDocRef.get();
-
-    if (userDocSnapshot.exists) {
-      // Check if the document exists
-      const userData = userDocSnapshot.data();
-
-      //check if the searches property of the user is at least 20
-      if (userData && userData.searches) {
-        if (userData.searches.length <= 19) {
-          userData.searches.push(conditionName);
-
-          // Update the user's document in the database
-          await userDocRef.update({
-            searches: userData.searches,
-          });
-        } else {
-          console.log("Cannot add conditions anymore");
-        }
-      }
+    } catch (error) {
+      console.error("Error loading remedies:", error);
     }
+    return remList;
   };
 
-  //Fills list of conditions to show in flatlist based on the bodypart selected
+  const applyFilters = async () => {
+    const conditionList = await loadConditions();
+    const remList = await loadRemedies();
+
+    const filteredConditions = conditionList.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    const filteredRemedies = remList.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    setConditions(filteredConditions);
+    setRemedies(filteredRemedies);
+  };
+
   useEffect(() => {
-    setSearchValue(searchValue);
-    loadConditions().then(() => {
-      loadRemedies().then(() => {
-        handleSearch();
-      });
-    });
+    setSearchValue(searchVal);
+  }, [searchVal]);
 
-    //loadConditions().t
-  }, []);
-
-  // Sort the conditions alphabetically
-  conditions.sort((a, b) => a.name.localeCompare(b.name));
-
-  // Sort the remedies alphabetically
-  //remedies.sort((a, b) => a.name.localeCompare(b.name));
+  useEffect(() => {
+    applyFilters();
+  }, [searchValue]);
 
   const initialLayout = { width: Dimensions.get("window").width };
 
@@ -214,10 +116,7 @@ function SearchResultScreen({ route }) {
         <TouchableOpacity
           key={item.id}
           style={styles.listItem}
-          onPress={() => {
-            console.log("Navigating with remedy:", item);
-            navigation.navigate("Remedy Details", { rem: item });
-          }}
+          onPress={() => navigation.navigate("Remedy Details", { rem: item })}
         >
           <Image
             source={
@@ -236,18 +135,14 @@ function SearchResultScreen({ route }) {
   const renderConditions = () => (
     <FlatList
       data={conditions}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.key}
       renderItem={({ item }) => (
         <TouchableOpacity
-          key={item.id}
+          key={item.key}
           style={styles.listItem}
-          onPress={() => {
-            console.log("Navigating with remedy:", item);
-            navigation.navigate("Remedies", {
-              bp: item.bp,
-              con: item.name,
-            });
-          }}
+          onPress={() =>
+            navigation.navigate("Remedies", { bp: item.bp, con: item.name })
+          }
         >
           <View style={styles.bpIcon}>
             <MIcon size={10} {...iconMapper[removeSpace(item.bp)]} />
@@ -268,8 +163,8 @@ function SearchResultScreen({ route }) {
       <SearchBar
         searchValue={searchValue}
         setSearchValue={setSearchValue}
-        placeholder="Search for remedy"
-        onSearchPress={handleSearch}
+        placeholder="Search for remedies or conditions"
+        onSearchPress={applyFilters}
       />
       <TabView
         navigationState={{
