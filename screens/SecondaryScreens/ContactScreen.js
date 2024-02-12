@@ -30,7 +30,7 @@ const ContactScreen = () => {
       return;
     }
 
-    fetch("http://127.0.0.1:5000/send-email", {
+    fetch("https://feedback-on-app-2bc3e168be3b.herokuapp.com/send-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,19 @@ const ContactScreen = () => {
         message: message,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        // Check if the response is ok (status code 200-299)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        // Ensure the response is in JSON format
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Not a JSON response");
+        }
+        // Parse JSON response
+        return response.json();
+      })
       .then((data) => {
         if (data.message) {
           Alert.alert("Success", data.message);
