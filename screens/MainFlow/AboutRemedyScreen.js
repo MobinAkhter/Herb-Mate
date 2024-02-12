@@ -724,7 +724,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
                   <TouchableOpacity
                     style={styles.prepBlock}
                     onPress={() => {
-                      navigation.navigate("Preparation Screen");
+                      navigation.navigate("PreparationScreen");
                     }}
                   >
                     <Text>
