@@ -7,18 +7,19 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { auth } from "../../firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
 
-const ForgotPassword = ({}) => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState("");
 
   const forgotPassword = () => {
-    auth
-      .sendPasswordResetEmail(email)
+    sendPasswordResetEmail(auth, email)
       .then(() => {
         alert("Password reset email sent! Check your spam mail as well.");
       })
       .catch((error) => {
-        alert(error);
+        // Handle errors here, such as displaying a more user-friendly message
+        alert(error.message);
       });
   };
 

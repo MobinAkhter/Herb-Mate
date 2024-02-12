@@ -1,6 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
-import { Linking, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Linking,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
@@ -265,29 +271,39 @@ function Navigation() {
   LogBox.ignoreAllLogs();
 
   const { user, setUser } = React.useContext(UserContext);
+  const [loading, setLoading] = useState(true);
   const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
   useEffect(() => {
     const checkFirstLaunch = async () => {
+      let isFirstLaunch = false;
       try {
         const value = await AsyncStorage.getItem("alreadyLaunched");
-        console.log(value);
-        if (value == null) {
+        if (value === null) {
           await AsyncStorage.setItem("alreadyLaunched", "true");
-          setIsFirstLaunch(true);
-        } else {
-          setIsFirstLaunch(false);
+          isFirstLaunch = true;
         }
       } catch (error) {
         console.error("Error reading from AsyncStorage:", error);
+      } finally {
+        setIsFirstLaunch(isFirstLaunch);
+        setLoading(false); // Ensure loading is set to false after the check
       }
     };
 
     checkFirstLaunch();
   }, []);
-
+  if (loading) {
+    // Render a loading indicator while checking AsyncStorage
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
   if (isFirstLaunch === null) {
-    return null;
+    // If it's still null, return a safe default view
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
