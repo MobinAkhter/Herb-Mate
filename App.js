@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Linking, StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
@@ -28,6 +28,7 @@ import ContactScreen from "./screens/SecondaryScreens/ContactScreen";
 import AboutUsScreen from "./screens/SecondaryScreens/AboutUsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
+import PrivacyPolicyScreen from "./screens/SecondaryScreens/PrivacyPolicy";
 
 const Drawer = createDrawerNavigator();
 
@@ -79,7 +80,20 @@ function CustomDrawerContent(props) {
 
       {/* Drawer Items */}
       <DrawerItemList {...props} />
-
+      {/* Privacy Policy Link */}
+      <DrawerItem
+        label="Privacy Policy"
+        icon={({ color, size }) => (
+          <MaterialCommunityIcons
+            name="shield-lock-outline"
+            size={size}
+            color={color}
+          />
+        )}
+        onPress={() =>
+          Linking.openURL("https://www.iubenda.com/privacy-policy/75131283")
+        }
+      />
       {/* Logout */}
       <DrawerItem
         label="Logout"
@@ -93,6 +107,27 @@ function CustomDrawerContent(props) {
     </DrawerContentScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  logoContainer: {
+    marginTop: 15,
+    marginLeft: 20,
+    marginBottom: 20,
+    flexDirection: "row",
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#a8d5ba",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logoText: {
+    marginLeft: 16,
+    justifyContent: "center",
+  },
+});
 function DrawerNavigator() {
   const { setUser } = React.useContext(UserContext);
   return (
