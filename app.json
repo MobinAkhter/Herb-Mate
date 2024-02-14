@@ -9,12 +9,15 @@
       "android": {
         "compileSdkVersion": 33,
         "targetSdkVersion": 33,
-        "buildToolsVersion": "33.0.0"
+        "buildToolsVersion": "33.0.0",
+        "enableProguardInReleaseBuilds": true,
+        "extraProguardRules": "-keep public class com.horcrux.svg.** {*;}",
+        "allowBackup": false
       }
     }
   ]
 ],
-    "version": "1.0.12",
+    "version": "1.0.16",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -39,7 +42,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.mobinakhter123.HerbalLife",
-      "versionCode": 11
+      "versionCode": 16
     },
     "web": {
       "favicon": "./assets/favicon.png"
