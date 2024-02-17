@@ -41,6 +41,7 @@ import {
 import { getAuth } from "firebase/auth";
 import DropDownPicker from "react-native-dropdown-picker";
 import DropDown from "react-native-dropdown-picker";
+
 function HerbScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -126,6 +127,7 @@ function HerbScreen() {
     );
   };
   const HerbDetailsTab = () => {
+    // console.log(remedy.interactions);
     return <HerbDetails interactions={remedy.interactions} />;
   };
   const renderScene = SceneMap({
@@ -159,6 +161,7 @@ function HerbScreen() {
 }
 
 const HerbDetails = ({ interactions }) => {
+  // console.log("INTERACTIONS HERE ALL ABOUT IT", interactions);
   const [isPressed, setIsPressed] = useState(false);
   const scrollViewRef = useRef();
   const [voices, setVoices] = useState([]);
@@ -328,6 +331,7 @@ const HerbDetails = ({ interactions }) => {
           const content = typeof value === "string" ? value : value.text;
           const evidence = typeof value === "object" ? value.evidence : null;
 
+          console.log(key, content);
           return (
             <View key={key} style={{ marginBottom: 20 }}>
               <Text style={styles.interactionHeader}>
@@ -866,8 +870,8 @@ const styles = StyleSheet.create({
   },
   interactionContent: {
     // fontSize: 14,
-    width: "100%",
-    height: "100%",
+    // width: "100%",
+    // height: "100%",
   },
   evidenceText: {
     fontStyle: "italic",
