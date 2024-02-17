@@ -624,6 +624,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
           >
             {remedy.image.map((imageUri, index) => (
               <Image
+                key={index}
                 source={{ uri: imageUri }}
                 style={styles.image}
                 resizeMode="cover"

@@ -177,7 +177,7 @@ function ConditionScreen({ route }) {
             </TouchableOpacity>
           </View>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => item.id || String(index)}
         numColumns={3}
         key={3}
       />
