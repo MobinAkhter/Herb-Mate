@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createContext } from "react";
 import * as Notifications from "expo-notifications";
 import { onAuthStateChanged } from "firebase/auth";
-import { db, auth } from "../firebase"; // Import db and auth from your firebase.js file
+import { db, auth } from "../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
 export const UserContext = createContext();

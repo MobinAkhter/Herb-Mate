@@ -268,7 +268,7 @@ function DrawerNavigator() {
   );
 }
 function Navigation() {
-  LogBox.ignoreAllLogs();
+  // LogBox.ignoreAllLogs();
 
   const { user, setUser } = React.useContext(UserContext);
   const [loading, setLoading] = useState(true);

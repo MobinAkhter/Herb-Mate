@@ -39,8 +39,6 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import DropDownPicker from "react-native-dropdown-picker";
-import DropDown from "react-native-dropdown-picker";
 
 function HerbScreen() {
   const navigation = useNavigation();
@@ -620,20 +618,21 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
           <Swiper
             style={styles.wrapper}
             showsButtons={true}
-            loop={remedy.image.length > 1}
-            showsPagination={false} // Remove this if we want to show pagination; removed it bcz of terrible styling
+            loop={remedy.image && remedy.image.length > 1}
+            showsPagination={false}
             buttonWrapperStyle={styles.buttonWrapper}
             nextButton={<Text style={styles.swipeButton}>›</Text>}
             prevButton={<Text style={styles.swipeButton}>‹</Text>}
           >
-            {remedy.image.map((imageUri, index) => (
-              <Image
-                key={index}
-                source={{ uri: imageUri }}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            ))}
+            {remedy.image &&
+              remedy.image.map((imageUri, index) => (
+                <Image
+                  key={index}
+                  source={{ uri: imageUri }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              ))}
           </Swiper>
 
           <View style={styles.info}>

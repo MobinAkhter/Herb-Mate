@@ -3,21 +3,20 @@
     "name": "HerbalLife",
     "slug": "HerbalLife",
     "plugins": [
-  [
-    "expo-build-properties",
-    {
-      "android": {
-        "compileSdkVersion": 33,
-        "targetSdkVersion": 33,
-        "buildToolsVersion": "33.0.0",
-        "enableProguardInReleaseBuilds": true,
-        "extraProguardRules": "-keep public class com.horcrux.svg.** {*;}",
-        "allowBackup": false
-      }
-    }
-  ]
-],
-    "version": "1.0.18",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 33,
+            "targetSdkVersion": 33,
+            "buildToolsVersion": "33.0.0",
+            "enableProguardInReleaseBuilds": true,
+            "allowBackup": false
+          }
+        }
+      ]
+    ],
+    "version": "1.0.20",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -29,12 +28,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mobinakhter123.HerbalLife"
     },
     "android": {
       "adaptiveIcon": {
@@ -42,7 +41,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.mobinakhter123.HerbalLife",
-      "versionCode": 18
+      "versionCode": 20
     },
     "web": {
       "favicon": "./assets/favicon.png"

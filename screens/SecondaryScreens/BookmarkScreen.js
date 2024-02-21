@@ -92,45 +92,43 @@ const BookmarkScreen = () => {
   }, []);
 
   return (
-    <KeyboardAwareScrollView style={{ backgroundColor: "white" }}>
-      <View style={styles.rootContainer}>
-        <FlatList
-          data={bookmarkCollection}
-          keyExtractor={(item) => item.name}
-          renderItem={({ item }) => (
-            <Swipeable
-              renderRightActions={(progress, dragX) =>
-                renderRightActions(progress, dragX, item.name)
+    <View style={{ backgroundColor: "white", flex: 1 }}>
+      <FlatList
+        data={bookmarkCollection}
+        keyExtractor={(item) => item.name}
+        renderItem={({ item }) => (
+          <Swipeable
+            renderRightActions={(progress, dragX) =>
+              renderRightActions(progress, dragX, item.name)
+            }
+          >
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Remedy Details", { rem: item })
               }
             >
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Remedy Details", { rem: item })
-                }
-              >
-                <View style={styles.listItemContainer}>
-                  <Image
-                    source={
-                      item.image && item.image[0]
-                        ? { uri: item.image[0] }
-                        : require("../../assets/leaf_icon.jpeg")
-                    }
-                    style={styles.listItemHerbImage}
-                  />
-                  <Text style={styles.listItemText}>{item.name}</Text>
-                </View>
-              </TouchableOpacity>
-            </Swipeable>
-          )}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          ListEmptyComponent={() => (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No bookmarks yet.</Text>
-            </View>
-          )}
-        />
-      </View>
-    </KeyboardAwareScrollView>
+              <View style={styles.listItemContainer}>
+                <Image
+                  source={
+                    item.image && item.image[0]
+                      ? { uri: item.image[0] }
+                      : require("../../assets/leaf_icon.jpeg")
+                  }
+                  style={styles.listItemHerbImage}
+                />
+                <Text style={styles.listItemText}>{item.name}</Text>
+              </View>
+            </TouchableOpacity>
+          </Swipeable>
+        )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No bookmarks yet.</Text>
+          </View>
+        )}
+      />
+    </View>
   );
 };
 
