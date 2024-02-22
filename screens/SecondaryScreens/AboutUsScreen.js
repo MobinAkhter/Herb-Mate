@@ -57,6 +57,7 @@ const AboutUsScreen = () => {
           Easley | Steven Horne
         </Text>
       </View>
+      <View style={{ height: 40 }}></View>
     </ScrollView>
   );
 };
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#fff",
+    paddingBottom: 160,
   },
   header: {
     fontSize: 26,

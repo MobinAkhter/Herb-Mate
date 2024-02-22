@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   logoutText: {
     color: "white",
     fontSize: 18,
-    padding: 11,
+    padding: 13,
     textAlign: "center",
   },
 });
