@@ -53,6 +53,7 @@
     "react-native-svg": "13.9.0",
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^3.5.2",
+    "react-native-tooltip": "^5.2.0",
     "react-native-webview": "13.2.2",
     "react-query": "^3.39.3"
   },

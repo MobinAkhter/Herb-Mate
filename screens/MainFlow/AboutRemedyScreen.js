@@ -329,7 +329,6 @@ const HerbDetails = ({ interactions }) => {
           const content = typeof value === "string" ? value : value.text;
           const evidence = typeof value === "object" ? value.evidence : null;
 
-          console.log(key, content);
           return (
             <View key={key} style={{ marginBottom: 20 }}>
               <Text style={styles.interactionHeader}>

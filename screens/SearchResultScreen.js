@@ -48,6 +48,12 @@ function SearchResultScreen({ route }) {
 
   useEffect(() => {
     async function fetchData() {
+      if (debouncedSearchValue.trim().length === 0) {
+        // Optionally set conditions and remedies to an initial state when search is empty
+        setConditions([]);
+        setRemedies([]);
+        return; // Exit if search input is empty
+      }
       let conditionList = [];
       let remList = [];
       for (const element of bpList) {
@@ -74,14 +80,14 @@ function SearchResultScreen({ route }) {
       setRemedies(remList);
     }
     fetchData();
-  }, []);
+  }, [debouncedSearchValue]);
 
   const filteredConditions = useMemo(
     () =>
       conditions.filter((condition) =>
         condition.name
           .toLowerCase()
-          .includes(debouncedSearchValue.toLowerCase())
+          .startsWith(debouncedSearchValue.toLowerCase())
       ),
     [debouncedSearchValue, conditions]
   );
@@ -89,7 +95,7 @@ function SearchResultScreen({ route }) {
   const filteredRemedies = useMemo(
     () =>
       remedies.filter((remedy) =>
-        remedy.name.toLowerCase().includes(debouncedSearchValue.toLowerCase())
+        remedy.name.toLowerCase().startsWith(debouncedSearchValue.toLowerCase())
       ),
     [debouncedSearchValue, remedies]
   );
@@ -123,7 +129,7 @@ function SearchResultScreen({ route }) {
             >
               <Image
                 source={
-                  item.image && item.image.length > 0
+                  item.image && item.image[0]
                     ? { uri: item.image[0] }
                     : require("../assets/leaf_icon.jpeg")
                 }
@@ -210,6 +216,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginRight: 10,
   },
+
   herbName: {
     fontSize: 18,
     alignSelf: "center",

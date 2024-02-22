@@ -67,7 +67,7 @@ function HomeStack() {
     </Stack.Navigator>
   );
 }
-
+// At this point the bugs are the initial load one, and search result
 function ProfileStack() {
   return (
     <Stack.Navigator

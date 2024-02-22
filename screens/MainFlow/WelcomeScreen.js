@@ -7,6 +7,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -100,7 +102,7 @@ const WelcomeScreen = ({}) => {
   };
 
   return (
-    <View style={styles.rootContainer}>
+    <KeyboardAvoidingView style={styles.rootContainer}>
       <SafeAreaView>
         <SearchBar
           searchValue={searchInput}
@@ -120,7 +122,7 @@ const WelcomeScreen = ({}) => {
           />
         </View>
       </SafeAreaView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

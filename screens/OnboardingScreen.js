@@ -1,11 +1,33 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Dimensions, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import Onboarding from "react-native-onboarding-swiper";
 import Lottie from "lottie-react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
+
+const SkipButton = ({ isLight, skipLabel, ...props }) => (
+  <TouchableOpacity style={styles.button} {...props}>
+    <Text style={[styles.buttonText, { color: isLight ? "black" : "white" }]}>
+      {skipLabel}
+    </Text>
+  </TouchableOpacity>
+);
+
+const NextButton = ({ isLight, nextLabel, ...props }) => (
+  <TouchableOpacity style={styles.button} {...props}>
+    <Text style={[styles.buttonText, { color: isLight ? "black" : "white" }]}>
+      {nextLabel}
+    </Text>
+  </TouchableOpacity>
+);
 
 const OnboardingScreen = () => {
   const navigation = useNavigation();
@@ -24,6 +46,12 @@ const OnboardingScreen = () => {
       <Onboarding
         onDone={handleFinishOnboarding}
         onSkip={handleFinishOnboarding}
+        SkipButtonComponent={(props) => (
+          <SkipButton {...props} skipLabel="Skip" />
+        )}
+        NextButtonComponent={(props) => (
+          <NextButton {...props} nextLabel="Next" />
+        )}
         containerStyles={{ paddingHorizontal: 15 }}
         pages={[
           {
@@ -80,15 +108,25 @@ const OnboardingScreen = () => {
   );
 };
 
-export default OnboardingScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+  },
+  button: {
+    width: 48,
+    height: 48,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 14,
+  },
+  buttonText: {
+    fontSize: 18,
   },
   lottie: {
     width: width * 0.9,
     height: width,
   },
 });
+
+export default OnboardingScreen;
