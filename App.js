@@ -52,7 +52,7 @@ function CustomDrawerContent(props) {
       {/* Header Logo */}
       <View
         style={{
-          marginTop: 15,
+          marginTop: 30,
           marginLeft: 20,
           marginBottom: 20,
           flexDirection: "row",
