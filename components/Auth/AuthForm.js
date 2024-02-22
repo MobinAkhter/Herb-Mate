@@ -163,7 +163,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         {!isLogin && (
           <Input
             label="First Name"
-            placeholder="John" // Add placeholder prop like this
+            placeholder="John"
             onUpdateValue={updateInputValueHandler.bind(this, "firstName")}
             value={enteredFirstName}
           />
@@ -171,14 +171,14 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         {!isLogin && (
           <Input
             label="Last Name"
-            placeholder="Doe" // Add placeholder prop like this
+            placeholder="Doe"
             onUpdateValue={updateInputValueHandler.bind(this, "lastName")}
             value={enteredLastName}
           />
         )}
         <Input
           label="Email Address"
-          placeholder="email@gmail.com" // Add placeholder prop like this
+          placeholder="email@gmail.com"
           onUpdateValue={updateInputValueHandler.bind(this, "email")}
           value={enteredEmail}
           keyboardType="email-address"
@@ -187,7 +187,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
 
         <Input
           label="Password"
-          placeholder="Password" // Add placeholder prop like this
+          placeholder="Password"
           onUpdateValue={updateInputValueHandler.bind(this, "password")}
           secure={!isPasswordVisible}
           value={enteredPassword}

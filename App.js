@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   ActivityIndicator,
   Linking,
@@ -268,47 +268,39 @@ function DrawerNavigator() {
   );
 }
 function Navigation() {
-  // LogBox.ignoreAllLogs();
+  LogBox.ignoreAllLogs();
 
-  const { user, setUser } = React.useContext(UserContext);
-  const [loading, setLoading] = useState(true);
-  const [isFirstLaunch, setIsFirstLaunch] = useState(null);
+  const { user, setUser } = useContext(UserContext);
+  const [appState, setAppState] = useState({
+    loading: true,
+    isFirstLaunch: null,
+  });
 
   useEffect(() => {
-    const checkFirstLaunch = async () => {
-      let isFirstLaunch = false;
+    async function initializeApp() {
       try {
         const value = await AsyncStorage.getItem("alreadyLaunched");
-        if (value === null) {
+        const isFirstLaunch = value === null;
+        if (isFirstLaunch) {
           await AsyncStorage.setItem("alreadyLaunched", "true");
-          isFirstLaunch = true;
         }
+        setAppState({ loading: false, isFirstLaunch });
       } catch (error) {
-        console.error("Error reading from AsyncStorage:", error);
-      } finally {
-        setIsFirstLaunch(isFirstLaunch);
-        setLoading(false); // Ensure loading is set to false after the check
+        console.error("Error initializing app:", error);
+        setAppState({ loading: false, isFirstLaunch: false }); // Fallback state
       }
-    };
+    }
 
-    checkFirstLaunch();
+    initializeApp();
   }, []);
-  if (loading) {
-    // Render a loading indicator while checking AsyncStorage
+
+  if (appState.loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-  if (isFirstLaunch === null) {
-    // If it's still null, return a safe default view
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
   }
 
   return (
     <NavigationContainer>
-      {isFirstLaunch ? (
+      {appState.isFirstLaunch ? (
         <OnboardingScreen />
       ) : user ? (
         <DrawerNavigator />

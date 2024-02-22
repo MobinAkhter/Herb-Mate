@@ -617,21 +617,28 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
           <Swiper
             style={styles.wrapper}
             showsButtons={true}
-            loop={remedy.image && remedy.image.length > 1}
+            loop={(remedy.image && remedy.image.length > 1) || false}
             showsPagination={false}
             buttonWrapperStyle={styles.buttonWrapper}
             nextButton={<Text style={styles.swipeButton}>›</Text>}
             prevButton={<Text style={styles.swipeButton}>‹</Text>}
           >
-            {remedy.image &&
-              remedy.image.map((imageUri, index) => (
+            {(remedy.image && remedy.image.length > 0
+              ? remedy.image
+              : ["defaultImageAssetPath"]
+            ).map((imageUri, index) => (
+              <View key={index} style={styles.slide}>
                 <Image
-                  key={index}
-                  source={{ uri: imageUri }}
+                  source={
+                    imageUri
+                      ? { uri: imageUri }
+                      : require("../../assets/leaf_icon.jpeg")
+                  }
                   style={styles.image}
                   resizeMode="cover"
                 />
-              ))}
+              </View>
+            ))}
           </Swiper>
 
           <View style={styles.info}>
@@ -727,7 +734,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
                   <TouchableOpacity
                     style={styles.prepBlock}
                     onPress={() => {
-                      navigation.navigate("PreparationScreen");
+                      navigation.navigate("Herb Preparation");
                     }}
                   >
                     <Text>
