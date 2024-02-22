@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import Button from "../ui/Button";
 import Input from "./Input";
@@ -158,113 +160,118 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.form}>
-      <View>
-        {!isLogin && (
-          <Input
-            label="First Name"
-            placeholder="John"
-            onUpdateValue={updateInputValueHandler.bind(this, "firstName")}
-            value={enteredFirstName}
-          />
-        )}
-        {!isLogin && (
-          <Input
-            label="Last Name"
-            placeholder="Doe"
-            onUpdateValue={updateInputValueHandler.bind(this, "lastName")}
-            value={enteredLastName}
-          />
-        )}
-        <Input
-          label="Email Address"
-          placeholder="email@gmail.com"
-          onUpdateValue={updateInputValueHandler.bind(this, "email")}
-          value={enteredEmail}
-          keyboardType="email-address"
-          isInvalid={emailIsInvalid}
-        />
-
-        <Input
-          label="Password"
-          placeholder="Password"
-          onUpdateValue={updateInputValueHandler.bind(this, "password")}
-          secure={!isPasswordVisible}
-          value={enteredPassword}
-          isInvalid={passwordIsInvalid}
-        />
-
-        {!isLogin && (
-          <Input
-            label="Confirm Password"
-            placeholder="Confirm Password" // Add placeholder prop like this
-            onUpdateValue={updateInputValueHandler.bind(
-              this,
-              "confirmPassword"
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={styles.form}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
+            {!isLogin && (
+              <Input
+                label="First Name"
+                placeholder="John"
+                onUpdateValue={updateInputValueHandler.bind(this, "firstName")}
+                value={enteredFirstName}
+              />
             )}
-            secure
-            value={enteredConfirmPassword}
-            isInvalid={passwordsDontMatch}
-          />
-        )}
+            {!isLogin && (
+              <Input
+                label="Last Name"
+                placeholder="Doe"
+                onUpdateValue={updateInputValueHandler.bind(this, "lastName")}
+                value={enteredLastName}
+              />
+            )}
+            <Input
+              label="Email Address"
+              placeholder="email@gmail.com"
+              onUpdateValue={updateInputValueHandler.bind(this, "email")}
+              value={enteredEmail}
+              keyboardType="email-address"
+              isInvalid={emailIsInvalid}
+            />
 
-        {!isLogin && (
-          <View style={styles.checkboxContainer}>
-            <Checkbox value={termsAgreed} onValueChange={setTermsAgreed} />
-            <TouchableOpacity onPress={toggleTermsModal}>
-              <Text style={styles.checkboxLabel}>
-                I agree to the{" "}
-                <Text style={styles.linkText}>terms and conditions</Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
+            <Input
+              label="Password"
+              placeholder="Password"
+              onUpdateValue={updateInputValueHandler.bind(this, "password")}
+              secure={!isPasswordVisible}
+              value={enteredPassword}
+              isInvalid={passwordIsInvalid}
+            />
 
-        <View style={styles.buttons}>
-          <Button onPress={submitHandler} style={styles.signupButton}>
-            {isLogin ? "Log In" : "Sign Up"}
-          </Button>
-        </View>
-      </View>
+            {!isLogin && (
+              <Input
+                label="Confirm Password"
+                placeholder="Confirm Password" // Add placeholder prop like this
+                onUpdateValue={updateInputValueHandler.bind(
+                  this,
+                  "confirmPassword"
+                )}
+                secure
+                value={enteredConfirmPassword}
+                isInvalid={passwordsDontMatch}
+              />
+            )}
 
-      <Modal visible={termsModalVisible} animationType="slide" transparent>
-        <SafeAreaView style={styles.modalContainer}>
-          <ScrollView>
-            <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Medical Disclosure</Text>
-              {/* Create a separate file for this text and import it */}
-              <Text style={styles.complianceText}>
-                The herbal content in this app is provided as general health
-                information only. It provides information on herbal remedies as
-                an alternative treatment, but it is not a substitute for medical
-                advice or treatment of any health condition. {"\n"}
-                {"\n"}
-                The team at HerbalLife makes no warranties about the
-                effectiveness of the remedies in curing your health problems, so
-                we do not assume any risk whatsoever for your use of the
-                information contained within the app. {"\n"}
-                {"\n"}You are hereby advised to consult with a herbalist or
-                other professionals in the healthcare industry before using any
-                of the information provided in this app. {"\n"}
-                {"\n"}If you're on any medication, please consult with health
-                care professionals before taking any remedies listed in the app.
-                {"\n"}
-                {"\n"}By agreeing to the terms and conditions, and registering
-                to the app, you agree that neither the team at HerbalLife nor
-                any other party is or will be liable for any decision you make
-                based on the information provided in this app.
-              </Text>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={toggleTermsModal}
-              >
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
+            {!isLogin && (
+              <View style={styles.checkboxContainer}>
+                <Checkbox value={termsAgreed} onValueChange={setTermsAgreed} />
+                <TouchableOpacity onPress={toggleTermsModal}>
+                  <Text style={styles.checkboxLabel}>
+                    I agree to the{" "}
+                    <Text style={styles.linkText}>terms and conditions</Text>
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <View style={styles.buttons}>
+              <Button onPress={submitHandler} style={styles.signupButton}>
+                {isLogin ? "Log In" : "Sign Up"}
+              </Button>
             </View>
-          </ScrollView>
-        </SafeAreaView>
-      </Modal>
-    </KeyboardAvoidingView>
+          </View>
+        </ScrollView>
+
+        <Modal visible={termsModalVisible} animationType="slide" transparent>
+          <SafeAreaView style={styles.modalContainer}>
+            <ScrollView>
+              <View style={styles.modalView}>
+                <Text style={styles.modalTitle}>Medical Disclosure</Text>
+                {/* Create a separate file for this text and import it */}
+                <Text style={styles.complianceText}>
+                  The herbal content in this app is provided as general health
+                  information only. It provides information on herbal remedies
+                  as an alternative treatment, but it is not a substitute for
+                  medical advice or treatment of any health condition. {"\n"}
+                  {"\n"}
+                  The team at Herb Mate makes no warranties about the
+                  effectiveness of the remedies in curing your health problems,
+                  so we do not assume any risk whatsoever for your use of the
+                  information contained within the app. {"\n"}
+                  {"\n"}You are hereby advised to consult with a herbalist or
+                  other professionals in the healthcare industry before using
+                  any of the information provided in this app. {"\n"}
+                  {"\n"}If you're on any medication, please consult with health
+                  care professionals before taking any remedies listed in the
+                  app.
+                  {"\n"}
+                  {"\n"}By agreeing to the terms and conditions, and registering
+                  to the app, you agree that neither the team at HerbalLife nor
+                  any other party is or will be liable for any decision you make
+                  based on the information provided in this app.
+                </Text>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={toggleTermsModal}
+                >
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+        </Modal>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 

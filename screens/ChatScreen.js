@@ -38,7 +38,7 @@ const ChatScreen = () => {
   useEffect(() => {
     const welcomeMessage = {
       id: 1,
-      text: "Hello! I'm HerbalLifeBot. How can I assist you today? I can provide herbal remedies based on various body parts and conditions.",
+      text: "Hello! I'm Herb Mate Bot. How can I assist you today? I can provide herbal remedies based on various body parts and conditions.",
       isUser: false,
     };
     setMessages([welcomeMessage]);

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HerbalLife",
-    "slug": "HerbalLife",
+    "name": "Herb Mate",
+    "slug": "Herb Mate",
     "plugins": [
       [
         "expo-build-properties",

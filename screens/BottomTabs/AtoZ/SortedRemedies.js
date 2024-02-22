@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../../firebase";
@@ -23,19 +24,26 @@ const PAGE_SIZE = 100;
 const AlphabetIndex = ({ selectedLetter, onLetterPress }) => {
   return (
     <View style={styles.alphabetContainer}>
-      {Array.from(Array(26)).map((_, i) => {
-        const letter = String.fromCharCode(65 + i);
-        const isSelected = letter === selectedLetter;
-        return (
-          <TouchableOpacity
-            key={letter}
-            style={isSelected ? styles.selectedLetter : styles.letterContainer}
-            onPress={() => onLetterPress(letter)}
-          >
-            <Text style={styles.letter}>{letter}</Text>
-          </TouchableOpacity>
-        );
-      })}
+      <ScrollView
+        contentContainerStyle={styles.alphabetScrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        {Array.from(Array(26)).map((_, i) => {
+          const letter = String.fromCharCode(65 + i);
+          const isSelected = letter === selectedLetter;
+          return (
+            <TouchableOpacity
+              key={letter}
+              style={
+                isSelected ? styles.selectedLetter : styles.letterContainer
+              }
+              onPress={() => onLetterPress(letter)}
+            >
+              <Text style={styles.letter}>{letter}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -150,6 +158,11 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     bottom: 0,
+    width: 30,
+    justifyContent: "center",
+  },
+  alphabetScrollView: {
+    alignItems: "center",
   },
   selectedLetter: {
     backgroundColor: "#87ceeb",
