@@ -35,6 +35,7 @@ import AboutUsScreen from "./screens/SecondaryScreens/AboutUsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import PrivacyPolicyScreen from "./screens/SecondaryScreens/PrivacyPolicy";
+import SplashScreen from "./screens/Auth/SplashScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -270,7 +271,7 @@ function DrawerNavigator() {
 function Navigation() {
   LogBox.ignoreAllLogs();
 
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [appState, setAppState] = useState({
     loading: true,
     isFirstLaunch: null,
@@ -300,13 +301,7 @@ function Navigation() {
 
   return (
     <NavigationContainer>
-      {appState.isFirstLaunch ? (
-        <OnboardingScreen />
-      ) : user ? (
-        <DrawerNavigator />
-      ) : (
-        <AuthStack />
-      )}
+      {user ? <DrawerNavigator /> : <AuthStack />}
     </NavigationContainer>
   );
 }

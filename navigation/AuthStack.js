@@ -6,7 +6,7 @@ import OnboardingScreen from "../screens/OnboardingScreen";
 import SignupScreen from "../screens/Auth/SignupScreen";
 import LoginScreen from "../screens/Auth/LoginScreen";
 import ForgotPassword from "../screens/Auth/ForgotPassword";
-
+import SplashScreen from "../screens/Auth/SplashScreen";
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
@@ -21,9 +21,10 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
+      {/* This was previously Onboarding */}
       <Stack.Screen
-        name="Onboarding"
-        component={OnboardingScreen}
+        name="Welcome"
+        component={SplashScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
