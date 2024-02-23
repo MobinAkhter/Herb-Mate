@@ -99,7 +99,7 @@ const ContactScreen = () => {
       />
       <TextInput
         style={[styles.input, styles.textArea]}
-        placeholder="Message"
+        placeholder="Please let us know if something in the app should be fixed, or share any new functionality you'd like to see, etc."
         multiline={true}
         numberOfLines={4}
         value={message}

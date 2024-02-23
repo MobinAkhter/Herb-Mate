@@ -1,22 +1,22 @@
 {
   "expo": {
     "name": "Herb Mate",
-    "slug": "Herb Mate",
+    "slug": "HerbalLife",
     "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "compileSdkVersion": 33,
-            "targetSdkVersion": 33,
-            "buildToolsVersion": "33.0.0",
-            "enableProguardInReleaseBuilds": true,
-            "allowBackup": false
-          }
-        }
-      ]
-    ],
-    "version": "1.0.22",
+  [
+    "expo-build-properties",
+    {
+      "android": {
+        "compileSdkVersion": 33,
+        "targetSdkVersion": 33,
+        "buildToolsVersion": "33.0.0",
+        "enableProguardInReleaseBuilds": true,
+        "allowBackup": false
+      }
+    }
+  ]
+],
+    "version": "1.0.24",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,12 +28,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.mobinakhter123.HerbalLife"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +41,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.mobinakhter123.HerbalLife",
-      "versionCode": 22
+      "versionCode": 24
     },
     "web": {
       "favicon": "./assets/favicon.png"

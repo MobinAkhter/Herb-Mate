@@ -107,7 +107,7 @@ const WelcomeScreen = ({}) => {
         <SearchBar
           searchValue={searchInput}
           setSearchValue={setSearchInput}
-          placeholder="Search for remedy/conditions..."
+          placeholder="Search for remedy/conditions"
           onSearchPress={navigateToSearchResult}
         />
         <View style={styles.bodyPartsContainer}>

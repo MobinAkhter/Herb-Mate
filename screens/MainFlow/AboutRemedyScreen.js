@@ -268,12 +268,15 @@ const HerbDetails = ({ interactions }) => {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between",
+                // justifyContent: "space-between",
               }}
             >
               <Text style={styles.herbDetailHeader}>Interactions:</Text>
+              <Text style={{ marginLeft: 110, marginRight: 20 }}>
+                {isSpeaking ? "Stop Audio" : "Play Audio"}
+              </Text>
               <TouchableOpacity
-                style={{ marginLeft: 80 }}
+                style={{ marginRight: 20 }}
                 onPress={
                   isSpeaking
                     ? stopSpeech

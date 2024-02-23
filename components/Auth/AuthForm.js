@@ -149,8 +149,22 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           }
         })
         .catch((error) => {
-          console.log(error);
-          // alert(error)
+          if (error.code === "auth/wrong-password") {
+            Alert.alert(
+              "Login Failed",
+              "The password you entered is incorrect. Please try again."
+            );
+          } else if (error.code === "auth/user-not-found") {
+            Alert.alert(
+              "Login Failed",
+              "No user found with this email. Please sign up."
+            );
+          } else {
+            Alert.alert(
+              "Login Error",
+              "An unexpected error occurred. Please try again later."
+            );
+          }
         });
     }
   }
@@ -256,7 +270,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
                   app.
                   {"\n"}
                   {"\n"}By agreeing to the terms and conditions, and registering
-                  to the app, you agree that neither the team at HerbalLife nor
+                  to the app, you agree that neither the team at Herb Mate nor
                   any other party is or will be liable for any decision you make
                   based on the information provided in this app.
                 </Text>
