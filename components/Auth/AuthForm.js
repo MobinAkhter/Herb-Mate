@@ -15,11 +15,13 @@ import {
 import Button from "../ui/Button";
 import Input from "./Input";
 import Checkbox from "expo-checkbox";
-import { auth, firestore } from "../../firebase";
+import { auth, db } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendEmailVerification,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 // import firebase from "firebase/app";
 // import "firebase/firestore";
@@ -100,37 +102,40 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         );
         return;
       }
-      createUserWithEmailAndPassword(enteredEmail, enteredPassword)
+      createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
         .then((authUser) => {
           const authId = authUser.user.uid;
-          const usersCollection = firestore.collection("users").doc(authId);
           const newUser = {
             firstName: enteredFirstName,
             lastName: enteredLastName,
             email: enteredEmail,
           };
-          usersCollection.set(newUser).then(() => {
-            console.log("User created successfully");
-
-            // Send verification email
-            authUser.user
-              .sendEmailVerification()
-              .then(() => {
-                // Verification link sent
-                Alert.alert(
-                  "Verification Email Sent",
-                  "Please verify your email before signing in."
-                );
-
-                // Navigate to sign-in screen
-                navigation.navigate("Login");
-              })
-              .catch((error) => {
-                console.log("Error sending verification email:", error);
-              });
-          });
+          // Use Firestore setDoc to save the user's details
+          const userRef = doc(db, "users", authId);
+          return setDoc(userRef, newUser); // Continue the promise chain
         })
-        .catch((error) => alert(error.message));
+        .then(() => {
+          console.log("User created and saved successfully");
+          // Call sendEmailVerification here with the current user object
+          if (auth.currentUser) {
+            return sendEmailVerification(auth.currentUser); // Correctly call sendEmailVerification
+          }
+        })
+        .then(() => {
+          console.log("Verification email sent");
+          Alert.alert(
+            "Verification Email Sent",
+            "Please verify your email before signing in."
+          );
+          navigation.navigate("Login");
+        })
+        .catch((error) => {
+          console.error(
+            "Error during the sign-up or email verification process:",
+            error
+          );
+          alert(error.message);
+        });
     } else {
       signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
         .then((authUser) => {
