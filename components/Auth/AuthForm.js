@@ -11,6 +11,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import Button from "../ui/Button";
 import Input from "./Input";
@@ -36,6 +37,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   const [termsModalVisible, setTermsModalVisible] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigation = useNavigation();
 
   const {
@@ -81,15 +83,20 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
   // const firestore = firebase.firestore();
 
   function submitHandler() {
+    setIsSubmitting(true);
     if (!isLogin && !termsAgreed) {
       Alert.alert(
         "Terms and Conditions",
-        "Please agree to the terms and conditions."
+        "Please agree to the terms and conditions."[
+          { text: "OK", onPress: () => setIsSubmitting(false) }
+        ]
       );
       return;
     }
     if (!isLogin && enteredPassword !== enteredConfirmPassword) {
-      Alert.alert("Password Error", "Passwords do not match.");
+      Alert.alert("Password Error", "Passwords do not match.", [
+        { text: "OK", onPress: () => setIsSubmitting(false) },
+      ]);
       return;
     }
     if (!isLogin) {
@@ -125,7 +132,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           console.log("Verification email sent");
           Alert.alert(
             "Verification Email Sent",
-            "Please verify your email before signing in."
+            "Please verify your email before signing in.",
+            [{ text: "OK", onPress: () => setIsSubmitting(false) }]
           );
           navigation.navigate("Login");
         })
@@ -135,6 +143,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
             error
           );
           alert(error.message);
+          setIsSubmitting(false);
         });
     } else {
       signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
@@ -146,9 +155,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           } else {
             Alert.alert(
               "Email Verification Required",
-              "Please verify your email before signing in."
+              "Please verify your email before signing in.",
+              [{ text: "OK", onPress: () => setIsSubmitting(false) }]
             );
-
             // Redirect to sign-in screen
             navigation.navigate("Login");
           }
@@ -157,17 +166,21 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           if (error.code === "auth/wrong-password") {
             Alert.alert(
               "Login Failed",
-              "The password you entered is incorrect. Please try again."
+              "The password you entered is incorrect. Please try again.",
+              [{ text: "OK", onPress: () => setIsSubmitting(false) }]
             );
           } else if (error.code === "auth/user-not-found") {
             Alert.alert(
               "Login Failed",
-              "No user found with this email. Please sign up."
+              "No user found with this email. Please sign up.",
+              [{ text: "OK", onPress: () => setIsSubmitting(false) }]
             );
           } else {
             Alert.alert(
               "Login Error",
-              "An unexpected error occurred. Please try again later."
+              "An unexpected error occurred. Please try again later."[
+                { text: "OK", onPress: () => setIsSubmitting(false) }
+              ]
             );
           }
         });
@@ -234,7 +247,13 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
             {!isLogin && (
               <View style={styles.checkboxContainer}>
                 <Checkbox value={termsAgreed} onValueChange={setTermsAgreed} />
-                <TouchableOpacity onPress={toggleTermsModal}>
+                <TouchableOpacity
+                  accessible={true}
+                  accessibilityLabel="I agree to the terms and conditions"
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: termsAgreed }}
+                  onPress={toggleTermsModal}
+                >
                   <Text style={styles.checkboxLabel}>
                     I agree to the{" "}
                     <Text style={styles.linkText}>terms and conditions</Text>
@@ -244,8 +263,17 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
             )}
 
             <View style={styles.buttons}>
-              <Button onPress={submitHandler} style={styles.signupButton}>
-                {isLogin ? "Log In" : "Sign Up"}
+              <Button onPress={submitHandler} disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <ActivityIndicator size="small" color="#FFF" />
+                    {isLogin ? " Logging In..." : " Signing Up..."}
+                  </>
+                ) : isLogin ? (
+                  "Log In"
+                ) : (
+                  "Sign Up"
+                )}
               </Button>
             </View>
           </View>
@@ -304,6 +332,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#35D96F",
     marginTop: 12,
   },
+  disabledButton: {
+    backgroundColor: "gray",
+  },
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -346,6 +377,13 @@ const styles = StyleSheet.create({
   linkText: {
     color: "blue",
     textDecorationLine: "underline",
+  },
+  closeButton: {
+    height: 48,
+    width: 48,
+    // backgroundColor: "lightgreen",
+    alignItems: "center",
+    justifyContent: "center",
   },
   closeButtonText: {
     fontSize: 16,

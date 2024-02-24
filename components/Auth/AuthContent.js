@@ -92,5 +92,8 @@ const styles = StyleSheet.create({
   },
   buttons: {
     marginTop: 8,
+    height: 48,
+    // backgroundColor: "blue",
+    justifyContent: "center",
   },
 });

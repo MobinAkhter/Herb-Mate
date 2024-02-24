@@ -1,13 +1,20 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-function Button({ children, onPress }) {
+function Button({ children, onPress, disabled }) {
   return (
     <Pressable
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
-      onPress={onPress}
+      style={({ pressed }) => [
+        styles.button,
+        pressed && !disabled && styles.pressed,
+        disabled && styles.disabled,
+      ]}
+      onPress={disabled ? () => {} : onPress}
+      disabled={disabled}
     >
       <View>
-        <Text style={styles.buttonText}>{children}</Text>
+        <Text style={[styles.buttonText, disabled && styles.disabledText]}>
+          {children}
+        </Text>
       </View>
     </Pressable>
   );
@@ -35,5 +42,12 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  disabled: {
+    backgroundColor: "#CCCCCC", // Light grey, for example, or any color that indicates disabled
+    shadowOpacity: 0, // Optional: remove shadow if you want
+  },
+  disabledText: {
+    color: "#999999", // Darker grey for text, indicating it's disabled
   },
 });
