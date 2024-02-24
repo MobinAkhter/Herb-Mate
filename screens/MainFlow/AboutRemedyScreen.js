@@ -14,6 +14,7 @@ import {
   Dimensions,
   Share,
 } from "react-native";
+
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";

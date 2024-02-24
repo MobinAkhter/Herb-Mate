@@ -122,14 +122,12 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           return setDoc(userRef, newUser); // Continue the promise chain
         })
         .then(() => {
-          console.log("User created and saved successfully");
-          // Call sendEmailVerification here with the current user object
           if (auth.currentUser) {
-            return sendEmailVerification(auth.currentUser); // Correctly call sendEmailVerification
+            return sendEmailVerification(auth.currentUser);
           }
         })
         .then(() => {
-          console.log("Verification email sent");
+          // console.log("Verification email sent");
           Alert.alert(
             "Verification Email Sent",
             "Please verify your email before signing in.",
