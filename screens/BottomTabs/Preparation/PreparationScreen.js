@@ -29,7 +29,7 @@ const PreparationScreen = () => {
   }, []);
 
   const navigateToDetails = (name) => {
-    navigation.navigate("Preparation Details", { method: name });
+    navigation.navigate("PreparationDetailsScreen", { method: name });
   };
 
   const renderPreparation = ({ item }) => (

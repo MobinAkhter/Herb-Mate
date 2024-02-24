@@ -105,7 +105,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
       if (!enteredPassword.match(passwordStrengthRegex)) {
         Alert.alert(
           "Weak Password",
-          "Password must be at least 8 characters long, include a number, a symbol, and both uppercase and lowercase letters."
+          "Password must be at least 8 characters long, include a number, a symbol, and both uppercase and lowercase letters.",
+          [{ text: "OK", onPress: () => setIsSubmitting(false) }]
         );
         return;
       }
