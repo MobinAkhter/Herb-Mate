@@ -17,6 +17,23 @@ function RemedyListScreen({ route }) {
   const navigation = useNavigation();
   const [remedies, setRemedies] = useState([]);
   const cacheKey = `remedies_${bp}_${con}`;
+  const conditionName = route.params?.con;
+
+  useEffect(() => {
+    const truncateTitle = (title, maxLength) => {
+      if (title.length > maxLength) {
+        return title.substring(0, maxLength - 3) + "...";
+      }
+      return title;
+    };
+
+    if (conditionName) {
+      const truncatedTitle = truncateTitle(`Remedies for ${conditionName}`, 34);
+      navigation.setOptions({
+        title: truncatedTitle,
+      });
+    }
+  }, [conditionName, navigation]);
 
   useEffect(() => {
     const fetchRemedies = async () => {
