@@ -156,7 +156,10 @@ function SearchResultScreen({ route }) {
               key={item.key}
               style={styles.listItem}
               onPress={() =>
-                navigation.navigate("Remedies", { bp: item.bp, con: item.name })
+                navigation.navigate("Remedies List", {
+                  bp: item.bp,
+                  con: item.name,
+                })
               }
             >
               <View style={styles.bpIcon}>

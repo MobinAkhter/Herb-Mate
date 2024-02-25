@@ -57,11 +57,11 @@ function HomeStack() {
       <Stack.Screen name="Condition List" component={ConditionScreen} />
       <Stack.Screen name="Remedies List" component={RemedyListScreen} />
       <Stack.Screen name="Remedy Details" component={AboutRemedyScreen} />
-      <Stack.Screen name="SearchResult" component={SearchResultScreen} />
+      <Stack.Screen name="Search Result" component={SearchResultScreen} />
       <Stack.Screen name="DonationScreen" component={DonationScreen} />
       <Stack.Screen name="Herb Preparation" component={PreparationScreen} />
       <Stack.Screen
-        name="PreparationDetailsScreen"
+        name="Herb Preparation Details"
         component={PreparationDetails}
       />
     </Stack.Navigator>

@@ -96,7 +96,7 @@ const WelcomeScreen = ({}) => {
 
   const navigateToSearchResult = () => {
     console.log("nav to search results???");
-    navigation.navigate("SearchResult", {
+    navigation.navigate("Search Result", {
       searchVal: searchInput,
     });
   };
