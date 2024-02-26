@@ -29,13 +29,10 @@ import { auth } from "./firebase";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserProfileScreen from "./screens/SecondaryScreens/UserProfileScreen";
 import DonationScreen from "./screens/SecondaryScreens/DonationScreen";
-import OnboardingScreen from "./screens/OnboardingScreen";
 import ContactScreen from "./screens/SecondaryScreens/ContactScreen";
 import AboutUsScreen from "./screens/SecondaryScreens/AboutUsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
-import PrivacyPolicyScreen from "./screens/SecondaryScreens/PrivacyPolicy";
-import SplashScreen from "./screens/Auth/SplashScreen";
 
 const Drawer = createDrawerNavigator();
 

@@ -12,17 +12,8 @@ import AboutRemedyScreen from "../screens/MainFlow/AboutRemedyScreen";
 import UserProfileScreen from "../screens/SecondaryScreens/UserProfileScreen";
 import BookmarkScreen from "../screens/SecondaryScreens/BookmarkScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
-import DataAnalyticsScreen from "../screens/BottomTabs/RecommendationSystem/DataAnalyticsScreen";
-import QuestionTier2Screen from "../screens/BottomTabs/RecommendationSystem/QuestionTier2Screen";
-import QuestionTier3Screen from "../screens/BottomTabs/RecommendationSystem/QuestionTier3Screen";
-import RecommendedRemedyScreen from "../screens/BottomTabs/RecommendationSystem/RecommendedRemedyScreen";
-import ChatScreen from "../screens/ChatScreen";
 import SortedRemedies from "../screens/BottomTabs/AtoZ/SortedRemedies";
 import DonationScreen from "../screens/SecondaryScreens/DonationScreen";
-import RecommendedRemediesScreen from "../screens/BottomTabs/RecommendationSystem/RecommendedRemediesScreen";
-import RecommendedRemedyReviewScreen from "../screens/BottomTabs/RecommendationSystem/RecommendedRemedyReviewScreen";
-import ViewAllRecommendationsScreen from "../screens/BottomTabs/RecommendationSystem/ViewAllRecommendationsScreen";
-import ViewRecommendationDetailScreen from "../screens/BottomTabs/RecommendationSystem/ViewRecommendationDetailScreen";
 import PreparationScreen from "../screens/BottomTabs/Preparation/PreparationScreen";
 import PreparationDetails from "../screens/BottomTabs/Preparation/PreparationDetails";
 import NotesScreen from "../screens/BottomTabs/Notes/NotesScreen";
@@ -52,7 +43,6 @@ function HomeStack() {
           ),
         })}
       />
-      <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="ProfileScreen" component={UserProfileScreen} />
       <Stack.Screen name="Condition List" component={ConditionScreen} />
       <Stack.Screen name="Remedies List" component={RemedyListScreen} />
@@ -136,70 +126,70 @@ export function BookmarkStack() {
   );
 }
 
-function RecommendationStack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: "#35D96F" },
-        headerTintColor: "white",
-        headerTitleAlign: "center",
-        contentStyle: { backgroundColor: Colors.white },
-      }}
-    >
-      <Stack.Screen
-        name="ViewSymptomsScreen" // Ensured unique name
-        component={ViewAllRecommendationsScreen}
-        options={({ navigation }) => ({
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-              <Ionicons name="menu-outline" size={28} />
-            </TouchableOpacity>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="AboutRecommendationSystemScreen" // Ensured unique name
-        component={DataAnalyticsScreen}
-      />
-      <Stack.Screen
-        name="SpecificQuestionScreen"
-        component={QuestionTier2Screen}
-      />
-      <Stack.Screen
-        name="EnterYourInfoScreen"
-        component={QuestionTier3Screen}
-      />
-      <Stack.Screen
-        name="SymptomDetailsReviewScreen" // Ensured unique name
-        component={RecommendedRemedyReviewScreen}
-      />
-      <Stack.Screen
-        name="ViewSymptomsDetailsScreen" // Ensured unique name
-        component={ViewRecommendationDetailScreen}
-      />
-      <Stack.Screen
-        name="RecommendedRemedyScreen" // Ensured unique name
-        component={RecommendedRemedyScreen}
-      />
-      <Stack.Screen
-        name="RecommendedRemediesScreen" // Ensured unique name
-        component={RecommendedRemediesScreen}
-      />
-      <Stack.Screen
-        name="RecommendationRemedyDetailsScreen"
-        component={AboutRemedyScreen}
-      />
-      <Stack.Screen
-        name="RecommendationPreparationScreen"
-        component={PreparationScreen}
-      />
-      <Stack.Screen
-        name="RecommendationPreparationDetailsScreen"
-        component={PreparationDetails}
-      />
-    </Stack.Navigator>
-  );
-}
+// function RecommendationStack() {
+//   return (
+//     <Stack.Navigator
+//       screenOptions={{
+//         headerStyle: { backgroundColor: "#35D96F" },
+//         headerTintColor: "white",
+//         headerTitleAlign: "center",
+//         contentStyle: { backgroundColor: Colors.white },
+//       }}
+//     >
+//       <Stack.Screen
+//         name="ViewSymptomsScreen" // Ensured unique name
+//         component={ViewAllRecommendationsScreen}
+//         options={({ navigation }) => ({
+//           headerLeft: () => (
+//             <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+//               <Ionicons name="menu-outline" size={28} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name="AboutRecommendationSystemScreen" // Ensured unique name
+//         component={DataAnalyticsScreen}
+//       />
+//       <Stack.Screen
+//         name="SpecificQuestionScreen"
+//         component={QuestionTier2Screen}
+//       />
+//       <Stack.Screen
+//         name="EnterYourInfoScreen"
+//         component={QuestionTier3Screen}
+//       />
+//       <Stack.Screen
+//         name="SymptomDetailsReviewScreen" // Ensured unique name
+//         component={RecommendedRemedyReviewScreen}
+//       />
+//       <Stack.Screen
+//         name="ViewSymptomsDetailsScreen" // Ensured unique name
+//         component={ViewRecommendationDetailScreen}
+//       />
+//       <Stack.Screen
+//         name="RecommendedRemedyScreen" // Ensured unique name
+//         component={RecommendedRemedyScreen}
+//       />
+//       <Stack.Screen
+//         name="RecommendedRemediesScreen" // Ensured unique name
+//         component={RecommendedRemediesScreen}
+//       />
+//       <Stack.Screen
+//         name="RecommendationRemedyDetailsScreen"
+//         component={AboutRemedyScreen}
+//       />
+//       <Stack.Screen
+//         name="RecommendationPreparationScreen"
+//         component={PreparationScreen}
+//       />
+//       <Stack.Screen
+//         name="RecommendationPreparationDetailsScreen"
+//         component={PreparationDetails}
+//       />
+//     </Stack.Navigator>
+//   );
+// }
 
 function AZHerbStack() {
   return (

@@ -2,7 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Colors } from "../constants/styles";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
-import OnboardingScreen from "../screens/OnboardingScreen";
 import SignupScreen from "../screens/Auth/SignupScreen";
 import LoginScreen from "../screens/Auth/LoginScreen";
 import ForgotPassword from "../screens/Auth/ForgotPassword";
