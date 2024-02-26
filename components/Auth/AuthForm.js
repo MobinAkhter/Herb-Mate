@@ -87,9 +87,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
     if (!isLogin && !termsAgreed) {
       Alert.alert(
         "Terms and Conditions",
-        "Please agree to the terms and conditions."[
-          { text: "OK", onPress: () => setIsSubmitting(false) }
-        ]
+        "Please agree to the terms and conditions.",
+        [{ text: "OK", onPress: () => setIsSubmitting(false) }]
       );
       return;
     }

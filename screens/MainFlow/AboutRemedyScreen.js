@@ -14,7 +14,7 @@ import {
   Dimensions,
   Share,
 } from "react-native";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -187,55 +187,49 @@ const HerbDetails = ({ interactions }) => {
   const hasDetails =
     overview ||
     (otherInteractions && Object.keys(otherInteractions).length > 0);
+  const increaseSpeechRate = () => {
+    const newRate = speechRate + 0.1; // Increase the speech rate by 0.1
+    setSpeechRate(newRate); // Update the speech rate state
+    stopSpeech(); // Stop the current speech synthesis process
+    speak(spokenText, newRate); // Start a new speech synthesis process with the updated rate
+  };
+  const speak = (text, rate = speechRate) => {
+    setIsSpeaking(true);
+    setSpokenText(text);
+    const textChunks = chunkText(text, 4000);
+    speakChunks(textChunks, rate);
+  };
 
-  const speak = (text, rate = 1.0) => {
-    if (isSpeaking) {
-      Speech.stop();
-      setIsPaused(true);
-    } else {
-      Speech.speak(text, {
-        rate,
-        voice: selectedVoice,
-        onStart: onSpeechStart,
-        onDone: onSpeechDone,
-      });
-      setIsSpeaking(true);
-      setIsPaused(false);
-      setSpokenText(text);
+  const speakChunks = (chunks, rate) => {
+    if (chunks.length === 0) {
+      setIsSpeaking(false);
+      return;
     }
+
+    const chunk = chunks.shift();
+    Speech.speak(chunk, {
+      rate,
+      voice: selectedVoice,
+      onStart: () => {
+        setIsSpeaking(true);
+      },
+      onDone: () => {
+        speakChunks(chunks, rate);
+      },
+    });
   };
   const stopSpeech = () => {
     Speech.stop();
     setIsSpeaking(false);
-    setIsPaused(false);
+    setSpokenText("");
   };
 
   const resumeSpeech = () => {
-    if (isPaused) {
-      Speech.speak(spokenText, {
-        rate: speechRate,
-        voice: selectedVoice,
-        onStart: onSpeechStart,
-        onDone: onSpeechDone,
-      });
-      setIsSpeaking(true);
-      setIsPaused(false);
+    if (spokenText) {
+      speak(spokenText, speechRate);
     }
   };
 
-  const onSpeechStart = () => {
-    setIsSpeaking(true);
-  };
-
-  const onSpeechDone = () => {
-    setIsSpeaking(false);
-    setIsPaused(false);
-    setSpokenText("");
-  };
-  const handleVoiceChange = (newVoiceIdentifier) => {
-    Speech.stop();
-    setSelectedVoice(newVoiceIdentifier);
-  };
   useEffect(() => {
     let isMounted = true;
     Speech.getAvailableVoicesAsync().then((availableVoices) => {
@@ -256,6 +250,16 @@ const HerbDetails = ({ interactions }) => {
     };
   }, []);
 
+  function chunkText(text, maxLength) {
+    const chunks = [];
+    let i = 0;
+    while (i < text.length) {
+      chunks.push(text.substring(i, i + maxLength));
+      i += maxLength;
+    }
+    return chunks;
+  }
+
   return hasDetails ? (
     <>
       <ScrollView
@@ -273,7 +277,7 @@ const HerbDetails = ({ interactions }) => {
               }}
             >
               <Text style={styles.herbDetailHeader}>Interactions:</Text>
-              <Text style={{ marginLeft: 110, marginRight: 20 }}>
+              <Text style={{ marginLeft: 30, marginRight: 20 }}>
                 {isSpeaking ? "Stop Audio" : "Play Audio"}
               </Text>
               <TouchableOpacity
@@ -290,30 +294,22 @@ const HerbDetails = ({ interactions }) => {
                   color="#000"
                 />
               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={increaseSpeechRate}
+                style={{ flexDirection: "row", alignItems: "center" }}
+              >
+                <MaterialCommunityIcons
+                  name="play-speed"
+                  size={24}
+                  color="black"
+                />
+                <Text style={{ marginLeft: 2 }}>{speechRate.toFixed(1)}X</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={resumeSpeech} disabled={!isPaused}>
                 {/* <Icon name="play" size={30} color="#000" /> */}
               </TouchableOpacity>
-
-              {/* <DropDown
-                onValueChange={(value) => handleVoiceChange(value)}
-                items={voices.map((voice) => ({
-                  label: voice.name,
-                  value: voice.identifier,
-                }))}
-                style={{
-                  fontSize: 16,
-                  paddingVertical: 12,
-                  paddingHorizontal: 10,
-                  borderWidth: 1,
-                  borderColor: "gray",
-                  borderRadius: 4,
-                  color: "black",
-                  paddingRight: 30, // Adjust based on Dropdown's icon or design
-                }}
-                value={selectedVoice}
-                placeholder="Select a voice..."
-              /> */}
             </View>
+
             <Text style={styles.interactionHeader}>
               {capitalizeFirstLetter("overview")}:
             </Text>
@@ -357,8 +353,6 @@ const HerbDetails = ({ interactions }) => {
   );
 };
 
-// TODO: Provide user with option to resume from the same place they stopped. Let them increase audio speed.
-// TODO: Instad of the same play button becoming pause button, have different buttons.
 function composeTextToSpeak(interactions) {
   let textToSpeak = "Interactions: ";
 

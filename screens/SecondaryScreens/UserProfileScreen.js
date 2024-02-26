@@ -67,7 +67,12 @@ function UserProfileScreen({ navigation }) {
       setUserData((prev) => ({ ...prev, [field]: value }));
       if (field === "firstName") setEditingFirstName(false);
       if (field === "lastName") setEditingLastName(false);
-      Alert.alert("Success", `${field} updated successfully.`);
+      Alert.alert(
+        "Success",
+        `${
+          field === "firstName" ? "First Name" : "Last Name"
+        } updated successfully.`
+      );
     } catch (error) {
       Alert.alert("Error", "Failed to update profile.");
     }

@@ -36,6 +36,7 @@ function RemedyListScreen({ route }) {
   }, [conditionName, navigation]);
 
   useEffect(() => {
+    // AsyncStorage.clear();
     const fetchRemedies = async () => {
       try {
         const cachedRemedies = await AsyncStorage.getItem(cacheKey);

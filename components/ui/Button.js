@@ -25,7 +25,7 @@ export default Button;
 const styles = StyleSheet.create({
   button: {
     borderRadius: 6,
-    paddingVertical: 6,
+    paddingVertical: 12,
     paddingHorizontal: 12,
     backgroundColor: "white",
     elevation: 2,
