@@ -28,7 +28,7 @@ function RemedyListScreen({ route }) {
     };
 
     if (conditionName) {
-      const truncatedTitle = truncateTitle(`Remedies for ${conditionName}`, 34);
+      const truncatedTitle = truncateTitle(`Remedies for ${conditionName}`, 30);
       navigation.setOptions({
         title: truncatedTitle,
       });

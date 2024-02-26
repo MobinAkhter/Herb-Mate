@@ -758,6 +758,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
             </BookMarkButton>
           </View>
         </View>
+        <View style={styles.emptyContainer}></View>
       </ScrollView>
       <FloatingScrollButton scrollViewRef={scrollViewRef} />
     </View>
@@ -926,5 +927,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa", // Light grey background
     padding: 10,
     borderRadius: 5, // Rounded corners for a softer look
+  },
+  emptyContainer: {
+    marginTop: 30,
   },
 });
