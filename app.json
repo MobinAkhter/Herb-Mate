@@ -18,7 +18,7 @@
 ],
     "version": "1.0.27",
     "orientation": "default",
-    "icon": "./assets/icon.png",
+    "icon": "./logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -37,8 +37,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./transparentlogo.png",
+        "backgroundColor": "#35D96F"
       },
       "package": "com.mobinakhter123.HerbalLife",
       "versionCode": 27

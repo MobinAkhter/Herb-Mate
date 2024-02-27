@@ -6,7 +6,6 @@ const AboutUsScreen = () => {
     <ScrollView style={styles.container}>
       <Text style={styles.header}>About Us</Text>
 
-      {/* Mission Section */}
       <View style={styles.section}>
         <Text style={styles.subHeader}>Our Mission</Text>
         <Text style={styles.text}>
@@ -15,7 +14,6 @@ const AboutUsScreen = () => {
         </Text>
       </View>
 
-      {/* Story Section */}
       <View style={styles.section}>
         <Text style={styles.subHeader}>Our Story</Text>
         <Text style={styles.text}>
@@ -24,16 +22,6 @@ const AboutUsScreen = () => {
         </Text>
       </View>
 
-      {/* Team Section */}
-      {/* <View style={styles.section}>
-        <Text style={styles.subHeader}>Meet the Team</Text>
-        <Text style={styles.text}>
-          A passionate team of herbal enthusiasts, discovering the best of
-          herbs.
-        </Text>
-      </View> */}
-
-      {/* Contact Information */}
       <View style={styles.section}>
         <Text style={styles.subHeader}>Contact Information</Text>
         <Text style={styles.text}>

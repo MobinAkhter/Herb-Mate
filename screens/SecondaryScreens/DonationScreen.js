@@ -34,7 +34,6 @@ const DonationScreen = () => {
         wisdom to the palm of your hand.
       </Text>
 
-      {/* Donation Button */}
       <TouchableOpacity
         style={styles.button}
         onPress={() =>

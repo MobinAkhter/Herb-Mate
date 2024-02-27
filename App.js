@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect, useContext } from "react";
 import {
   ActivityIndicator,
+  Image,
   Linking,
   StyleSheet,
   Text,
@@ -11,9 +12,7 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { UserContext } from "./contexts/userContext";
-
 import UserProvider from "./contexts/userContext";
-// import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import { BookmarkStack } from "./navigation/AuthenticatedStack";
 import AuthStack from "./navigation/AuthStack";
 import { LogBox, TouchableOpacity } from "react-native";
@@ -66,7 +65,11 @@ function CustomDrawerContent(props) {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 40, color: "white" }}>🌿</Text>
+          <Image
+            source={require("./logo.png")}
+            style={{ width: 80, height: 80, borderRadius: 40 }}
+          />
+          {/* <Text style={{ fontSize: 40, color: "white" }}>🌿</Text> */}
           {/* Went for simple logo implementation, can use our app image later instead of text. */}
         </View>
         <View
@@ -76,9 +79,8 @@ function CustomDrawerContent(props) {
           }}
         >
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#30a46c" }}>
-            Herb Mate
+            HerbMate
           </Text>
-          {/* You can replace 'AppName' with your actual app name */}
         </View>
       </View>
 
@@ -153,8 +155,6 @@ function DrawerNavigator() {
           headerLeft: () => (
             <TouchableOpacity>
               <Ionicons name="bookmarks-outline" size={28} color={"white"} />
-
-              {/* Same custom icon as in drawerIcon */}
             </TouchableOpacity>
           ),
         }}

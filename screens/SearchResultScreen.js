@@ -49,7 +49,6 @@ function SearchResultScreen({ route }) {
   useEffect(() => {
     async function fetchData() {
       if (debouncedSearchValue.trim().length === 0) {
-        // Optionally set conditions and remedies to an initial state when search is empty
         setConditions([]);
         setRemedies([]);
         return; // Exit if search input is empty
