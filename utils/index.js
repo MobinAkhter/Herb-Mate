@@ -41,4 +41,12 @@ export const iconMapper = {
     name: "blood-drop",
     family: "Fontisto",
   },
+  General: {
+    name: "format-list-bulleted",
+    family: "MaterialCommunityIcons",
+  },
+  Other: {
+    name: "dots-grid",
+    family: "MaterialCommunityIcons",
+  },
 };

@@ -26,6 +26,7 @@ const WelcomeScreen = ({}) => {
   // const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
+    // AsyncStorage.clear();
     const fetchBodyParts = async () => {
       try {
         // Try to get the cached body parts from AsyncStorage
@@ -68,19 +69,6 @@ const WelcomeScreen = ({}) => {
 
     fetchBodyParts();
   }, []);
-
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => (
-  //       <TouchableOpacity
-  //         onPress={() => navigation.navigate("Chat")}
-  //         style={styles.chatButton}
-  //       >
-  //         <Entypo name="chat" size={24} color="royalblue" />
-  //       </TouchableOpacity>
-  //     ),
-  //   });
-  // }, [navigation]);
 
   const renderBodyPartCard = ({ item }) => (
     <TouchableOpacity

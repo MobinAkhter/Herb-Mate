@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   disabled: {
-    backgroundColor: "#CCCCCC", // Light grey, for example, or any color that indicates disabled
-    shadowOpacity: 0, // Optional: remove shadow if you want
+    backgroundColor: "#CCCCCC",
+    shadowOpacity: 0,
   },
   disabledText: {
-    color: "#999999", // Darker grey for text, indicating it's disabled
+    color: "#999999",
   },
 });

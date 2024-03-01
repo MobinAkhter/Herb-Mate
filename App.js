@@ -79,7 +79,7 @@ function CustomDrawerContent(props) {
           }}
         >
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#30a46c" }}>
-            HerbMate
+            Herb Mate
           </Text>
         </View>
       </View>
