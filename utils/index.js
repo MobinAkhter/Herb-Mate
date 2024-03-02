@@ -45,8 +45,8 @@ export const iconMapper = {
     name: "format-list-bulleted",
     family: "MaterialCommunityIcons",
   },
-  Other: {
-    name: "dots-grid",
-    family: "MaterialCommunityIcons",
-  },
+  // Other: {
+  //   name: "dots-grid",
+  //   family: "MaterialCommunityIcons",
+  // },
 };

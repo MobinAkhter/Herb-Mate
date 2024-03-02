@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
     color: "black",
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "bold",
   },
   disabled: {

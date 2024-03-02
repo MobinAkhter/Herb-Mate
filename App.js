@@ -69,8 +69,6 @@ function CustomDrawerContent(props) {
             source={require("./logo.png")}
             style={{ width: 80, height: 80, borderRadius: 40 }}
           />
-          {/* <Text style={{ fontSize: 40, color: "white" }}>🌿</Text> */}
-          {/* Went for simple logo implementation, can use our app image later instead of text. */}
         </View>
         <View
           style={{

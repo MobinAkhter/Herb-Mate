@@ -253,7 +253,17 @@ function NotesStack() {
         contentStyle: { backgroundColor: Colors.white },
       }}
     >
-      <Stack.Screen name="Your Notes" component={NotesScreen} />
+      <Stack.Screen
+        name="Your Notes"
+        component={NotesScreen}
+        options={({ navigation }) => ({
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+              <Ionicons name="menu-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Stack.Navigator>
   );
 }
