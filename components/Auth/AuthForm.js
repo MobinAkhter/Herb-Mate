@@ -153,8 +153,22 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
           } else {
             Alert.alert(
               "Email Verification Required",
-              "Please verify your email before signing in.",
-              [{ text: "OK", onPress: () => setIsSubmitting(false) }]
+              "Please verify your email before signing in. Would you like to resend the verification email?",
+              [
+                {
+                  text: "Resend",
+
+                  onPress: () => {
+                    resendVerificationEmail(enteredEmail);
+                    setIsSubmitting(false);
+                  },
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => setIsSubmitting(false),
+                  style: "cancel",
+                },
+              ]
             );
             // Redirect to sign-in screen
             navigation.navigate("Login");
@@ -185,6 +199,27 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
     }
   }
 
+  function resendVerificationEmail(email) {
+    const user = auth.currentUser;
+    if (user && !user.emailVerified) {
+      sendEmailVerification(user)
+        .then(() => {
+          Alert.alert(
+            "Verification Email Sent",
+            "Please check your email to verify your account."
+          );
+        })
+        .catch((error) => {
+          console.error("Error resending verification email:", error);
+          alert("Failed to resend verification email. Please try again later.");
+        });
+    } else {
+      Alert.alert(
+        "Error",
+        "Could not resend verification email. Please ensure you are logged in and your email is correct."
+      );
+    }
+  }
   function toggleTermsModal() {
     setTermsModalVisible(!termsModalVisible);
   }
