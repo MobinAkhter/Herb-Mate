@@ -57,9 +57,9 @@ function CustomDrawerContent(props) {
       >
         <View
           style={{
-            width: 80,
-            height: 80,
-            borderRadius: 40,
+            width: 90,
+            height: 90,
+            borderRadius: 45,
             backgroundColor: "#a8d5ba",
             justifyContent: "center",
             alignItems: "center",
@@ -67,7 +67,7 @@ function CustomDrawerContent(props) {
         >
           <Image
             source={require("./logo.png")}
-            style={{ width: 80, height: 80, borderRadius: 40 }}
+            style={{ width: 90, height: 90, borderRadius: 45 }}
           />
         </View>
         <View

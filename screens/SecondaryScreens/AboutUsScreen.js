@@ -44,6 +44,24 @@ const AboutUsScreen = () => {
           - "The Modern Herbal Dispensatory: A Medicine-Making Guide" by Thomas
           Easley | Steven Horne
         </Text>
+        <Text style={styles.text}>
+          - "Stockley's Herbal Medicines Interactions" - Edited by Elizabeth
+          Williamson, Samuel Driver and Karen Baxter
+        </Text>
+
+        <View style={styles.section}>
+          <Text style={[styles.subHeader, { color: "red" }]}>Disclaimer</Text>
+          <Text style={styles.text}>
+            The information provided by our app and the recommended books is for
+            educational purposes only. We, along with the authors of the
+            referenced materials, are not liable for any adverse effects or
+            consequences resulting from the use of any suggestions,
+            preparations, or procedures discussed. It's important to consult
+            with a qualified healthcare professional before starting any new
+            herbal regimen, especially if you have pre-existing health
+            conditions or are taking other medications.
+          </Text>
+        </View>
       </View>
       <View style={{ height: 40 }}></View>
     </ScrollView>
