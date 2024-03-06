@@ -121,7 +121,13 @@ const SortedRemedies = () => {
         )}
         onEndReached={allHerbsLoaded ? null : fetchHerbs}
         onEndReachedThreshold={0.9}
+        getItemLayout={(data, index) => ({
+          length: 70,
+          offset: 70 * index,
+          index,
+        })}
       />
+
       <AlphabetIndex
         selectedLetter={selectedLetter}
         onLetterPress={onLetterPress}
