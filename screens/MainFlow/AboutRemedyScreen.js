@@ -398,6 +398,8 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
   const [selectedRemedy, setSelectedRemedy] = useState(rem);
   const [modalVisible, setModalVisible] = useState(false);
   const [isDescriptionCollapsed, setDescriptionCollapsed] = useState(true);
+  const [isHabitatCollapsed, setIsHabitatCollapsed] = useState(true);
+
   const [isPrecautionsCollapsed, setPrecautionsCollapsed] = useState(true);
   const [isPropertiesCollapsed, setPropertiesCollapsed] = useState(true);
   const [isDosageCollapsed, setDosageCollapsed] = useState(true);
@@ -662,6 +664,26 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
               </>
             )}
 
+            {remedy.habitat && remedy.habitat.trim().length > 0 && (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.head}>Habitat & Cultivation</Text>
+                  <AntDesign
+                    name={isHabitatCollapsed ? "down" : "up"}
+                    size={24}
+                    onPress={() => setIsHabitatCollapsed(!isHabitatCollapsed)}
+                    style={{
+                      paddingHorizontal: 5,
+                    }}
+                  />
+                </View>
+                <Collapsible collapsed={isHabitatCollapsed}>
+                  <Text style={styles.desc}>{remedy.habitat}</Text>
+                </Collapsible>
+                <View style={styles.divider} />
+              </>
+            )}
+
             {/* Adding properties section for herbs */}
             {remedy.properties && remedy.properties.trim().length > 0 && (
               <>
@@ -803,8 +825,8 @@ const styles = StyleSheet.create({
   head: {
     fontSize: 22,
     fontWeight: "600",
-    marginTop: 16,
-    marginBottom: 16,
+    marginTop: 10,
+    marginBottom: 10,
     alignSelf: "flex-start",
   },
   modal: {

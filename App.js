@@ -263,6 +263,7 @@ function DrawerNavigator() {
     </Drawer.Navigator>
   );
 }
+
 function Navigation() {
   LogBox.ignoreAllLogs();
 
