@@ -7,6 +7,14 @@ admin.initializeApp();
 const db = admin.firestore();
 const expo = new Expo();
 
+// store it in environment variables later, at least for security reasons
+// const projectId = "herballife-udcu";
+// const sessionId = "some-session-id";
+
+// const client = new SessionsClient({
+//   keyFilename: "../function/fir-auth-b5f8a-b5371b052504.json",
+// });
+
 // // Check if all these herbs exist in our app. Used gpt to give me all
 // // these messages text. Phew, saved a lot of time coming up with them.
 const notificationMessages = [
