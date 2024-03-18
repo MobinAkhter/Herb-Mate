@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Share,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -43,6 +44,16 @@ function CustomDrawerContent(props) {
     await auth.signOut();
     setUser(null);
     navigation.navigate("Login");
+  };
+  const shareApp = async () => {
+    try {
+      await Share.share({
+        message:
+          "Check out Herb Mate on the Play Store! https://bit.ly/HerbMate",
+      });
+    } catch (error) {
+      console.log("Error sharing", error);
+    }
   };
   return (
     <DrawerContentScrollView {...props} style={{ backgroundColor: "#e0f2e9" }}>
@@ -84,6 +95,17 @@ function CustomDrawerContent(props) {
 
       {/* Drawer Items */}
       <DrawerItemList {...props} />
+      <DrawerItem
+        label="Share App"
+        icon={({ color, size }) => (
+          <MaterialCommunityIcons
+            name="share-outline"
+            size={size}
+            color={color}
+          />
+        )}
+        onPress={shareApp}
+      />
       {/* Privacy Policy Link */}
       <DrawerItem
         label="Privacy Policy"
@@ -98,6 +120,7 @@ function CustomDrawerContent(props) {
           Linking.openURL("https://www.iubenda.com/privacy-policy/75131283")
         }
       />
+
       {/* Logout */}
       <DrawerItem
         label="Logout"

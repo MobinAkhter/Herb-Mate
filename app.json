@@ -16,7 +16,7 @@
     }
   ]
 ],
-    "version": "1.0.30",
+    "version": "1.0.32",
     "orientation": "default",
     "icon": "./logo.png",
     "userInterfaceStyle": "light",
@@ -41,7 +41,7 @@
         "backgroundColor": "#35D96F"
       },
       "package": "com.mobinakhter123.HerbalLife",
-      "versionCode": 30
+      "versionCode": 32
     },
     "web": {
       "favicon": "./assets/favicon.png"
