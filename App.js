@@ -96,7 +96,7 @@ function CustomDrawerContent(props) {
       {/* Drawer Items */}
       <DrawerItemList {...props} />
       <DrawerItem
-        label="Share App"
+        label="Share Herb Mate"
         icon={({ color, size }) => (
           <MaterialCommunityIcons
             name="share-outline"
