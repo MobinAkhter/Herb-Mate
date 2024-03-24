@@ -15,6 +15,8 @@ Welcome to "Herb Mate" – your digital herbal companion that simplifies your se
 
 Embark on a path to natural wellness with "Herb Mate" – your reliable source for herbal knowledge. Whether at home or on the go, find your herbal remedy for any situation in the palm of your hand.
 
+[Check it out on Google Play](https://bit.ly/HerbMate)
+
 ## Screenshots
 
 <img src="https://github.com/MobinAkhter/herballife/assets/55329336/7066e5ad-f1e8-437d-b328-a86110a5a849" width="280" height="420" />
@@ -26,4 +28,3 @@ Embark on a path to natural wellness with "Herb Mate" – your reliable source f
 <img src="https://github.com/MobinAkhter/herballife/assets/55329336/798f6e3d-60bd-445f-9fe0-c76679baa2a5" width="280" height="420" />
 
 
-[Check it out on Google Play](https://bit.ly/HerbMate)
