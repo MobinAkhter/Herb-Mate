@@ -15,16 +15,16 @@ Welcome to "Herb Mate" – your digital herbal companion that simplifies your se
 
 Embark on a path to natural wellness with "Herb Mate" – your reliable source for herbal knowledge. Whether at home or on the go, find your herbal remedy for any situation in the palm of your hand.
 
+![Feature_Image](https://github.com/MobinAkhter/Herb-Mate/assets/55329336/1ebe3a1d-ad8c-49d9-a5bf-c43ec3c1da86)
+
 [Check it out on Google Play](https://bit.ly/HerbMate)
 
 ## Screenshots
 
-<img src="https://github.com/MobinAkhter/herballife/assets/55329336/7066e5ad-f1e8-437d-b328-a86110a5a849" width="280" height="420" />
-<img src="https://github.com/MobinAkhter/herballife/assets/55329336/4d5e036a-5227-42b8-9e59-8b498fabb19f" width="280" height="420" />
-<img src="https://github.com/MobinAkhter/herballife/assets/55329336/910cb22f-7cf7-4f87-82d7-0476b75573c7" width="280" height="420" />
-<img src="https://github.com/MobinAkhter/herballife/assets/55329336/78e83dd8-3cf1-472d-b5ce-f7ce68645c70" width="280" height="420" />
-<img src="https://github.com/MobinAkhter/herballife/assets/55329336/914f9ada-72b9-4cb4-bba5-33b25e0344c1" width="280" height="420" />
-<img src="https://github.com/MobinAkhter/herballife/assets/55329336/4acfc9cd-44da-4e02-99aa-991ff3b28ed3" width="280" height="420" />
-<img src="https://github.com/MobinAkhter/herballife/assets/55329336/798f6e3d-60bd-445f-9fe0-c76679baa2a5" width="280" height="420" />
-
-
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/bdf3297e-a17f-4f4a-954c-51ce499fa4f3" width="280" height="497" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/def4506e-ce77-48f3-b209-f8351c80b241" width="280" height="497" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/f725ece0-80f7-49e1-999f-250f2919fbfc" width="280" height="497" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/d8e44632-eca8-4e41-9496-a467c7a52107" width="280" height="497" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/d46e29e0-7018-481f-81a1-f8a188c4bc51" width="280" height="497" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/ec8ec8a8-a131-4e72-8f99-08e1d02d5a63" width="280" height="497" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/345421b2-4d12-436d-8422-2430f6a53a43" width="280" height="497" />
