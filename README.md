@@ -1,5 +1,5 @@
 # Herb Mate
-
+Note for MLH Fellowship: This is the project I shared. Made a mistake by changing name of the repo, reverting back, hoping for the link to work again.
 Welcome to "Herb Mate" – your digital herbal companion that simplifies your search for natural remedies. Our user-friendly app offers a seamless navigation experience, allowing you to quickly find herbal solutions for a variety of conditions with just a few taps.
 
 ## Key Features
