@@ -22,10 +22,10 @@ Embark on a path to natural wellness with "Herb Mate" – your reliable source f
 
 ## Screenshots
 
-<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/bdf3297e-a17f-4f4a-954c-51ce499fa4f3" width="280" height="497" />
-<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/def4506e-ce77-48f3-b209-f8351c80b241" width="280" height="497" />
-<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/f725ece0-80f7-49e1-999f-250f2919fbfc" width="280" height="497" />
-<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/d8e44632-eca8-4e41-9496-a467c7a52107" width="280" height="497" />
-<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/d46e29e0-7018-481f-81a1-f8a188c4bc51" width="280" height="497" />
-<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/ec8ec8a8-a131-4e72-8f99-08e1d02d5a63" width="280" height="497" />
-<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/345421b2-4d12-436d-8422-2430f6a53a43" width="280" height="497" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/bdf3297e-a17f-4f4a-954c-51ce499fa4f3" width="400" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/def4506e-ce77-48f3-b209-f8351c80b241" width="400" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/f725ece0-80f7-49e1-999f-250f2919fbfc" width="400"  />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/d8e44632-eca8-4e41-9496-a467c7a52107" width="400" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/d46e29e0-7018-481f-81a1-f8a188c4bc51" width="400" />
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/ec8ec8a8-a131-4e72-8f99-08e1d02d5a63" width="400"/>
+<img src="https://github.com/MobinAkhter/Herb-Mate/assets/55329336/345421b2-4d12-436d-8422-2430f6a53a43" width="400"  />
