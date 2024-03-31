@@ -1,9 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { Colors } from "../constants/styles";
-import { TouchableOpacity } from "react-native";
+import { Animated, Dimensions, Text, TouchableOpacity } from "react-native";
 import { Platform } from "react-native";
 import WelcomeScreen from "../screens/MainFlow/WelcomeScreen";
 import ConditionScreen from "../screens/MainFlow/ConditionScreen";
@@ -18,9 +18,51 @@ import PreparationScreen from "../screens/BottomTabs/Preparation/PreparationScre
 import PreparationDetails from "../screens/BottomTabs/Preparation/PreparationDetails";
 import NotesScreen from "../screens/BottomTabs/Notes/NotesScreen";
 import Icon from "react-native-vector-icons/Ionicons";
+import styled from "styled-components/native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+const screen_width = Dimensions.get("window").width;
+const iconSize = screen_width * 0.06; // dynamic icon sizing
+
+const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
+
+const ActiveIndicator = styled(Animated.View)`
+  position: absolute;
+  height: 10px; // Increased height
+  width: 10px; // Increased width
+  border-radius: 5px; // Ensuring it's a perfect circle
+  background-color: #35d96f;
+  bottom: 3px; // Adjust position above the icon
+`;
+
+const StyledTabBarIcon = ({ name, focused, tintColor }) => {
+  const scaleValue = React.useRef(new Animated.Value(1)).current; // Use useRef to persist the Animated.Value
+
+  React.useEffect(() => {
+    Animated.spring(scaleValue, {
+      toValue: focused ? 1.2 : 1, // Noticeable scale change
+      friction: 3, // Control the "bounciness" of the animation
+      useNativeDriver: true,
+    }).start();
+  }, [focused, scaleValue]);
+
+  return (
+    <AnimatedIcon
+      name={name}
+      size={iconSize}
+      color={tintColor}
+      style={{ transform: [{ scale: scaleValue }] }}
+    />
+  );
+};
+
+const TabBarIconWrapper = styled.View`
+  align-items: center;
+  justify-content: center;
+  top: 10px;
+`;
 
 function HomeStack() {
   return (
@@ -271,11 +313,62 @@ function NotesStack() {
 function AuthenticatedStack() {
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: "#35D96F",
         tabBarInactiveTintColor: "#A9A9A9",
-      }}
+        tabBarLabel: ({ focused, color }) => (
+          <Text style={{ color, fontSize: 12, marginBottom: 3 }}>
+            {route.name}
+          </Text>
+        ),
+        // ) : null,
+        // Display the label only when the tab is active
+        tabBarLabelStyle: {
+          fontSize: 12, // Choose a size that's readable but not too large
+          marginBottom: 3, // Adjust as needed for proper spacing
+        },
+        // tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: "white",
+          borderTopColor: "transparent",
+          elevation: 20,
+          shadowOffset: { width: 0, height: 0 },
+          shadowColor: "black",
+          shadowOpacity: 0.15,
+          shadowRadius: 20,
+          height: 60, // Adjusted for better proportion
+        },
+        tabBarIcon: ({ focused, color }) => {
+          let iconName;
+          if (route.name === "Home") {
+            iconName = "md-home";
+          } else if (route.name === "A-Z Herbs") {
+            iconName = "md-book-outline";
+          } else if (route.name === "Preparation") {
+            iconName = "eyedrop-outline";
+          } else if (route.name === "Notes") {
+            iconName = "document-text-outline";
+          }
+
+          return (
+            <TabBarIconWrapper>
+              {focused && (
+                <ActiveIndicator // Use styled component for active tab indicator
+                  style={{
+                    transform: [{ scale: scaleValue }], // Apply scaling animation
+                  }}
+                />
+              )}
+              <StyledTabBarIcon
+                name={iconName}
+                focused={focused}
+                tintColor={color}
+              />
+            </TabBarIconWrapper>
+          );
+        },
+      })}
     >
       <Tab.Screen
         name="Home" // Changed for clarity and to ensure uniqueness

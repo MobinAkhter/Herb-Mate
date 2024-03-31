@@ -85,12 +85,14 @@ export default PreparationDetails;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    padding: 24,
+    paddingLeft: 24,
+    paddingRight: 24,
   },
   title: {
     fontSize: 26,
     fontWeight: "bold",
     marginBottom: 24,
+    marginTop: 24,
   },
   image: {
     width: 400,

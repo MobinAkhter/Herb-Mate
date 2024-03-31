@@ -21,16 +21,29 @@ const BookmarkScreen = () => {
   const userRef = doc(db, "users", user); // Adjusted for Firestore modular SDK
   const [bookmarkCollection, setBookmarkCollection] = useState([]);
 
-  const fetchBookmarks = async () => {
-    const docSnap = await getDoc(userRef);
+  // const fetchBookmarks = async () => {
+  //   const docSnap = await getDoc(userRef);
 
-    if (docSnap.exists()) {
-      const userData = docSnap.data();
-      setBookmarkCollection(userData.bookmarks || []);
-    } else {
-      setBookmarkCollection([]);
-    }
-  };
+  //   if (docSnap.exists()) {
+  //     const userData = docSnap.data();
+  //     setBookmarkCollection(userData.bookmarks || []);
+  //   } else {
+  //     setBookmarkCollection([]);
+  //   }
+  // };
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(userRef, (doc) => {
+      if (doc.exists()) {
+        const userData = doc.data();
+        setBookmarkCollection(userData.bookmarks || []);
+      } else {
+        setBookmarkCollection([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const clickX = (name) => {
     Alert.alert(
@@ -51,7 +64,7 @@ const BookmarkScreen = () => {
       (item) => item.name !== remedyName
     );
     await updateDoc(userRef, { bookmarks: newBookmarks });
-    fetchBookmarks(); // Refresh bookmarks after removal
+    // No need to call fetchBookmarks as onSnapshot will update the state.
   };
 
   const renderRightActions = (progress, dragX, name) => {
@@ -74,15 +87,6 @@ const BookmarkScreen = () => {
       </TouchableOpacity>
     );
   };
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(userRef, (doc) => {
-      const userData = doc.data();
-      setBookmarkCollection(userData?.bookmarks || []);
-    });
-
-    return unsubscribe; // Detach listener on unmount
-  }, []);
 
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
@@ -121,6 +125,9 @@ const BookmarkScreen = () => {
           </View>
         )}
       />
+      <Text style={styles.swipeHintText}>
+        Psst... Swipe on a bookmark to delete it.
+      </Text>
     </View>
   );
 };
@@ -183,6 +190,11 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  swipeHintText: {
+    textAlign: "center",
+    padding: 10,
+    color: "grey",
   },
 });
 

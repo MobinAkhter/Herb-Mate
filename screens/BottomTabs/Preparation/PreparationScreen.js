@@ -68,7 +68,8 @@ export default PreparationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   row: {
     justifyContent: "space-between",
@@ -78,6 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 8,
     margin: 8,
+    marginTop: 12,
     padding: 16,
     alignItems: "center",
     justifyContent: "center",
