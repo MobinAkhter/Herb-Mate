@@ -16,7 +16,7 @@
     }
   ]
 ],
-    "version": "1.0.32",
+    "version": "1.0.34",
     "orientation": "default",
     "icon": "./logo.png",
     "userInterfaceStyle": "light",
@@ -36,12 +36,9 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./transparentlogo.png",
-        "backgroundColor": "#35D96F"
-      },
+     
       "package": "com.mobinakhter123.HerbalLife",
-      "versionCode": 32
+      "versionCode": 34
     },
     "web": {
       "favicon": "./assets/favicon.png"

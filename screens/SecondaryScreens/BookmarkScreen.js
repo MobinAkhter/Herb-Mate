@@ -21,17 +21,6 @@ const BookmarkScreen = () => {
   const userRef = doc(db, "users", user); // Adjusted for Firestore modular SDK
   const [bookmarkCollection, setBookmarkCollection] = useState([]);
 
-  // const fetchBookmarks = async () => {
-  //   const docSnap = await getDoc(userRef);
-
-  //   if (docSnap.exists()) {
-  //     const userData = docSnap.data();
-  //     setBookmarkCollection(userData.bookmarks || []);
-  //   } else {
-  //     setBookmarkCollection([]);
-  //   }
-  // };
-
   useEffect(() => {
     const unsubscribe = onSnapshot(userRef, (doc) => {
       if (doc.exists()) {
