@@ -8,22 +8,19 @@ import {
   TouchableOpacity,
   Dimensions,
   KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db, firestore } from "../../firebase";
-import { Entypo } from "@expo/vector-icons";
+import { db } from "../../firebase";
 import { removeSpace, iconMapper } from "../../utils";
 import MIcon from "../../components/ui/MIcon";
 import SearchBar from "../../components/ui/SearchBar";
 
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 const WelcomeScreen = ({}) => {
   const navigation = useNavigation();
   const [bodyParts, setBodyParts] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  // const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     // AsyncStorage.clear();

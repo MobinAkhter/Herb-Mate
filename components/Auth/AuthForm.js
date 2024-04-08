@@ -24,10 +24,8 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
-// import firebase from "firebase/app";
-// import "firebase/firestore";
 
-function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
+function AuthForm({ isLogin, credentialsInvalid, setUser }) {
   const [enteredFirstName, setFirstName] = useState("");
   const [enteredLastName, setLastName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
@@ -79,8 +77,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, setUser }) {
         break;
     }
   }
-
-  // const firestore = firebase.firestore();
 
   function submitHandler() {
     setIsSubmitting(true);

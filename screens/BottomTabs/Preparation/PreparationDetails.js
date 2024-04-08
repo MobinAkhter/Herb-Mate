@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
-import { doc, getDoc } from "firebase/firestore"; // Updated import for Firestore modular SDK
-import { db } from "../../../firebase"; // Ensure db is correctly initialized in your firebase.js
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
 
 function PreparationDetails({ route }) {
   const { method } = route.params;
   const [prepDetails, setPreparationDetails] = useState(null);
 
   const fetchDetails = async () => {
-    const prepRef = doc(db, "Preparations", method); // Updated reference to preparation document
+    const prepRef = doc(db, "Preparations", method);
     try {
       const docSnap = await getDoc(prepRef);
       if (docSnap.exists()) {

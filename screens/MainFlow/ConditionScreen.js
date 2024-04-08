@@ -117,7 +117,7 @@ function ConditionScreen({ route }) {
       })
       .catch((error) => {
         console.log("Error clearing cache:", error);
-        loadConditions(); // You might still want to load conditions even if clearing cache fails.
+        loadConditions(); // Load conditions even if clearing cache fails.
       });
   }, []);
 
@@ -190,15 +190,11 @@ export default ConditionScreen;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    // justifyContent: "flex-start",
-    // alignItems: "stretch",
     paddingTop: 14, // personal preference
-    // backgroundColor: "white",
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    // color: "black",
     alignSelf: "center",
     marginVertical: 20,
   },

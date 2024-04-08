@@ -16,19 +16,17 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
 import { AntDesign } from "@expo/vector-icons";
-import { db, auth } from "../../firebase";
+import { db } from "../../firebase";
 import BookMarkButton from "../../components/ui/BookmarkButton";
 import FloatingScrollButton from "../../components/ui/FloatingScrollButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
-import RNPickerSelect from "react-native-picker-select";
 import * as Speech from "expo-speech"; // This is better cause the other lib wanted me to link it or something. Extra steps for expo managed workflow.
 import Icon from "react-native-vector-icons/FontAwesome";
-import { FieldValue } from "firebase/firestore";
 import {
   getFirestore,
   doc,
@@ -50,7 +48,6 @@ function HerbScreen() {
     { key: "herbDetails", title: "Herb Details" },
   ]);
   const [remedy, setRemedy] = useState({});
-  // const [bookMarkText, setBookMarkText] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { rem } = route.params || {};
   const [remediesList, setRemediesList] = useState([]);
@@ -73,7 +70,6 @@ function HerbScreen() {
         }
       }
 
-      // Using the new Firestore modular syntax for fetching a document
       const docRef = doc(db, "Remedies", rem.id);
       getDoc(docRef)
         .then((docSnap) => {
@@ -160,7 +156,6 @@ function HerbScreen() {
 }
 
 const HerbDetails = ({ interactions }) => {
-  // console.log("INTERACTIONS HERE ALL ABOUT IT", interactions);
   const [isPressed, setIsPressed] = useState(false);
   const scrollViewRef = useRef();
   const [voices, setVoices] = useState([]);
@@ -189,9 +184,9 @@ const HerbDetails = ({ interactions }) => {
     (otherInteractions && Object.keys(otherInteractions).length > 0);
   const increaseSpeechRate = () => {
     const newRate = speechRate + 0.1; // Increase the speech rate by 0.1
-    setSpeechRate(newRate); // Update the speech rate state
-    stopSpeech(); // Stop the current speech synthesis process
-    speak(spokenText, newRate); // Start a new speech synthesis process with the updated rate
+    setSpeechRate(newRate);
+    stopSpeech();
+    speak(spokenText, newRate); // Start a new speech process with the updated rate
   };
   const speak = (text, rate = speechRate) => {
     setIsSpeaking(true);
@@ -871,7 +866,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   dosageRow: {
-    // flexDirection: "row",
     paddingVertical: 5,
   },
   dosageField: {
@@ -879,7 +873,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
-
   divider: {
     borderBottomColor: "gainsboro",
     borderBottomWidth: 1,
@@ -893,11 +886,6 @@ const styles = StyleSheet.create({
   interactionHeader: {
     fontWeight: "bold",
     fontSize: 16,
-  },
-  interactionContent: {
-    // fontSize: 14,
-    // width: "100%",
-    // height: "100%",
   },
   evidenceText: {
     fontStyle: "italic",
@@ -915,34 +903,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20, // Adjust padding as needed
-    backgroundColor: "#f2f2f2", // Soft background color for contrast
+    padding: 20,
+    backgroundColor: "#f2f2f2",
   },
   noDetailsText: {
-    fontSize: 24, // Large, readable text
-    fontWeight: "bold", // Bold text for emphasis
-    color: "#2e8b57", // Color that signifies nature or herbal theme
-    textAlign: "center", // Ensure text is centered
-    padding: 10, // Add some padding for spacing
-    borderRadius: 10, // Optional: round corners for a softer look
-    borderWidth: 2, // Optional: border to make the text stand out more
-    borderColor: "#2e8b57", // Border color to match the text
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Slightly transparent background for depth
-    shadowColor: "#000", // Shadow for a subtle depth effect
-    shadowOffset: { width: 0, height: 2 }, // Shadow direction
-    shadowOpacity: 0.25, // Shadow visibility
-    shadowRadius: 3.84, // Shadow blur radius
-    elevation: 5, // Elevation for Android shadow
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#2e8b57",
+    textAlign: "center",
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#2e8b57",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   textInput: {
     fontSize: 18,
-    height: 40, // Adjust height as needed
-    // margin: ,
+    height: 40,
     borderWidth: 1,
-    borderColor: "#ccc", // Light grey border
-    backgroundColor: "#fafafa", // Light grey background
+    borderColor: "#ccc",
+    backgroundColor: "#fafafa",
     padding: 10,
-    borderRadius: 5, // Rounded corners for a softer look
+    borderRadius: 5,
   },
   emptyContainer: {
     marginTop: 30,

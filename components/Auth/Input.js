@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import { Colors } from "../../constants/styles";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useState } from "react";
 function Input({

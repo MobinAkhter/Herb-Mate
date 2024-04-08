@@ -18,11 +18,9 @@ import {
   collection,
   setDoc,
   onSnapshot,
-  updateDoc,
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function NotesScreen() {
   const [notes, setNotes] = useState([]);

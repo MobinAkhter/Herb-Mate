@@ -38,12 +38,12 @@ const ActiveIndicator = styled(Animated.View)`
 `;
 
 const StyledTabBarIcon = ({ name, focused, tintColor }) => {
-  const scaleValue = React.useRef(new Animated.Value(1)).current; // Use useRef to persist the Animated.Value
+  const scaleValue = React.useRef(new Animated.Value(1)).current;
 
   React.useEffect(() => {
     Animated.spring(scaleValue, {
-      toValue: focused ? 1.2 : 1, // Noticeable scale change
-      friction: 3, // Control the "bounciness" of the animation
+      toValue: focused ? 1.2 : 1,
+      friction: 3,
       useNativeDriver: true,
     }).start();
   }, [focused, scaleValue]);
@@ -75,7 +75,7 @@ function HomeStack() {
       }}
     >
       <Stack.Screen
-        name="Welcome" // Renamed to avoid duplication
+        name="Welcome"
         component={WelcomeScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -168,71 +168,6 @@ export function BookmarkStack() {
   );
 }
 
-// function RecommendationStack() {
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         headerStyle: { backgroundColor: "#35D96F" },
-//         headerTintColor: "white",
-//         headerTitleAlign: "center",
-//         contentStyle: { backgroundColor: Colors.white },
-//       }}
-//     >
-//       <Stack.Screen
-//         name="ViewSymptomsScreen" // Ensured unique name
-//         component={ViewAllRecommendationsScreen}
-//         options={({ navigation }) => ({
-//           headerLeft: () => (
-//             <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-//               <Ionicons name="menu-outline" size={28} />
-//             </TouchableOpacity>
-//           ),
-//         })}
-//       />
-//       <Stack.Screen
-//         name="AboutRecommendationSystemScreen" // Ensured unique name
-//         component={DataAnalyticsScreen}
-//       />
-//       <Stack.Screen
-//         name="SpecificQuestionScreen"
-//         component={QuestionTier2Screen}
-//       />
-//       <Stack.Screen
-//         name="EnterYourInfoScreen"
-//         component={QuestionTier3Screen}
-//       />
-//       <Stack.Screen
-//         name="SymptomDetailsReviewScreen" // Ensured unique name
-//         component={RecommendedRemedyReviewScreen}
-//       />
-//       <Stack.Screen
-//         name="ViewSymptomsDetailsScreen" // Ensured unique name
-//         component={ViewRecommendationDetailScreen}
-//       />
-//       <Stack.Screen
-//         name="RecommendedRemedyScreen" // Ensured unique name
-//         component={RecommendedRemedyScreen}
-//       />
-//       <Stack.Screen
-//         name="RecommendedRemediesScreen" // Ensured unique name
-//         component={RecommendedRemediesScreen}
-//       />
-//       <Stack.Screen
-//         name="RecommendationRemedyDetailsScreen"
-//         component={AboutRemedyScreen}
-//       />
-//       <Stack.Screen
-//         name="RecommendationPreparationScreen"
-//         component={PreparationScreen}
-//       />
-//       <Stack.Screen
-//         name="RecommendationPreparationDetailsScreen"
-//         component={PreparationDetails}
-//       />
-//     </Stack.Navigator>
-//   );
-// }
-
 function AZHerbStack() {
   return (
     <Stack.Navigator
@@ -322,13 +257,13 @@ function AuthenticatedStack() {
             {route.name}
           </Text>
         ),
-        // ) : null,
+
         // Display the label only when the tab is active
         tabBarLabelStyle: {
-          fontSize: 12, // Choose a size that's readable but not too large
-          marginBottom: 3, // Adjust as needed for proper spacing
+          fontSize: 12,
+          marginBottom: 3,
         },
-        // tabBarShowLabel: false,
+
         tabBarStyle: {
           backgroundColor: "white",
           borderTopColor: "transparent",
@@ -337,7 +272,7 @@ function AuthenticatedStack() {
           shadowColor: "black",
           shadowOpacity: 0.15,
           shadowRadius: 20,
-          height: 60, // Adjusted for better proportion
+          height: 60,
         },
         tabBarIcon: ({ focused, color }) => {
           let iconName;
@@ -354,9 +289,9 @@ function AuthenticatedStack() {
           return (
             <TabBarIconWrapper>
               {focused && (
-                <ActiveIndicator // Use styled component for active tab indicator
+                <ActiveIndicator
                   style={{
-                    transform: [{ scale: scaleValue }], // Apply scaling animation
+                    transform: [{ scale: scaleValue }],
                   }}
                 />
               )}
@@ -371,8 +306,8 @@ function AuthenticatedStack() {
       })}
     >
       <Tab.Screen
-        name="Home" // Changed for clarity and to ensure uniqueness
-        component={HomeStack} // Changed to use the corrected HomeStack
+        name="Home"
+        component={HomeStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="md-home" size={size} color={color} />
@@ -380,7 +315,7 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="A-Z Herbs" // Ensured unique name
+        name="A-Z Herbs"
         component={AZHerbStack}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -389,7 +324,7 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="Preparation" // Ensured unique name
+        name="Preparation"
         component={PreparationStack}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -398,7 +333,7 @@ function AuthenticatedStack() {
         }}
       />
       <Tab.Screen
-        name="Notes" // Ensured unique name
+        name="Notes"
         component={NotesStack}
         options={{
           tabBarIcon: ({ color, size }) => (

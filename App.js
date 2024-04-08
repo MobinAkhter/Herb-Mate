@@ -8,6 +8,7 @@ import {
   Text,
   View,
   Share,
+  Alert,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -294,25 +295,54 @@ function Navigation() {
   const [appState, setAppState] = useState({
     loading: true,
     isFirstLaunch: null,
+    launchCount: 0,
   });
 
   useEffect(() => {
     async function initializeApp() {
       try {
-        const value = await AsyncStorage.getItem("alreadyLaunched");
-        const isFirstLaunch = value === null;
+        const isFirstLaunch =
+          (await AsyncStorage.getItem("alreadyLaunched")) === null;
         if (isFirstLaunch) {
           await AsyncStorage.setItem("alreadyLaunched", "true");
         }
-        setAppState({ loading: false, isFirstLaunch });
+        const launchCount =
+          parseInt((await AsyncStorage.getItem("launchCount")) || "0") + 1;
+        await AsyncStorage.setItem("launchCount", launchCount.toString());
+
+        setAppState({ loading: false, isFirstLaunch, launchCount });
+        if (launchCount === 2) {
+          // Second launch prompt
+          promptForRating();
+        }
       } catch (error) {
         console.error("Error initializing app:", error);
-        setAppState({ loading: false, isFirstLaunch: false }); // Fallback state
+        setAppState({ loading: false, isFirstLaunch: false, launchCount: 0 }); // Fallback state
       }
     }
 
     initializeApp();
   }, []);
+
+  const promptForRating = () => {
+    Alert.alert(
+      "Enjoying Herb Mate?",
+      "If you enjoy using Herb Mate, please take a moment to rate us. It really helps!",
+      [
+        { text: "Rate Now", onPress: () => openStore() },
+        { text: "Later", onPress: () => console.log("Rate Later") },
+        { text: "No Thanks", onPress: () => console.log("No Rate") },
+      ]
+    );
+  };
+
+  const openStore = () => {
+    const url = Platform.select({
+      // ios: `https://apps.apple.com/app/id<APP_ID>`,
+      android: `https://play.google.com/store/apps/details?id=<com.mobinakhter123.HerbalLife>`,
+    });
+    Linking.openURL(url);
+  };
 
   if (appState.loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;

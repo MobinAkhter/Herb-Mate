@@ -3,9 +3,60 @@ const admin = require("firebase-admin");
 const { Expo } = require("expo-server-sdk");
 // const { SessionsClient } = require("@google-cloud/dialogflow");
 
-admin.initializeApp();
+const { Translate } = require("@google-cloud/translate").v2;
+
+admin.initializeApp({
+  credential: admin.credential.cert(
+    require("./fir-auth-b5f8a-95c125031f8f.json")
+  ),
+});
 const db = admin.firestore();
 const expo = new Expo();
+const translate = new Translate({
+  credentials: require("./fir-auth-b5f8a-95c125031f8f.json"),
+  projectId: "fir-auth-b5f8a",
+});
+
+exports.translateFields = functions.firestore
+  .document("Remedies/{herbName}")
+  .onWrite(async (change, context) => {
+    const document = change.after.exists ? change.after.data() : null;
+    if (!document) return null;
+
+    const fieldsToTranslate = [
+      "description",
+      "dosage",
+      "habitat",
+      "precautions",
+      "name",
+      "properties",
+    ];
+    const targetLanguage = "ms";
+    const updates = {};
+
+    for (const field of fieldsToTranslate) {
+      if (
+        document[field] &&
+        !document[`${field}_translated_${targetLanguage}`]
+      ) {
+        try {
+          const [translatedText] = await translate.translate(
+            document[field],
+            targetLanguage
+          );
+          updates[`${field}_translated_${targetLanguage}`] = translatedText;
+        } catch (error) {
+          console.error(`Error translating field ${field}:`, error);
+        }
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      await change.after.ref.update(updates);
+    }
+
+    return null;
+  });
 
 // store it in environment variables later, at least for security reasons
 // const projectId = "herballife-udcu";
@@ -116,7 +167,7 @@ const notificationMessages = [
 // It works when it feels like it. Created a function more innovative than AI. Damnnn 🔥
 // Will need to ensure it notifies the user even if the app is not running!
 exports.sendPushNotifications = functions.pubsub
-  .schedule("52 04 * * *")
+  .schedule("0 17 * * *")
   .timeZone("America/Toronto")
   .onRun(async (context) => {
     const messages = [];

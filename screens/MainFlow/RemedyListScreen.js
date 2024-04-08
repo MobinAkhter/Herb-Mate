@@ -3,14 +3,7 @@ import { FlatList, StyleSheet, View, Text, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../../firebase";
-import {
-  doc,
-  getDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 function RemedyListScreen({ route }) {
   const { bp, con } = route.params;
@@ -141,7 +134,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    marginHorizontal: 10, // Spacing from the screen edges
+    marginHorizontal: 10,
   },
   cardImage: {
     width: "100%",
