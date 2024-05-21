@@ -1,13 +1,13 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const { Expo } = require("expo-server-sdk");
+const {Expo} = require("expo-server-sdk");
 // const { SessionsClient } = require("@google-cloud/dialogflow");
 
-const { Translate } = require("@google-cloud/translate").v2;
+const {Translate} = require("@google-cloud/translate").v2;
 
 admin.initializeApp({
   credential: admin.credential.cert(
-    require("./fir-auth-b5f8a-95c125031f8f.json")
+      require("./fir-auth-b5f8a-95c125031f8f.json"),
   ),
 });
 const db = admin.firestore();
@@ -18,45 +18,45 @@ const translate = new Translate({
 });
 
 exports.translateFields = functions.firestore
-  .document("Remedies/{herbName}")
-  .onWrite(async (change, context) => {
-    const document = change.after.exists ? change.after.data() : null;
-    if (!document) return null;
+    .document("Remedies/{herbName}")
+    .onWrite(async (change, context) => {
+      const document = change.after.exists ? change.after.data() : null;
+      if (!document) return null;
 
-    const fieldsToTranslate = [
-      "description",
-      "dosage",
-      "habitat",
-      "precautions",
-      "name",
-      "properties",
-    ];
-    const targetLanguage = "ms";
-    const updates = {};
+      const fieldsToTranslate = [
+        "description",
+        "dosage",
+        "habitat",
+        "precautions",
+        "name",
+        "properties",
+      ];
+      const targetLanguage = "ms";
+      const updates = {};
 
-    for (const field of fieldsToTranslate) {
-      if (
-        document[field] &&
+      for (const field of fieldsToTranslate) {
+        if (
+          document[field] &&
         !document[`${field}_translated_${targetLanguage}`]
-      ) {
-        try {
-          const [translatedText] = await translate.translate(
-            document[field],
-            targetLanguage
-          );
-          updates[`${field}_translated_${targetLanguage}`] = translatedText;
-        } catch (error) {
-          console.error(`Error translating field ${field}:`, error);
+        ) {
+          try {
+            const [translatedText] = await translate.translate(
+                document[field],
+                targetLanguage,
+            );
+            updates[`${field}_translated_${targetLanguage}`] = translatedText;
+          } catch (error) {
+            console.error(`Error translating field ${field}:`, error);
+          }
         }
       }
-    }
 
-    if (Object.keys(updates).length > 0) {
-      await change.after.ref.update(updates);
-    }
+      if (Object.keys(updates).length > 0) {
+        await change.after.ref.update(updates);
+      }
 
-    return null;
-  });
+      return null;
+    });
 
 // store it in environment variables later, at least for security reasons
 // const projectId = "herballife-udcu";
@@ -131,7 +131,7 @@ const notificationMessages = [
 ];
 
 // exports.dialogflowGateway = functions.https.onRequest(async (req, res) => {
-//   console.log("Received request for dialogflowGateway with payload:", req.body);
+// console.log("Received request for dialogflowGateway with:", req.body);
 
 //   if (req.method !== "POST") {
 //     return res.status(405).send("Method Not Allowed");
@@ -163,50 +163,52 @@ const notificationMessages = [
 // });
 
 // This function pushes notifications, will need to see how it works.
-// TODO: This function only works if the app is running in background. Apparently not.
-// It works when it feels like it. Created a function more innovative than AI. Damnnn 🔥
+// TODO: This function only works if the app is running in background.
+// Apparently not.
+// It works when it feels like it. Created a function
+// more innovative than AI. Damnnn 🔥
 // Will need to ensure it notifies the user even if the app is not running!
 exports.sendPushNotifications = functions.pubsub
-  .schedule("0 17 * * *")
-  .timeZone("America/Toronto")
-  .onRun(async (context) => {
-    const messages = [];
-    const usersSnapshot = await db.collection("users").get();
+    .schedule("0 9,19 * * *")
+    .timeZone("America/Toronto")
+    .onRun(async (context) => {
+      const messages = [];
+      const usersSnapshot = await db.collection("users").get();
 
-    usersSnapshot.forEach((doc) => {
-      const expoPushToken = doc.data().expoPushToken;
+      usersSnapshot.forEach(async (doc) => {
+        const expoPushToken = doc.data().expoPushToken;
 
-      const randomIndex = Math.floor(
-        Math.random() * notificationMessages.length
-      );
-      const randomMessage = notificationMessages[randomIndex];
-      if (Expo.isExpoPushToken(expoPushToken)) {
-        messages.push({
-          to: expoPushToken,
-          sound: "default",
-          body: randomMessage,
-          data: { withSome: "data" },
-        });
+        const randomIndex = Math.floor(
+            Math.random() * notificationMessages.length,
+        );
+        const randomMessage = notificationMessages[randomIndex];
+        if (Expo.isExpoPushToken(expoPushToken)) {
+          messages.push({
+            to: expoPushToken,
+            sound: "default",
+            body: randomMessage,
+            data: {withSome: "data"},
+          });
+        }
+      });
+
+      console.log("Preparing to send push notifications...");
+
+      const chunks = expo.chunkPushNotifications(messages);
+      const tickets = [];
+      for (const chunk of chunks) {
+        try {
+          const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+          console.log(
+              "Successfully sent a chunk of push notifications:",
+              ticketChunk,
+          );
+          tickets.push(...ticketChunk);
+        } catch (error) {
+          console.error(
+              "Error sending a chunk of push notifications:",
+              error.message,
+          );
+        }
       }
     });
-
-    console.log("Preparing to send push notifications...");
-
-    const chunks = expo.chunkPushNotifications(messages);
-    const tickets = [];
-    for (const chunk of chunks) {
-      try {
-        const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-        console.log(
-          "Successfully sent a chunk of push notifications:",
-          ticketChunk
-        );
-        tickets.push(...ticketChunk);
-      } catch (error) {
-        console.error(
-          "Error sending a chunk of push notifications:",
-          error.message
-        );
-      }
-    }
-  });

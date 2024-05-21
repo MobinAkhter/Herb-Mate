@@ -8,7 +8,12 @@ export const UserContext = createContext();
 
 function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [language, setLanguage] = useState("en");
 
+  const setUserLanguage = (newLanguage) => {
+    setLanguage(newLanguage);
+    // Trigger a re-render or update content as needed
+  };
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
@@ -66,7 +71,7 @@ function UserProvider({ children }) {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, language, setUserLanguage }}>
       {children}
     </UserContext.Provider>
   );

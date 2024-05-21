@@ -202,7 +202,7 @@ function AuthForm({ isLogin, credentialsInvalid, setUser }) {
         .then(() => {
           Alert.alert(
             "Verification Email Sent",
-            "Please check your email to verify your account."
+            "Please check your email to verify your account. Make sure to check the spam folder as well."
           );
         })
         .catch((error) => {

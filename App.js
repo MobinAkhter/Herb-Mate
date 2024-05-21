@@ -9,6 +9,7 @@ import {
   View,
   Share,
   Alert,
+  Platform,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -32,6 +33,8 @@ import UserProfileScreen from "./screens/SecondaryScreens/UserProfileScreen";
 import DonationScreen from "./screens/SecondaryScreens/DonationScreen";
 import ContactScreen from "./screens/SecondaryScreens/ContactScreen";
 import AboutUsScreen from "./screens/SecondaryScreens/AboutUsScreen";
+import SettingsScreen from "./screens/SecondaryScreens/SettingsScreen";
+
 import { Ionicons } from "@expo/vector-icons";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
 
@@ -284,6 +287,31 @@ function DrawerNavigator() {
           ),
         })}
       />
+      <Drawer.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={({ navigation }) => ({
+          headerTitle: "Settings",
+          headerStyle: { backgroundColor: "#35D96F" },
+          headerTitleAlign: "center",
+          headerTintColor: "white",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="cog-outline"
+              size={size}
+              color={color}
+            />
+          ),
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              style={{ marginLeft: 15 }}
+            >
+              <Ionicons name="menu-outline" size={28} color={"white"} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Drawer.Navigator>
   );
 }
@@ -311,7 +339,7 @@ function Navigation() {
         await AsyncStorage.setItem("launchCount", launchCount.toString());
 
         setAppState({ loading: false, isFirstLaunch, launchCount });
-        if (launchCount === 2) {
+        if (launchCount === 3) {
           // Second launch prompt
           promptForRating();
         }
@@ -339,7 +367,7 @@ function Navigation() {
   const openStore = () => {
     const url = Platform.select({
       // ios: `https://apps.apple.com/app/id<APP_ID>`,
-      android: `https://play.google.com/store/apps/details?id=<com.mobinakhter123.HerbalLife>`,
+      android: `https://play.google.com/store/apps/details?id=com.mobinakhter123.HerbalLife`,
     });
     Linking.openURL(url);
   };

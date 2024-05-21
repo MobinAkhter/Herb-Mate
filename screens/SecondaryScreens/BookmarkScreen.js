@@ -114,9 +114,11 @@ const BookmarkScreen = () => {
           </View>
         )}
       />
-      <Text style={styles.swipeHintText}>
-        Psst... Swipe on a bookmark to delete it.
-      </Text>
+      {bookmarkCollection.length > 0 && (
+        <Text style={styles.swipeHintText}>
+          Psst... Swipe on a bookmark to delete it.
+        </Text>
+      )}
     </View>
   );
 };
